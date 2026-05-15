@@ -39,7 +39,7 @@ const Hero = () => {
           <h1 className="mt-4 font-extrabold leading-[1.08] tracking-tight text-[clamp(1.75rem,5.2vw,3.4rem)]">
             <span className="relative inline-block">
               <span className="absolute inset-0 -z-10 bg-gradient-to-r from-cyan-400/35 via-sky-400/30 to-blue-500/25 blur-3xl opacity-60" />
-              <span className="text-[#C0FDB9]">Impulsamos tu marca usando</span>
+              <span className="text-[#C0FDB9]">Soluciones Tecnológicas</span>
             </span>
 
             <br />
@@ -47,15 +47,14 @@ const Hero = () => {
             <span className="relative mt-2 inline-block">
               <span className="absolute left-0 right-0 -bottom-2 h-[2px] bg-gradient-to-r from-transparent via-cyan-300/70 to-transparent blur-[0.3px]" />
               <span className="text-white/95">
-                Hardware <span className="text-[#C0FDB9]">&</span> Software
+                impulsadas por <span className="text-[#C0FDB9]">IA</span> 
               </span>
             </span>
           </h1>
 
           {/* Subtítulo */}
           <p className="mx-auto mt-5 max-w-2xl px-2 text-[clamp(1rem,2.5vw,1.15rem)] leading-relaxed text-white/75">
-            Tu negocio merece soluciones tecnológicas innovadoras, atractivas y
-            fáciles de usar, en Soluciones Tecnologicas Ortegón las hacemos realidad.
+            Desarrollo web, automatización, sistemas inteligentes y herramientas digitales para empresas modernas.
           </p>
 
           {/* Botones */}

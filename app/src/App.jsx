@@ -4,6 +4,7 @@ import useInViewOnce from "./hooks/useInViewOnce";
 
 const Header = lazy(() => import("./Header/Header.jsx"));
 const Hero = lazy(() => import("./Hero/Hero.jsx"));
+const Products = lazy(() => import("./Products/Products.jsx"));
 const Stack = lazy(() => import("./Stack/Stack.jsx"));
 const Projects = lazy(() => import("./Projects/Projects.jsx"));
 const Footer = lazy(() => import("./Footer/Footer.jsx"));
@@ -32,6 +33,10 @@ function App() {
         <Header />
         <Hero />
       </Suspense>
+
+      <DeferredSection minHeight={720} rootMargin="300px 0px">
+        <Products />
+      </DeferredSection>
 
       <DeferredSection minHeight={720} rootMargin="300px 0px">
         <Stack />

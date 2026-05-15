@@ -12,44 +12,86 @@ import {
   Plug,
 } from "lucide-react";
 
-import imgStack from "../assets/img_stack.png" 
-
-
+import imgStack from "../assets/img_stack.png";
 
 const STACK = [
   {
     key: "intelligence",
     title: "DESARROLLO",
+
+    description:
+      "Creamos plataformas modernas enfocadas en rendimiento, automatización y experiencia de usuario.",
+
+    details: [
+      "Interfaces modernas y responsivas",
+      "Sistemas escalables",
+      "Experiencias optimizadas para conversión",
+    ],
+
     items: [
-      { label: "Web", Icon: Globe },
-      { label: "IA", Icon: BrainCircuit },
-      { label: "Dispositivos Electrónicos", Icon: Cpu },
+      { label: "Plataformas Web", Icon: Globe },
+      { label: "Automatización Inteligente", Icon: BrainCircuit },
+      { label: "IA Conversacional", Icon: Bot },
     ],
   },
+
   {
     key: "technologies",
     title: "TECNOLOGÍAS",
+
+    description:
+      "Utilizamos arquitecturas modernas para construir soluciones rápidas y preparadas para crecer.",
+
+    details: [
+      "Frontend interactivo",
+      "Arquitectura escalable",
+      "Procesamiento inteligente",
+    ],
+
     items: [
-      { label: "React", Icon: Atom },
-      { label: "Tailwind CSS", Icon: Wind },
-      { label: "Python", Icon: Terminal },
+      { label: "Frontend Moderno", Icon: Atom },
+      { label: "Arquitectura Escalable", Icon: Wind },
+      { label: "Procesamiento Inteligente", Icon: Terminal },
     ],
   },
+
   {
     key: "predict",
     title: "PREDICCIÓN",
+
+    description:
+      "Transformamos datos en información útil para optimizar decisiones empresariales.",
+
+    details: [
+      "Análisis inteligente",
+      "Predicción de patrones",
+      "Optimización operativa",
+    ],
+
     items: [
-      { label: "Modelos", Icon: BrainCircuit },
-      { label: "Análisis de Datos", Icon: Layers3 },
-      { label: "Simulaciones", Icon: Orbit },
+      { label: "Predicción de Datos", Icon: BrainCircuit },
+      { label: "Análisis Inteligente", Icon: Layers3 },
+      { label: "Optimización de Procesos", Icon: Orbit },
     ],
   },
+
   {
     key: "automation",
     title: "AUTOMATIZACIÓN IA",
+
+    description:
+      "Conectamos automatización e inteligencia artificial para mejorar atención y productividad.",
+
+    details: [
+      "Integraciones empresariales",
+      "Recepcionistas IA",
+      "Automatización de atención",
+    ],
+
     items: [
-      { label: "Integraciones", Icon: Plug },
-      { label: "Agentes", Icon: Bot },
+      { label: "Integraciones Empresariales", Icon: Plug },
+      { label: "Asistentes Virtuales IA", Icon: Bot },
+      { label: "Automatización de Atención", Icon: Cpu },
     ],
   },
 ];
@@ -59,37 +101,20 @@ function clamp(n, a, b) {
 }
 
 const StackCard = React.forwardRef(function StackCard(
-  { title, items, side = "left" },
+  { title, items, description, details = [], side = "left" },
   ref,
 ) {
   const isLeft = side === "left";
 
-  return (
+  const FrontContent = ({ invisible = false }) => (
     <div
-      ref={ref}
-      className="
-        group relative rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-md
+      className={`
+        rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-md
         px-4 py-4 sm:px-5 sm:py-5 lg:px-6
         shadow-[0_0_60px_rgba(0,0,0,0.35)]
-        transition will-change-transform hover:-translate-y-0.5 hover:border-cyan-200/25
-      "
+        ${invisible ? "invisible" : ""}
+      `}
     >
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-200/20 to-transparent" />
-
-      {/* Puerto visible solo en desktop */}
-      <div
-        className={[
-          "pointer-events-none absolute top-1/2 hidden -translate-y-1/2 lg:block",
-          isLeft ? "-right-2" : "-left-2",
-        ].join(" ")}
-      >
-        <div className="relative size-4">
-          <div className="absolute inset-0 rounded-full bg-cyan-200/70 blur-[6px] opacity-0 transition group-hover:opacity-100" />
-          <div className="absolute inset-0 rounded-full bg-cyan-200/40 blur-[10px] opacity-60" />
-          <div className="absolute inset-[3px] rounded-full bg-cyan-200 shadow-[0_0_16px_rgba(34,211,238,0.55)]" />
-        </div>
-      </div>
-
       <div className="flex items-center justify-between gap-3">
         <div className="text-[10px] sm:text-[11px] font-semibold tracking-[0.22em] sm:tracking-[0.24em] text-white/60">
           {title}
@@ -104,7 +129,6 @@ const StackCard = React.forwardRef(function StackCard(
             className="
               flex items-center gap-3 rounded-xl border border-cyan-300/10 bg-black/30
               px-3 py-3 sm:px-4
-              transition group-hover:border-cyan-200/15
             "
           >
             <div
@@ -116,11 +140,131 @@ const StackCard = React.forwardRef(function StackCard(
             >
               <Icon className="size-5 sm:size-6" />
             </div>
+
             <div className="text-sm sm:text-base font-medium text-white/90">
               {label}
             </div>
           </div>
         ))}
+      </div>
+    </div>
+  );
+
+  return (
+    <div ref={ref} className="group relative [perspective:1200px]">
+      {/* Este bloque define el tamaño real de la card */}
+      <FrontContent invisible />
+
+      <div
+        className="
+          absolute inset-0 rounded-2xl transition-transform duration-700
+          [transform-style:preserve-3d]
+          group-hover:[transform:rotateY(180deg)]
+        "
+      >
+        {/* FRONT */}
+        <div
+          className="
+            absolute inset-0 rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-md
+            px-4 py-4 sm:px-5 sm:py-5 lg:px-6
+            shadow-[0_0_60px_rgba(0,0,0,0.35)]
+            transition will-change-transform group-hover:border-cyan-200/25
+            [backface-visibility:hidden]
+          "
+        >
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-200/20 to-transparent" />
+
+          <div
+            className={[
+              "pointer-events-none absolute top-1/2 hidden -translate-y-1/2 lg:block",
+              isLeft ? "-right-2" : "-left-2",
+            ].join(" ")}
+          >
+            <div className="relative size-4">
+              <div className="absolute inset-0 rounded-full bg-cyan-200/70 blur-[6px] opacity-0 transition group-hover:opacity-100" />
+              <div className="absolute inset-0 rounded-full bg-cyan-200/40 blur-[10px] opacity-60" />
+              <div className="absolute inset-[3px] rounded-full bg-cyan-200 shadow-[0_0_16px_rgba(34,211,238,0.55)]" />
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between gap-3">
+            <div className="text-[10px] sm:text-[11px] font-semibold tracking-[0.22em] sm:tracking-[0.24em] text-white/60">
+              {title}
+            </div>
+            <div className="h-px w-10 sm:w-16 bg-gradient-to-r from-transparent via-cyan-300/30 to-transparent" />
+          </div>
+
+          <div className="mt-4 space-y-3">
+            {items.map(({ label, Icon }, idx) => (
+              <div
+                key={idx}
+                className="
+                  flex items-center gap-3 rounded-xl border border-cyan-300/10 bg-black/30
+                  px-3 py-3 sm:px-4
+                  transition group-hover:border-cyan-200/15
+                "
+              >
+                <div
+                  className="
+                    grid size-9 shrink-0 place-items-center rounded-xl border border-cyan-300/15
+                    bg-cyan-400/10 text-cyan-100 shadow-[0_0_18px_rgba(34,211,238,0.10)]
+                    sm:size-10
+                  "
+                >
+                  <Icon className="size-5 sm:size-6" />
+                </div>
+
+                <div className="text-sm sm:text-base font-medium text-white/90">
+                  {label}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* BACK */}
+        <div
+          className="
+    absolute inset-0 rounded-2xl border border-cyan-300/20
+    bg-gradient-to-br from-[#111818]/95 via-[#172323]/95 to-[#0b1111]/95
+    px-4 py-4 sm:px-5 sm:py-5 lg:px-6
+    shadow-[0_0_70px_rgba(34,211,238,0.18)]
+    [transform:rotateY(180deg)] [backface-visibility:hidden]
+    overflow-y-auto overflow-x-hidden
+    [&::-webkit-scrollbar]:hidden
+    [-ms-overflow-style:none]
+    [scrollbar-width:none]
+  "
+        >
+          <div className="flex items-center justify-between gap-3">
+            <div className="text-[10px] sm:text-[11px] font-semibold tracking-[0.22em] sm:tracking-[0.24em] text-cyan-100/70">
+              {title}
+            </div>
+            <div className="h-px w-10 sm:w-16 bg-gradient-to-r from-transparent via-cyan-300/30 to-transparent" />
+          </div>
+
+          <h3 className="mt-3 text-sm sm:text-base font-extrabold text-[#C0FDB9]">
+            {items[0]?.label}
+          </h3>
+
+          <p className="mt-2 text-[11px] sm:text-xs leading-relaxed text-white/70">
+            {description}
+          </p>
+
+          <div className="mt-3 space-y-1.5">
+            {details.slice(0, 3).map((detail, idx) => (
+              <div
+                key={idx}
+                className="
+          rounded-lg border border-white/10 bg-white/[0.04]
+          px-3 py-1.5 text-[11px] sm:text-xs leading-snug text-white/80
+        "
+              >
+                ✦ {detail}
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -216,7 +360,6 @@ function curvedPath(from, to) {
 }
 
 const ChipCenter = React.forwardRef(function ChipCenter(_, ref) {
-  
   return (
     <div
       ref={ref}
@@ -279,8 +422,8 @@ const Stack = () => {
           </h2>
 
           <p className="mx-auto mt-3 max-w-2xl px-2 text-sm leading-relaxed text-white/65 sm:text-base">
-            En Soluciones Tecnológicas Ortegón usamos tecnología de última
-            generación para llevar tu negocio al siguiente nivel.
+            Diseñamos soluciones donde la IA, el software y la automatización
+            trabajan juntos para optimizar procesos reales.
           </p>
         </div>
 
@@ -363,12 +506,17 @@ const Stack = () => {
                 ref={refs.intelligence}
                 title={STACK[0].title}
                 items={STACK[0].items}
+                description={STACK[0].description}
+                details={STACK[0].details}
                 side="left"
               />
+
               <StackCard
                 ref={refs.predict}
                 title={STACK[2].title}
                 items={STACK[2].items}
+                description={STACK[2].description}
+                details={STACK[2].details}
                 side="left"
               />
             </div>
@@ -382,12 +530,17 @@ const Stack = () => {
                 ref={refs.product}
                 title={STACK[1].title}
                 items={STACK[1].items}
+                description={STACK[1].description}
+                details={STACK[1].details}
                 side="right"
               />
+
               <StackCard
                 ref={refs.automation}
                 title={STACK[3].title}
                 items={STACK[3].items}
+                description={STACK[3].description}
+                details={STACK[3].details}
                 side="right"
               />
             </div>
