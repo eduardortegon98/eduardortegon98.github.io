@@ -1,10 +1,30 @@
 @import "tailwindcss";
 @import url("https://fonts.googleapis.com/css2?family=Italianno&display=swap");
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+}
+
 .italianno-regular {
   font-family: "Italianno", cursive;
   font-weight: 500;
   font-style: normal;
 }
 
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-14px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.animate-float {
+  animation: float 5s ease-in-out infinite;
+}
