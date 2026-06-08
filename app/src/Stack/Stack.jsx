@@ -183,7 +183,6 @@ const StackCard = React.forwardRef(function StackCard(
             <div className="relative size-4">
               <div className="absolute inset-0 rounded-full bg-cyan-200/70 blur-[6px] opacity-0 transition group-hover:opacity-100" />
               <div className="absolute inset-0 rounded-full bg-cyan-200/40 blur-[10px] opacity-60" />
-              <div className="absolute inset-[3px] rounded-full bg-cyan-200 shadow-[0_0_16px_rgba(34,211,238,0.55)]" />
             </div>
           </div>
 
@@ -351,34 +350,41 @@ function useMeasurePorts(wrapperRef, refs) {
   return data;
 }
 
-function curvedPath(from, to) {
-  const dx = clamp(Math.abs(to.x - from.x) * 0.35, 80, 220);
-  const dir = to.x > from.x ? 1 : -1;
-  const c1 = { x: from.x + dx * dir, y: from.y };
-  const c2 = { x: to.x - dx * dir, y: to.y };
-  return `M ${from.x} ${from.y} C ${c1.x} ${c1.y}, ${c2.x} ${c2.y}, ${to.x} ${to.y}`;
-}
-
 const ChipCenter = React.forwardRef(function ChipCenter(_, ref) {
   return (
     <div
       ref={ref}
-      className="relative mx-auto w-full max-w-[240px] sm:max-w-[320px] lg:max-w-[520px]"
+      className="
+        relative
+        mx-auto
+        flex
+        items-center
+        justify-center
+        w-full
+        max-w-[700px]
+      "
     >
-      <div className="pointer-events-none absolute -inset-10 rounded-full bg-cyan-400/10 blur-3xl sm:-inset-16" />
-      <div className="pointer-events-none absolute -inset-10 translate-x-6 rounded-full bg-blue-500/10 blur-3xl sm:-inset-16 sm:translate-x-10" />
+      <div className="pointer-events-none absolute -inset-16 rounded-full bg-cyan-400/10 blur-3xl" />
+
+      <div className="pointer-events-none absolute -inset-16 translate-x-10 rounded-full bg-blue-500/10 blur-3xl" />
 
       <img
         src={imgStack}
         alt="Chip"
-        onLoad={() => console.log("Imagen cargó bien:", imgStack)}
-        onError={() => console.log("Error cargando imagen:", imgStack)}
-        className="relative w-full h-auto drop-shadow-[0_0_50px_rgba(34,211,238,0.20)]"
-        draggable="false"
+        draggable={false}
+        className="
+          block
+          mx-auto
+          w-full
+          max-w-[650px]
+          h-auto
+          object-contain
+          drop-shadow-[0_0_50px_rgba(34,211,238,0.20)]
+        "
       />
 
-      <div className="pointer-events-none absolute inset-0 grid place-items-center">
-        <div className="h-[96%] w-[96%] rounded-full border border-cyan-300/10" />
+      <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+        <div className="absolute h-[96%] w-[96%] rounded-full border border-cyan-300/10" />
         <div className="absolute h-[78%] w-[78%] rounded-full border border-cyan-300/10" />
         <div className="absolute h-[60%] w-[60%] rounded-full border border-cyan-300/10" />
       </div>
@@ -413,12 +419,9 @@ const Stack = () => {
 
       <div className="relative mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
         <div className="text-center">
-          <div className="mt-4 text-xs sm:text-sm font-semibold tracking-[0.28em] text-white/90">
-            TECNOLOGÍAS
-          </div>
 
           <h2 className="mt-3 font-extrabold tracking-tight text-[#C0FDB9] text-[clamp(1.9rem,5vw,3.4rem)]">
-            Todo está conectado
+            Nuestras Tecnologías
           </h2>
 
           <p className="mx-auto mt-3 max-w-2xl px-2 text-sm leading-relaxed text-white/65 sm:text-base">
@@ -461,41 +464,6 @@ const Stack = () => {
                   </feMerge>
                 </filter>
               </defs>
-
-              {Object.entries(m.ports).map(([key, seg]) => {
-                const d = curvedPath(seg.from, seg.to);
-
-                return (
-                  <g key={key} filter="url(#softGlow)" opacity={0.95}>
-                    <path
-                      d={d}
-                      fill="none"
-                      stroke="rgba(34,211,238,0.14)"
-                      strokeWidth="9"
-                      strokeLinecap="round"
-                    />
-                    <path
-                      d={d}
-                      fill="none"
-                      stroke="url(#wire)"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                    />
-                    <circle
-                      cx={seg.from.x}
-                      cy={seg.from.y}
-                      r="3.2"
-                      fill="rgba(34,211,238,0.9)"
-                    />
-                    <circle
-                      cx={seg.to.x}
-                      cy={seg.to.y}
-                      r="3.2"
-                      fill="rgba(34,211,238,0.9)"
-                    />
-                  </g>
-                );
-              })}
             </svg>
           )}
 
@@ -512,7 +480,6 @@ const Stack = () => {
               />
 
               <StackCard
-                ref={refs.predict}
                 title={STACK[2].title}
                 items={STACK[2].items}
                 description={STACK[2].description}
@@ -527,7 +494,6 @@ const Stack = () => {
 
             <div className="order-3 space-y-5 lg:space-y-6">
               <StackCard
-                ref={refs.product}
                 title={STACK[1].title}
                 items={STACK[1].items}
                 description={STACK[1].description}
@@ -536,7 +502,6 @@ const Stack = () => {
               />
 
               <StackCard
-                ref={refs.automation}
                 title={STACK[3].title}
                 items={STACK[3].items}
                 description={STACK[3].description}

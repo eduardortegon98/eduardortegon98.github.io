@@ -61,7 +61,7 @@ const Hero = () => {
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <button
               className="group relative w-full rounded-full bg-[#C0FDB9]/90 px-6 py-3 text-sm font-semibold text-black transition hover:brightness-110 sm:w-auto sm:text-base"
-              onClick={() => goTo("stack")}
+              onClick={() => goTo("products")}
               type="button"
             >
               <span className="absolute inset-0 rounded-full opacity-0 shadow-[0_0_35px_rgba(34,211,238,0.35)] transition group-hover:opacity-100" />

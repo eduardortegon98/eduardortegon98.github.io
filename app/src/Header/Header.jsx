@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import Logo from "../../public/Soluciones_Tecnologicas_Ortegon.png";
 
 const navItems = [
-  { label: "Inicio", href: "#inicio" },
-  { label: "Info", href: "#info" },
+  { label: "LogIn", href: "#login" },
   { label: "Contacto", href: "#contacto" },
 ];
 
@@ -36,7 +35,7 @@ const Header = () => {
 
             {/* Branding */}
             <a
-              href="#inicio"
+              href="/"
               className="flex items-center gap-3"
               onClick={() => setOpen(false)}
             >
@@ -47,9 +46,9 @@ const Header = () => {
               />
               <div className="text-white">
                 <p className="text-lg font-extrabold tracking-tight">
-                  Soluciones Tecnológicas
+                  Soluciones Tecnológicas Ortegón
                 </p>
-                <p className="text-sm text-[#C0FDB9]/90">Soporte • Redes • Sistemas</p>
+                <p className="text-sm text-[#C0FDB9]/90">Ingeniería, software e IA para tu negocio.</p>
               </div>
             </a>
 
@@ -77,7 +76,7 @@ const Header = () => {
               </nav>
 
               <a
-                href="#contacto"
+                href="#cotizar"
                 className="
                   px-5 py-2.5 text-sm font-bold
                   bg-[#C0FDB9] text-black

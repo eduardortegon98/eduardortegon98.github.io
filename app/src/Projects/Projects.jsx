@@ -36,11 +36,8 @@ const Background = () => (
 
 const SectionHeader = () => (
   <div className="text-center">
-    <div className="text-white/90 text-sm font-semibold tracking-widest">
-      PROYECTOS
-    </div>
     <h2 className="mt-3 text-3xl sm:text-5xl font-extrabold tracking-tight text-[#C0FDB9]">
-      Estos son algunos de nuestros nuevos proyectos
+      Nuevos Proyectos
     </h2>
     <p className="mx-auto mt-3 max-w-2xl text-white/65">
       Para ingresar a los proyectos haz click en el icono superior derecho de
