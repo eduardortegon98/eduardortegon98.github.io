@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Logo from "../../public/Soluciones_Tecnologicas_Ortegon.png";
 
 const navItems = [
-  { label: "LogIn", href: "#login" },
+  { label: "Log In", href: "#login" },
   { label: "Contacto", href: "#contacto" },
 ];
 
