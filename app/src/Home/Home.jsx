@@ -27,11 +27,11 @@ const DeferredSection = memo(function DeferredSection({
   );
 });
 
-function Home() {
+function Home({theme, setTheme}) {
   return (
     <>
       <Suspense fallback={null}>
-        <Header />
+        <Header setTheme = {setTheme} />
         <Hero />
       </Suspense>
 

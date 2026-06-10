@@ -1,1 +1,16 @@
 @import "tailwindcss";
+
+:root {
+  --bg: #0F0F10;
+  --text: #FFFFFF;
+}
+
+[data-theme="light"] {
+  --bg: #FFFFFF;
+  --text: #000000;
+}
+
+[data-theme="corporate"] {
+  --bg: #474B4E;
+  --text: #FFFFFF;
+}

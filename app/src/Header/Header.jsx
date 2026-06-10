@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+
+import { useTheme } from "../context/ThemeContext";
 import Logo from "../../public/Soluciones_Tecnologicas_Ortegon.png";
+import { Moon, Sun } from "lucide-react";
 
 const navItems = [
   { label: "Log In", href: "/login" },
@@ -8,6 +11,8 @@ const navItems = [
 ];
 
 const Header = () => {
+  const { theme, setTheme } = useTheme();
+
   const location = useLocation();
 
   const [active, setActive] = useState(location.pathname);
@@ -18,7 +23,11 @@ const Header = () => {
   }, [location]);
 
   useEffect(() => {
-    const onEsc = (e) => e.key === "Escape" && setOpen(false);
+    const onEsc = (e) => {
+      if (e.key === "Escape") {
+        setOpen(false);
+      }
+    };
 
     window.addEventListener("keydown", onEsc);
 
@@ -27,20 +36,29 @@ const Header = () => {
     };
   }, []);
 
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === "dark" ? "corporate" : "dark"));
+  };
+
   return (
     <header className="sticky top-0 z-50">
-      {/* Glow ligero acorde Hero */}
+      {/* Glow */}
       <div className="pointer-events-none absolute inset-x-0 -top-10 h-24 bg-gradient-to-r from-cyan-400/15 via-sky-400/15 to-blue-500/15 blur-3xl" />
 
       {/* Barra principal */}
-      <div className="bg-black/80 backdrop-blur-xl border-b border-white/10 shadow-lg">
+      <div
+        className={`
+    border-b border-white/10 shadow-lg backdrop-blur-xl
+    ${theme === "dark" ? "bg-black/80" : "bg-[#474B4E]/80"}
+  `}
+      >
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="flex h-20 items-center justify-between">
             {/* Branding */}
             <Link
               to="/"
-              className="flex items-center gap-3"
               onClick={() => setOpen(false)}
+              className="flex items-center gap-3"
             >
               <img
                 src={Logo}
@@ -59,8 +77,8 @@ const Header = () => {
               </div>
             </Link>
 
-            {/* Desktop Nav + CTA */}
-            <div className="hidden md:flex items-center gap-6">
+            {/* Desktop */}
+            <div className="hidden items-center gap-6 md:flex">
               <nav className="flex items-center gap-4">
                 {navItems.map((item) => {
                   const isActive = active === item.href;
@@ -85,22 +103,44 @@ const Header = () => {
               <Link
                 to="/cotizar"
                 className="
-                  px-5 py-2.5 text-sm font-bold
-                  bg-[#C0FDB9] text-black
-                  rounded-full shadow-lg
-                  hover:brightness-110 transition
-                  focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C0FDB9]/50
+                  rounded-full bg-[#C0FDB9]
+                  px-5 py-2.5 text-sm font-bold text-black
+                  shadow-lg transition
+                  hover:brightness-110
+                  focus:outline-none
+                  focus-visible:ring-2
+                  focus-visible:ring-[#C0FDB9]/50
                 "
               >
                 Cotizar
               </Link>
+
+              <button
+                onClick={toggleTheme}
+                className="
+    inline-flex items-center gap-2
+    rounded-xl bg-[#C0FDB9]
+    px-4 py-2 text-sm font-semibold text-black
+    transition hover:brightness-110
+  "
+              >
+                {theme === "dark" ? (
+                  <>
+                    <Sun size={18} />
+                  </>
+                ) : (
+                  <>
+                    <Moon size={18} />
+                  </>
+                )}
+              </button>
             </div>
 
             {/* Mobile Toggle */}
             <button
               type="button"
-              onClick={() => setOpen((v) => !v)}
-              className="md:hidden text-white text-2xl focus:outline-none"
+              onClick={() => setOpen((prev) => !prev)}
+              className="text-2xl text-white focus:outline-none md:hidden"
             >
               {open ? "✕" : "☰"}
             </button>
@@ -109,7 +149,7 @@ const Header = () => {
 
         {/* Mobile Menu */}
         {open && (
-          <div className="md:hidden bg-black/90 backdrop-blur-lg border-t border-white/20">
+          <div className="border-t border-white/20 bg-black/90 backdrop-blur-lg md:hidden">
             <nav className="flex flex-col gap-2 px-4 py-4">
               {navItems.map((item) => {
                 const isActive = active === item.href;
@@ -120,7 +160,7 @@ const Header = () => {
                     to={item.href}
                     onClick={() => setOpen(false)}
                     className={[
-                      "block px-3 py-2 rounded-lg text-sm font-semibold transition",
+                      "block rounded-lg px-3 py-2 text-sm font-semibold transition",
                       isActive
                         ? "bg-[#C0FDB9]/30 text-[#C0FDB9]"
                         : "text-white/80 hover:bg-white/10 hover:text-white",
@@ -135,13 +175,30 @@ const Header = () => {
                 to="/cotizar"
                 onClick={() => setOpen(false)}
                 className="
-                  block mt-2 px-4 py-3 text-center text-sm font-bold
-                  bg-[#C0FDB9] text-black rounded-lg
-                  hover:brightness-110 transition
+                  mt-2 block rounded-lg
+                  bg-[#C0FDB9]
+                  px-4 py-3 text-center
+                  text-sm font-bold text-black
+                  transition hover:brightness-110
                 "
               >
                 Cotizar
               </Link>
+
+              <button
+                onClick={() => {
+                  toggleTheme();
+                  setOpen(false);
+                }}
+                className="
+                  mt-2 rounded-lg
+                  bg-[#C0FDB9]
+                  px-4 py-3 text-sm font-bold text-black
+                  transition hover:brightness-110
+                "
+              >
+                {theme === "dark" ? "Modo corporativo" : "Modo oscuro"}
+              </button>
             </nav>
           </div>
         )}

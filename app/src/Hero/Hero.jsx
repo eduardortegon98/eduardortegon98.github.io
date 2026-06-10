@@ -1,27 +1,58 @@
-import Hyperspeed from "./Hyperspeed";
-import { hyperspeedPresets } from "./hyperspeedPresets";
 import { ChevronDown } from "lucide-react";
 import Logo from "../../public/Soluciones_Tecnologicas_Ortegon.png";
 
+import Hyperspeed from "./Hyperspeed";
+import { hyperspeedPresets } from "./hyperspeedPresets";
+import { useTheme } from "../context/ThemeContext";
+
 const Hero = () => {
+  const { theme } = useTheme();
+
+  const isDark = theme === "dark";
+
   const goTo = (id) => {
     const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+
+    if (el) {
+      el.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
   };
 
   return (
-    <section className="relative min-h-[calc(100svh-64px)] w-full overflow-hidden bg-black">
-      {/* Fondo */}
-      <div className="absolute inset-0">
-        <Hyperspeed effectOptions={hyperspeedPresets.four} />
-      </div>
+    <section
+      className={`
+        relative min-h-[calc(100svh-64px)] w-full overflow-hidden
+        transition-colors duration-500
+        ${isDark ? "bg-black" : "bg-slate-100"}
+      `}
+    >
+      {/* Fondo animado */}
+      {isDark && (
+        <div className="absolute inset-0">
+          <Hyperspeed effectOptions={hyperspeedPresets.four} />
+        </div>
+      )}
 
       {/* Overlay */}
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-black/35 to-black/80" />
+        <div
+          className={`
+            absolute inset-0 transition-all duration-500
+            ${
+              isDark
+                ? "bg-gradient-to-b from-black/75 via-black/35 to-black/80"
+                : "bg-gradient-to-b from-white/80 via-white/50 to-slate-100/90"
+            }
+          `}
+        />
 
         <div className="absolute left-1/2 top-32 h-72 w-[18rem] -translate-x-1/2 rounded-full bg-cyan-400/20 blur-3xl md:h-[24rem] md:w-[24rem]" />
+
         <div className="absolute right-4 top-8 h-20 w-20 rounded-full bg-sky-400/15 blur-2xl md:right-10 md:top-10 md:h-28 md:w-28" />
+
         <div className="absolute bottom-24 left-4 h-32 w-32 rounded-full bg-blue-500/10 blur-3xl md:left-10 md:h-52 md:w-52" />
       </div>
 
@@ -32,61 +63,162 @@ const Hero = () => {
           <img
             src={Logo}
             alt="Soluciones Tecnológicas Ortegón"
-            className="mx-auto h-auto w-full max-w-[220px] object-contain sm:max-w-[280px] md:max-w-[340px] lg:max-w-[380px]"
+            className="
+              mx-auto h-auto w-full object-contain
+              max-w-[220px]
+              sm:max-w-[280px]
+              md:max-w-[340px]
+              lg:max-w-[380px]
+            "
           />
 
           {/* Título */}
           <h1 className="mt-4 font-extrabold leading-[1.08] tracking-tight text-[clamp(1.75rem,5.2vw,3.4rem)]">
             <span className="relative inline-block">
-              <span className="absolute inset-0 -z-10 bg-gradient-to-r from-cyan-400/35 via-sky-400/30 to-blue-500/25 blur-3xl opacity-60" />
+              <span
+                className="
+                  absolute inset-0 -z-10
+                  bg-gradient-to-r
+                  from-cyan-400/35
+                  via-sky-400/30
+                  to-blue-500/25
+                  blur-3xl opacity-60
+                "
+              />
+
               <span className="text-[#C0FDB9]">Soluciones Tecnológicas</span>
             </span>
 
             <br />
 
             <span className="relative mt-2 inline-block">
-              <span className="absolute left-0 right-0 -bottom-2 h-[2px] bg-gradient-to-r from-transparent via-cyan-300/70 to-transparent blur-[0.3px]" />
-              <span className="text-white/95">
-                impulsadas por <span className="text-[#C0FDB9]">IA</span> 
+              <span
+                className="
+                  absolute left-0 right-0 -bottom-2 h-[2px]
+                  bg-gradient-to-r
+                  from-transparent
+                  via-cyan-300/70
+                  to-transparent
+                  blur-[0.3px]
+                "
+              />
+
+              <span className={isDark ? "text-white/95" : "text-slate-900"}>
+                impulsadas por <span className="text-[#C0FDB9]">IA</span>
               </span>
             </span>
           </h1>
 
           {/* Subtítulo */}
-          <p className="mx-auto mt-5 max-w-2xl px-2 text-[clamp(1rem,2.5vw,1.15rem)] leading-relaxed text-white/75">
-            Desarrollo web, automatización, sistemas inteligentes y herramientas digitales para empresas modernas.
+          <p
+            className={`
+              mx-auto mt-5 max-w-2xl px-2
+              text-[clamp(1rem,2.5vw,1.15rem)]
+              leading-relaxed
+              ${isDark ? "text-white/75" : "text-slate-700"}
+            `}
+          >
+            Desarrollo web, automatización, sistemas inteligentes y herramientas
+            digitales para empresas modernas.
           </p>
 
           {/* Botones */}
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <button
-              className="group relative w-full rounded-full bg-[#C0FDB9]/90 px-6 py-3 text-sm font-semibold text-black transition hover:brightness-110 sm:w-auto sm:text-base"
-              onClick={() => goTo("products")}
               type="button"
+              onClick={() => goTo("products")}
+              className="
+                group relative w-full rounded-full
+                bg-[#C0FDB9]/90 px-6 py-3
+                text-sm font-semibold text-black
+                transition hover:brightness-110
+                sm:w-auto sm:text-base
+              "
             >
-              <span className="absolute inset-0 rounded-full opacity-0 shadow-[0_0_35px_rgba(34,211,238,0.35)] transition group-hover:opacity-100" />
+              <span
+                className="
+                  absolute inset-0 rounded-full opacity-0
+                  shadow-[0_0_35px_rgba(34,211,238,0.35)]
+                  transition group-hover:opacity-100
+                "
+              />
+
               <span className="relative">Conócenos</span>
             </button>
 
             <button
-              className="group relative w-full rounded-full border border-cyan-300/25 bg-black/30 px-6 py-3 text-sm font-semibold text-cyan-100 backdrop-blur transition hover:border-cyan-200/60 sm:w-auto sm:text-base"
-              onClick={() => goTo("projects")}
               type="button"
+              onClick={() => goTo("projects")}
+              className={`
+                group relative w-full rounded-full
+                px-6 py-3 text-sm font-semibold
+                backdrop-blur transition
+                sm:w-auto sm:text-base
+                ${
+                  isDark
+                    ? `
+                      border border-cyan-300/25
+                      bg-black/30
+                      text-cyan-100
+                      hover:border-cyan-200/60
+                    `
+                    : `
+                      border border-slate-300
+                      bg-white/60
+                      text-slate-800
+                      hover:border-slate-400
+                    `
+                }
+              `}
             >
-              <span className="absolute inset-0 rounded-full opacity-0 shadow-[0_0_30px_rgba(34,211,238,0.25)] transition group-hover:opacity-100" />
+              <span
+                className="
+                  absolute inset-0 rounded-full opacity-0
+                  shadow-[0_0_30px_rgba(34,211,238,0.25)]
+                  transition group-hover:opacity-100
+                "
+              />
+
               <span className="relative">Proyectos</span>
             </button>
           </div>
 
-          {/* Scroll hint */}
+          {/* Scroll */}
           <div className="mt-8 hidden items-center justify-center sm:flex">
             <button
               aria-label="Scroll down"
               type="button"
               onClick={() => goTo("stack")}
-              className="group grid h-10 w-10 place-items-center rounded-full border border-cyan-300/25 bg-black/30 shadow-[0_0_22px_rgba(34,211,238,0.12)] backdrop-blur transition hover:border-cyan-200/60"
+              className={`
+                group grid h-10 w-10 place-items-center
+                rounded-full backdrop-blur transition
+                ${
+                  isDark
+                    ? `
+                      border border-cyan-300/25
+                      bg-black/30
+                      shadow-[0_0_22px_rgba(34,211,238,0.12)]
+                      hover:border-cyan-200/60
+                    `
+                    : `
+                      border border-slate-300
+                      bg-white/70
+                      shadow-lg
+                      hover:border-slate-400
+                    `
+                }
+              `}
             >
-              <ChevronDown className="h-5 w-5 text-cyan-100/90 transition group-hover:text-cyan-100" />
+              <ChevronDown
+                className={`
+                  h-5 w-5 transition
+                  ${
+                    isDark
+                      ? "text-cyan-100/90 group-hover:text-cyan-100"
+                      : "text-slate-700 group-hover:text-slate-900"
+                  }
+                `}
+              />
             </button>
           </div>
         </div>
