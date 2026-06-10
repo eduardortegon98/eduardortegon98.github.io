@@ -1,26 +1,30 @@
 import React, { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import Logo from "../../public/Soluciones_Tecnologicas_Ortegon.png";
 
 const navItems = [
-  { label: "Log In", href: "#login" },
-  { label: "Contacto", href: "#contacto" },
+  { label: "Log In", href: "/login" },
+  { label: "Contacto", href: "/contacto" },
 ];
 
 const Header = () => {
-  const [active, setActive] = useState("#inicio");
+  const location = useLocation();
+
+  const [active, setActive] = useState(location.pathname);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const onHash = () => setActive(window.location.hash || "#inicio");
-    onHash();
-    window.addEventListener("hashchange", onHash);
-    return () => window.removeEventListener("hashchange", onHash);
-  }, []);
+    setActive(location.pathname);
+  }, [location]);
 
   useEffect(() => {
     const onEsc = (e) => e.key === "Escape" && setOpen(false);
+
     window.addEventListener("keydown", onEsc);
-    return () => window.removeEventListener("keydown", onEsc);
+
+    return () => {
+      window.removeEventListener("keydown", onEsc);
+    };
   }, []);
 
   return (
@@ -32,10 +36,9 @@ const Header = () => {
       <div className="bg-black/80 backdrop-blur-xl border-b border-white/10 shadow-lg">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="flex h-20 items-center justify-between">
-
             {/* Branding */}
-            <a
-              href="/"
+            <Link
+              to="/"
               className="flex items-center gap-3"
               onClick={() => setOpen(false)}
             >
@@ -44,24 +47,28 @@ const Header = () => {
                 alt="Soluciones Tecnológicas Ortegón"
                 className="h-12 w-12 rounded-xl border-2 border-[#C0FDB9] object-contain shadow-md"
               />
+
               <div className="text-white">
                 <p className="text-lg font-extrabold tracking-tight">
                   Soluciones Tecnológicas Ortegón
                 </p>
-                <p className="text-sm text-[#C0FDB9]/90">Ingeniería, software e IA para tu negocio.</p>
+
+                <p className="text-sm text-[#C0FDB9]/90">
+                  Ingeniería, software e IA para tu negocio.
+                </p>
               </div>
-            </a>
+            </Link>
 
             {/* Desktop Nav + CTA */}
             <div className="hidden md:flex items-center gap-6">
-
               <nav className="flex items-center gap-4">
                 {navItems.map((item) => {
                   const isActive = active === item.href;
+
                   return (
-                    <a
+                    <Link
                       key={item.href}
-                      href={item.href}
+                      to={item.href}
                       className={[
                         "relative px-3 py-2 font-medium transition-all duration-200",
                         isActive
@@ -70,13 +77,13 @@ const Header = () => {
                       ].join(" ")}
                     >
                       {item.label}
-                    </a>
+                    </Link>
                   );
                 })}
               </nav>
 
-              <a
-                href="#cotizar"
+              <Link
+                to="/cotizar"
                 className="
                   px-5 py-2.5 text-sm font-bold
                   bg-[#C0FDB9] text-black
@@ -86,7 +93,7 @@ const Header = () => {
                 "
               >
                 Cotizar
-              </a>
+              </Link>
             </div>
 
             {/* Mobile Toggle */}
@@ -106,10 +113,11 @@ const Header = () => {
             <nav className="flex flex-col gap-2 px-4 py-4">
               {navItems.map((item) => {
                 const isActive = active === item.href;
+
                 return (
-                  <a
+                  <Link
                     key={item.href}
-                    href={item.href}
+                    to={item.href}
                     onClick={() => setOpen(false)}
                     className={[
                       "block px-3 py-2 rounded-lg text-sm font-semibold transition",
@@ -119,9 +127,21 @@ const Header = () => {
                     ].join(" ")}
                   >
                     {item.label}
-                  </a>
+                  </Link>
                 );
               })}
+
+              <Link
+                to="/cotizar"
+                onClick={() => setOpen(false)}
+                className="
+                  block mt-2 px-4 py-3 text-center text-sm font-bold
+                  bg-[#C0FDB9] text-black rounded-lg
+                  hover:brightness-110 transition
+                "
+              >
+                Cotizar
+              </Link>
             </nav>
           </div>
         )}

@@ -20,9 +20,9 @@ const Hero = () => {
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-black/35 to-black/80" />
 
-        <div className="absolute left-1/2 top-[-8rem] h-[18rem] w-[18rem] -translate-x-1/2 rounded-full bg-cyan-400/20 blur-3xl md:h-[24rem] md:w-[24rem]" />
+        <div className="absolute left-1/2 top-32 h-72 w-[18rem] -translate-x-1/2 rounded-full bg-cyan-400/20 blur-3xl md:h-[24rem] md:w-[24rem]" />
         <div className="absolute right-4 top-8 h-20 w-20 rounded-full bg-sky-400/15 blur-2xl md:right-10 md:top-10 md:h-28 md:w-28" />
-        <div className="absolute bottom-[-6rem] left-4 h-32 w-32 rounded-full bg-blue-500/10 blur-3xl md:left-10 md:h-52 md:w-52" />
+        <div className="absolute bottom-24 left-4 h-32 w-32 rounded-full bg-blue-500/10 blur-3xl md:left-10 md:h-52 md:w-52" />
       </div>
 
       {/* Contenido */}

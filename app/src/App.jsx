@@ -1,64 +1,21 @@
-import { Suspense, lazy, memo } from "react";
-import "./App.css";
-import useInViewOnce from "./hooks/useInViewOnce";
+import { Suspense, lazy } from "react";
+import { Routes, Route } from "react-router-dom";
 
-const Header = lazy(() => import("./Header/Header.jsx"));
-const Hero = lazy(() => import("./Hero/Hero.jsx"));
-const Products = lazy(() => import("./Products/Products.jsx"));
-const Stack = lazy(() => import("./Stack/Stack.jsx"));
-const Projects = lazy(() => import("./Projects/Projects.jsx"));
-const Footer = lazy(() => import("./Footer/Footer.jsx"));
-const Walkie = lazy(() => import("./Walkie/Walkie.jsx"));
-const FeedBack = lazy(() => import("./FeedBack/FeedBack.jsx"));
-const Quotes = lazy(() => import("./Quote/Quotes.jsx"));
-
-const DeferredSection = memo(function DeferredSection({
-  children,
-  minHeight = 400,
-  rootMargin = "250px 0px",
-}) {
-  const { ref, inView } = useInViewOnce({ rootMargin });
-
-  return (
-    <section ref={ref} style={{ minHeight }}>
-      {inView ? <Suspense fallback={null}>{children}</Suspense> : null}
-    </section>
-  );
-});
+const Home = lazy(() => import("./Home/Home.jsx"));
+const Login = lazy(() => import("./Login/Login.jsx"));
+const Contacto = lazy(()=> import("./Contacto/Contacto.jsx"));
+const Cotizar = lazy(() => import ("./Cotizar/Cotizar.jsx") )
 
 function App() {
   return (
-    <>
-      <Suspense fallback={null}>
-        <Header />
-        <Hero />
-      </Suspense>
-
-      <DeferredSection minHeight={720} rootMargin="300px 0px">
-        <Products />
-      </DeferredSection>
-
-      <DeferredSection minHeight={720} rootMargin="300px 0px">
-        <Stack />
-      </DeferredSection>
-
-      <DeferredSection minHeight={720} rootMargin="300px 0px">
-        <Projects />
-      </DeferredSection>
-
-      <DeferredSection minHeight={760} rootMargin="220px 0px">
-        <FeedBack />
-      </DeferredSection>
-
-      <DeferredSection minHeight={520} rootMargin="220px 0px">
-        <Quotes />
-      </DeferredSection>
-
-      <Suspense fallback={null}>
-        <Footer />
-        <Walkie />
-      </Suspense>
-    </>
+    <Suspense fallback={null}>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/contacto" element={<Contacto />} />
+        <Route path="/cotizar" element={<Cotizar />} />
+      </Routes>
+    </Suspense>
   );
 }
 

@@ -18,7 +18,7 @@ export const PRODUCTS = [
     title: "Gestiona tus clientes y ventas en un solo lugar",
     description:
       "Organiza contactos, oportunidades y el seguimiento de tu equipo comercial.",
-    image: "/portfolio_de_ventas/src/assets/crm_bot.png",
+    image: "/src/assets/crm_bot.png",
     features: [
       { label: "Gestión de clientes", Icon: Users },
       { label: "Embudo de ventas", Icon: GitMerge },
@@ -32,7 +32,7 @@ export const PRODUCTS = [
     title: "Sitios web que impulsan tu negocio",
     description:
       "Diseñamos páginas modernas, rápidas y adaptadas a todos los dispositivos.",
-    image: "/portfolio_de_ventas/src/assets/web_bot.png",
+    image: "/src/assets/web_bot.png",
     features: [
       { label: "Diseño responsive", Icon: Globe },
       { label: "Rápido y seguro", Icon: ShieldCheck },
@@ -45,7 +45,7 @@ export const PRODUCTS = [
     title: "Asistente inteligente para WhatsApp y Web",
     description:
       "Atiende, responde y convierte 24/7 con Inteligencia Artificial.",
-    image: "/portfolio_de_ventas/src/assets/ortdesk-bot.png", // Asegúrate de tener las rutas correctas
+    image: "/src/assets/ortdesk-bot.png", // Asegúrate de tener las rutas correctas
     features: [
       { label: "Atención 24/7", Icon: MessageCircle },
       { label: "Respuestas automáticas", Icon: ShieldCheck },
