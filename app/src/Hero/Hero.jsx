@@ -1,8 +1,8 @@
 import { ChevronDown } from "lucide-react";
 import Logo from "../../public/Soluciones_Tecnologicas_Ortegon.png";
 
-import Hyperspeed from "./Hyperspeed";
-import { hyperspeedPresets } from "./hyperspeedPresets";
+import Hyperspeed from "../HyperSpeed/Hyperspeed";
+import { hyperspeedPresets } from "../HyperSpeed/hyperspeedPresets";
 import { useTheme } from "../context/ThemeContext";
 
 const Hero = () => {
@@ -30,11 +30,9 @@ const Hero = () => {
       `}
     >
       {/* Fondo animado */}
-      {isDark && (
-        <div className="absolute inset-0">
-          <Hyperspeed effectOptions={hyperspeedPresets.four} />
-        </div>
-      )}
+      <div className="absolute inset-0">
+        <Hyperspeed isDark={isDark} />
+      </div>
 
       {/* Overlay */}
       <div className="pointer-events-none absolute inset-0">
@@ -43,8 +41,8 @@ const Hero = () => {
             absolute inset-0 transition-all duration-500
             ${
               isDark
-                ? "bg-gradient-to-b from-black/75 via-black/35 to-black/80"
-                : "bg-gradient-to-b from-white/80 via-white/50 to-slate-100/90"
+                ? "bg-linear-to-b from-black/75 via-black/35 to-black/80"
+                : "bg-linear-to-b from-white via-white to-slate-50"
             }
           `}
         />
