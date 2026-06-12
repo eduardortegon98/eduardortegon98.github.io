@@ -1,4 +1,4 @@
-import{j as e}from"./index-uc9U90eV.js";import{M as l}from"./mail-ClrihIWC.js";import{c as a}from"./createLucideIcon-B5Og810q.js";import{A as o}from"./arrow-right-CfYtbDCU.js";import c from"./Header-UgiEzlkC.js";import"./Soluciones_Tecnologicas_Ortegon-BE8Dubus.js";const d=()=>e.jsxs("div",{className:"text-center",children:[e.jsx("span",{className:`\r
+import{j as e}from"./index-Bqc_2o3L.js";import{M as l}from"./mail-UHLhK49d.js";import{c as a}from"./createLucideIcon-CwRaRX6I.js";import{A as o}from"./arrow-right-VsX-P_LA.js";import c from"./Header-C76J-0fh.js";import"./Soluciones_Tecnologicas_Ortegon-BE8Dubus.js";const d=()=>e.jsxs("div",{className:"text-center",children:[e.jsx("span",{className:`\r
           inline-flex rounded-full\r
           border border-[#C0FDB9]/30\r
           bg-[#C0FDB9]/10\r
