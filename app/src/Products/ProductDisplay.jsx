@@ -24,7 +24,7 @@ const ProductDisplay = ({ image, altText }) => {
         src={image}
         alt={altText}
         draggable="false"
-        className="relative z-10 rounded-xl w-full max-w-[520px] object-contain drop-shadow-[0_0_60px_rgba(192,253,185,0.22)] animate-float"
+        className="relative z-10 rounded-2xl w-full max-w-[680px] object-contain drop-shadow-[0_0_60px_rgba(192,253,185,0.22)] animate-float"
       />
     </div>
   );

@@ -1,16 +1,57 @@
 @import "tailwindcss";
 
 :root {
-  --bg: #0F0F10;
-  --text: #FFFFFF;
+  /* Dark */
+  --color-bg: #0f0f10;
+  --color-bg-secondary: #d1d5db;
+
+  --color-surface: #1a1b1d;
+
+  --color-text: #ffffff;
+  --color-text-muted: rgba(255, 255, 255, 0.7);
+
+  --color-primary: #c0fdb9;
+  --color-primary-hover: #a9f79f;
+  --color-primary-text: #000000;
+
+  --color-border: rgba(255, 255, 255, 0.1);
+  --color-border-strong: rgba(255, 255, 255, 0.2);
+  --color-disabled: rgba(255, 255, 255, 0.05);
+  --color-text-on-secondary: #111827;
 }
 
 [data-theme="light"] {
-  --bg: #FFFFFF;
-  --text: #000000;
+  --color-bg: #ffffff;
+  --color-bg-secondary: #d1d5db;
+
+  --color-surface: #f3f4f6;
+
+  --color-text: #111827;
+  --color-text-muted: rgba(17, 24, 39, 0.7);
+
+  --color-primary: #c0fdb9;
+  --color-primary-hover: #a9f79f;
+  --color-primary-text: #000000;
+
+  --color-border: rgba(0, 0, 0, 0.1);
+  --color-border-strong: rgba(0, 0, 0, 0.2);
+  --color-disabled: rgba(0, 0, 0, 0.05);
 }
 
 [data-theme="corporate"] {
-  --bg: #474B4E;
-  --text: #FFFFFF;
+  --color-bg: #474b4e;
+  --color-bg-secondary: #d1d5db;
+
+  --color-surface: #5a5f63;
+
+  --color-text: #ffffff;
+  --color-text-muted: rgba(255, 255, 255, 0.7);
+
+  --color-primary: #c0fdb9;
+  --color-primary-hover: #a9f79f;
+  --color-primary-text: #000000;
+
+  --color-border: rgba(255, 255, 255, 0.1);
+  --color-border-strong: rgba(255, 255, 255, 0.2);
+  --color-disabled: rgba(255, 255, 255, 0.05);
 }

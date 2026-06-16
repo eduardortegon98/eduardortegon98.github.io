@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { Moon, Sun } from "lucide-react";
 
 import { useTheme } from "../context/ThemeContext";
 import Logo from "../../public/Soluciones_Tecnologicas_Ortegon.png";
-import { Moon, Sun } from "lucide-react";
 
 const navItems = [
   { label: "Log In", href: "/login" },
@@ -13,14 +13,9 @@ const navItems = [
 const Header = () => {
   const { theme, setTheme } = useTheme();
 
-  const location = useLocation();
+  const { pathname } = useLocation();
 
-  const [active, setActive] = useState(location.pathname);
   const [open, setOpen] = useState(false);
-
-  useEffect(() => {
-    setActive(location.pathname);
-  }, [location]);
 
   useEffect(() => {
     const onEsc = (e) => {
@@ -36,6 +31,10 @@ const Header = () => {
     };
   }, []);
 
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
+
   const toggleTheme = () => {
     setTheme((prev) => (prev === "dark" ? "corporate" : "dark"));
   };
@@ -47,31 +46,35 @@ const Header = () => {
 
       {/* Barra principal */}
       <div
-        className={`
-    border-b border-white/10 shadow-lg backdrop-blur-xl
-    ${theme === "dark" ? "bg-black/80" : "bg-[#474B4E]/80"}
-  `}
+        className="
+          border-b border-[var(--color-border)]
+          bg-[var(--color-bg)]
+          shadow-lg backdrop-blur-xl
+        "
       >
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="flex h-20 items-center justify-between">
             {/* Branding */}
             <Link
               to="/"
-              onClick={() => setOpen(false)}
               className="flex items-center gap-3"
             >
               <img
                 src={Logo}
                 alt="Soluciones Tecnológicas Ortegón"
-                className="h-12 w-12 rounded-xl border-2 border-[#C0FDB9] object-contain shadow-md"
+                className="
+                  h-12 w-12 rounded-xl
+                  border-2 border-[var(--color-primary)]
+                  object-contain shadow-md
+                "
               />
 
-              <div className="text-white">
+              <div className="hidden sm:block text-[var(--color-text)]">
                 <p className="text-lg font-extrabold tracking-tight">
                   Soluciones Tecnológicas Ortegón
                 </p>
 
-                <p className="text-sm text-[#C0FDB9]/90">
+                <p className="text-sm text-[var(--color-primary)]">
                   Ingeniería, software e IA para tu negocio.
                 </p>
               </div>
@@ -81,7 +84,7 @@ const Header = () => {
             <div className="hidden items-center gap-6 md:flex">
               <nav className="flex items-center gap-4">
                 {navItems.map((item) => {
-                  const isActive = active === item.href;
+                  const isActive = pathname === item.href;
 
                   return (
                     <Link
@@ -90,8 +93,8 @@ const Header = () => {
                       className={[
                         "relative px-3 py-2 font-medium transition-all duration-200",
                         isActive
-                          ? "text-[#C0FDB9] underline decoration-[#C0FDB9]/70 underline-offset-4"
-                          : "text-white/70 hover:text-[#C0FDB9] hover:underline hover:decoration-cyan-300",
+                          ? "text-[var(--color-primary)] underline decoration-[var(--color-primary)] underline-offset-4"
+                          : "text-[var(--color-text-muted)] hover:text-[var(--color-primary)]",
                       ].join(" ")}
                     >
                       {item.label}
@@ -103,13 +106,15 @@ const Header = () => {
               <Link
                 to="/cotizar"
                 className="
-                  rounded-full bg-[#C0FDB9]
-                  px-5 py-2.5 text-sm font-bold text-black
+                  rounded-full
+                  bg-[var(--color-primary)]
+                  px-5 py-2.5
+                  text-sm font-bold text-black
                   shadow-lg transition
-                  hover:brightness-110
+                  hover:bg-[var(--color-primary-hover)]
                   focus:outline-none
                   focus-visible:ring-2
-                  focus-visible:ring-[#C0FDB9]/50
+                  focus-visible:ring-[var(--color-primary)]
                 "
               >
                 Cotizar
@@ -118,20 +123,19 @@ const Header = () => {
               <button
                 onClick={toggleTheme}
                 className="
-    inline-flex items-center gap-2
-    rounded-xl bg-[#C0FDB9]
-    px-4 py-2 text-sm font-semibold text-black
-    transition hover:brightness-110
-  "
+                  inline-flex items-center gap-2
+                  rounded-xl
+                  bg-[var(--color-primary)]
+                  px-4 py-2
+                  text-sm font-semibold text-black
+                  transition
+                  hover:bg-[var(--color-primary-hover)]
+                "
               >
                 {theme === "dark" ? (
-                  <>
-                    <Sun size={18} />
-                  </>
+                  <Sun size={18} />
                 ) : (
-                  <>
-                    <Moon size={18} />
-                  </>
+                  <Moon size={18} />
                 )}
               </button>
             </div>
@@ -140,7 +144,12 @@ const Header = () => {
             <button
               type="button"
               onClick={() => setOpen((prev) => !prev)}
-              className="text-2xl text-white focus:outline-none md:hidden"
+              className="
+                text-2xl
+                text-[var(--color-text)]
+                focus:outline-none
+                md:hidden
+              "
             >
               {open ? "✕" : "☰"}
             </button>
@@ -149,21 +158,27 @@ const Header = () => {
 
         {/* Mobile Menu */}
         {open && (
-          <div className="border-t border-white/20 bg-black/90 backdrop-blur-lg md:hidden">
+          <div
+            className="
+              border-t border-[var(--color-border-strong)]
+              bg-[var(--color-surface)]
+              backdrop-blur-lg
+              md:hidden
+            "
+          >
             <nav className="flex flex-col gap-2 px-4 py-4">
               {navItems.map((item) => {
-                const isActive = active === item.href;
+                const isActive = pathname === item.href;
 
                 return (
                   <Link
                     key={item.href}
                     to={item.href}
-                    onClick={() => setOpen(false)}
                     className={[
                       "block rounded-lg px-3 py-2 text-sm font-semibold transition",
                       isActive
-                        ? "bg-[#C0FDB9]/30 text-[#C0FDB9]"
-                        : "text-white/80 hover:bg-white/10 hover:text-white",
+                        ? "bg-[var(--color-primary)]/20 text-[var(--color-primary)]"
+                        : "text-[var(--color-text-muted)] hover:bg-white/10 hover:text-[var(--color-text)]",
                     ].join(" ")}
                   >
                     {item.label}
@@ -173,13 +188,13 @@ const Header = () => {
 
               <Link
                 to="/cotizar"
-                onClick={() => setOpen(false)}
                 className="
                   mt-2 block rounded-lg
-                  bg-[#C0FDB9]
+                  bg-[var(--color-primary)]
                   px-4 py-3 text-center
                   text-sm font-bold text-black
-                  transition hover:brightness-110
+                  transition
+                  hover:bg-[var(--color-primary-hover)]
                 "
               >
                 Cotizar
@@ -192,12 +207,16 @@ const Header = () => {
                 }}
                 className="
                   mt-2 rounded-lg
-                  bg-[#C0FDB9]
-                  px-4 py-3 text-sm font-bold text-black
-                  transition hover:brightness-110
+                  bg-[var(--color-primary)]
+                  px-4 py-3
+                  text-sm font-bold text-black
+                  transition
+                  hover:bg-[var(--color-primary-hover)]
                 "
               >
-                {theme === "dark" ? "Modo corporativo" : "Modo oscuro"}
+                {theme === "dark"
+                  ? "Modo corporativo"
+                  : "Modo oscuro"}
               </button>
             </nav>
           </div>

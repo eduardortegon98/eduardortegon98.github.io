@@ -17,10 +17,10 @@ export const PRODUCTS = [
     eyebrow: "ORTCRM",
     title: "Gestiona tus clientes y ventas en un solo lugar",
     description:
-      "Organiza contactos, oportunidades y el seguimiento de tu equipo comercial.",
+      "Centraliza contactos y el seguimiento comercial.",
     image: "/src/assets/crm_bot.png",
     features: [
-      { label: "Gestión de clientes", Icon: Users },
+      { label: "Gestión clientes", Icon: Users },
       { label: "Embudo de ventas", Icon: GitMerge },
       { label: "Reportes y métricas", Icon: BarChart3 },
     ],
@@ -31,7 +31,7 @@ export const PRODUCTS = [
     eyebrow: "ORTWEB",
     title: "Sitios web que impulsan tu negocio",
     description:
-      "Diseñamos páginas modernas, rápidas y adaptadas a todos los dispositivos.",
+      "Diseñamos páginas rápidas y adaptadas a todos los dispositivos.",
     image: "/src/assets/web_bot.png",
     features: [
       { label: "Diseño responsive", Icon: Globe },

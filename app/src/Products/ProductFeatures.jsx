@@ -8,10 +8,10 @@ const ProductFeatures = ({ features }) => {
       {features.map(({ label, Icon }) => (
         <div
           key={label}
-          className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 backdrop-blur-xl"
+          className="flex items-center gap-2 rounded-full border border-white/10 bg-[#C0FDB9] px-4 py-2 backdrop-blur-xl"
         >
-          <Icon className="size-4 text-[#C0FDB9]" />
-          <span className="text-sm font-medium text-white/80">{label}</span>
+          <Icon className="size-4 text-black" />
+          <span className="text-sm font-medium text-black">{label}</span>
         </div>
       ))}
     </div>

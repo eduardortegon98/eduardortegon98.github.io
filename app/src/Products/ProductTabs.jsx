@@ -11,7 +11,7 @@ const ProductTabs = ({ products, activeIndex, onChange }) => {
             px-4 py-2 rounded-xl text-xs font-bold transition-all
             ${activeIndex === index 
               ? "bg-[#C0FDB9] text-black scale-105" 
-              : "bg-white/5 text-white/40 hover:bg-white/10 hover:text-white"}
+              : "bg-white/5 text-black hover:bg-[#C0FDB9]/10 hover:text-[#C0FDB9]"}
           `}
         >
           {product.eyebrow}

@@ -407,19 +407,21 @@ const Stack = () => {
 
   return (
     <section
-      className="relative w-full overflow-hidden bg-[#474B4E] py-16 sm:py-20 lg:min-h-screen lg:py-24"
+      className="
+    relative w-full overflow-hidden
+    bg-[var(--color-bg-secondary)]
+    py-16 sm:py-20 lg:min-h-screen lg:py-24
+  "
       id="stack"
     >
-      {/* background */}
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute -top-28 left-6 h-52 w-52 rounded-full bg-cyan-400/10 blur-3xl sm:left-10 sm:h-72 sm:w-72" />
-        <div className="absolute -bottom-32 right-6 h-56 w-56 rounded-full bg-blue-500/10 blur-3xl sm:right-10 sm:h-80 sm:w-80" />
-        <div className="absolute inset-0 bg-[#474B4E]" />
+        <div className="absolute -top-28 left-6 h-52 w-52 rounded-full bg-[#C0FDB9]/10 blur-3xl sm:left-10 sm:h-72 sm:w-72" />
+
+        <div className="absolute -bottom-32 right-6 h-56 w-56 rounded-full bg-[#C0FDB9]/5 blur-3xl sm:right-10 sm:h-80 sm:w-80" />
       </div>
 
       <div className="relative mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
         <div className="text-center">
-
           <h2 className="mt-3 font-extrabold tracking-tight text-[#C0FDB9] text-[clamp(1.9rem,5vw,3.4rem)]">
             Nuestras Tecnologías
           </h2>
