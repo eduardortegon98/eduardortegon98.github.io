@@ -7,9 +7,27 @@ const AUTHOR = "— Anónimo";
 const Background = memo(function Background() {
   return (
     <div className="pointer-events-none absolute inset-0">
-      <div className="absolute -top-20 left-4 h-32 w-32 rounded-full bg-cyan-400/10 blur-2xl sm:h-44 sm:w-44 lg:h-56 lg:w-56" />
-      <div className="absolute -bottom-20 right-4 h-36 w-36 rounded-full bg-blue-500/10 blur-2xl sm:h-48 sm:w-48 lg:h-60 lg:w-60" />
-      <div className="absolute inset-0 bg-[#474B4E]" />
+      <div
+        className="
+          absolute -top-20 left-4
+          h-32 w-32 rounded-full
+          bg-[var(--color-primary)]/10
+          blur-2xl
+          sm:h-44 sm:w-44
+          lg:h-56 lg:w-56
+        "
+      />
+
+      <div
+        className="
+          absolute -bottom-20 right-4
+          h-36 w-36 rounded-full
+          bg-[var(--color-primary)]/5
+          blur-2xl
+          sm:h-48 sm:w-48
+          lg:h-60 lg:w-60
+        "
+      />
     </div>
   );
 });
@@ -31,7 +49,7 @@ export default function Quotes() {
           observer.disconnect();
         }
       },
-      { threshold: 0.35, rootMargin: "0px 0px -10% 0px" }
+      { threshold: 0.35, rootMargin: "0px 0px -10% 0px" },
     );
 
     observer.observe(el);
@@ -73,7 +91,10 @@ export default function Quotes() {
   }, [started]);
 
   const typedQuote = useMemo(() => QUOTE.slice(0, quoteIndex), [quoteIndex]);
-  const typedAuthor = useMemo(() => AUTHOR.slice(0, authorIndex), [authorIndex]);
+  const typedAuthor = useMemo(
+    () => AUTHOR.slice(0, authorIndex),
+    [authorIndex],
+  );
 
   const showCursor = started && authorIndex < AUTHOR.length;
 
@@ -81,12 +102,28 @@ export default function Quotes() {
     <section
       ref={sectionRef}
       id="quotes"
-      className="relative flex min-h-[70svh] w-full items-center justify-center overflow-hidden bg-[#474B4E] px-4 py-16 sm:min-h-[80svh] sm:px-6 sm:py-20 lg:min-h-screen lg:px-8"
+      className="
+    relative flex w-full
+    min-h-[70svh] items-center justify-center
+    overflow-hidden
+    bg-[var(--color-bg-secondary)]
+    border-[10px]
+    border-[#248f26]
+    px-4 py-16
+    sm:min-h-[80svh] sm:px-6 sm:py-20
+    lg:min-h-screen lg:px-8
+  "
     >
       <Background />
 
       <div className="relative z-10 mx-auto w-full max-w-4xl text-center">
-        <div className="italianno-regular text-[#C0FDB9]">
+        <div
+          className="
+    italianno-regular
+    text-[var(--color-surface)]
+    drop-shadow-[0_4px_12px_rgba(0,0,0,0.18)]
+  "
+        >
           <span className="inline leading-[1.2] text-[clamp(1.45rem,4.8vw,3.4rem)] sm:text-[clamp(1.7rem,4.4vw,4rem)]">
             {typedQuote}
           </span>

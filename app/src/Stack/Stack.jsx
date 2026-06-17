@@ -426,7 +426,7 @@ const Stack = () => {
             Nuestras Tecnologías
           </h2>
 
-          <p className="mx-auto mt-3 max-w-2xl px-2 text-sm leading-relaxed text-white/65 sm:text-base">
+          <p className="mx-auto mt-3 max-w-2xl px-2 text-sm leading-relaxed text-[var(--color-surface)] sm:text-base">
             Diseñamos soluciones donde la IA, el software y la automatización
             trabajan juntos para optimizar procesos reales.
           </p>

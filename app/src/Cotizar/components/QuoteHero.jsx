@@ -13,7 +13,7 @@ const QuoteHero = () => {
             Cuéntanos qué necesitas.
           </h1>
 
-          <p className="mt-6 text-lg text-white/70">
+          <p className="mt-6 text-lg text-[var(--color-surface)]">
             Diseñamos soluciones tecnológicas adaptadas a cada negocio. Cuanto
             más detalle nos brindes, más precisa será nuestra propuesta.
           </p>
