@@ -1,7 +1,12 @@
 import React, { useEffect, useMemo, useState, useCallback } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Bot, Mic, TrashIcon, Sparkles } from "lucide-react";
-import { FaFacebookF, FaInstagram, FaWhatsapp, FaPaperPlane } from "react-icons/fa";
+import {
+  FaFacebookF,
+  FaInstagram,
+  FaWhatsapp,
+  FaPaperPlane,
+} from "react-icons/fa";
 
 const CONTACTS = {
   whatsappNumber: "57XXXXXXXXXX",
@@ -45,7 +50,7 @@ const pickSuggestion = (text, channel) => {
       "windows",
       "formate",
       "lento",
-      "virus"
+      "virus",
     )
   ) {
     return {
@@ -136,7 +141,7 @@ function ChannelPill({ id, Icon, title, active, onSelect }) {
         "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C0FDB9]/60",
         active
           ? "bg-[#C0FDB9]/90 text-black ring-white/10"
-          : "bg-white/5 text-white/80 hover:text-white hover:bg-white/10 ring-white/10"
+          : "bg-white/5 text-white/80 hover:text-white hover:bg-white/10 ring-white/10",
       )}
     >
       <span
@@ -144,7 +149,7 @@ function ChannelPill({ id, Icon, title, active, onSelect }) {
           "pointer-events-none absolute -inset-10 blur-2xl transition",
           active
             ? "bg-[#C0FDB9]/22 opacity-100"
-            : "bg-[#C0FDB9]/16 opacity-0 group-hover:opacity-100"
+            : "bg-[#C0FDB9]/16 opacity-0 group-hover:opacity-100",
         )}
       />
       <Icon className="relative text-[18px]" />
@@ -165,7 +170,7 @@ function IconAction({ onClick, title, children, variant = "ghost" }) {
         "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C0FDB9]/60",
         variant === "primary"
           ? "bg-[#C0FDB9]/90 hover:bg-[#C0FDB9] text-black ring-white/10 shadow-[0_18px_55px_-35px_rgba(192,253,185,0.95)]"
-          : "bg-white/5 hover:bg-white/10 text-white/80 hover:text-white ring-white/10 hover:ring-[#C0FDB9]/25"
+          : "bg-white/5 hover:bg-white/10 text-white/80 hover:text-white ring-white/10 hover:ring-[#C0FDB9]/25",
       )}
     >
       {variant === "primary" && (
@@ -227,7 +232,7 @@ function WalkieModal({
                   "relative overflow-hidden rounded-3xl",
                   "bg-[#0b0d12]/95 backdrop-blur-xl ring-1 ring-white/10",
                   "shadow-[0_40px_120px_-70px_rgba(192,253,185,0.95)]",
-                  "max-h-[calc(100svh-2rem)] sm:max-h-[calc(100svh-3rem)] flex flex-col"
+                  "max-h-[calc(100svh-2rem)] sm:max-h-[calc(100svh-3rem)] flex flex-col",
                 )}
               >
                 <motion.div
@@ -344,7 +349,11 @@ function WalkieModal({
                     </div>
 
                     <div className="flex shrink-0 flex-row gap-2 sm:flex-col">
-                      <IconAction onClick={send} title="Enviar" variant="primary">
+                      <IconAction
+                        onClick={send}
+                        title="Enviar"
+                        variant="primary"
+                      >
                         <FaPaperPlane className="text-[18px]" />
                       </IconAction>
 
@@ -379,11 +388,13 @@ const Walkie = () => {
 
   const suggestion = useMemo(
     () => pickSuggestion(message, channel),
-    [message, channel]
+    [message, channel],
   );
 
   const links = useMemo(() => {
-    const text = encodeURIComponent(message || "Hola, quiero más información 😊");
+    const text = encodeURIComponent(
+      message || "Hola, quiero más información 😊",
+    );
     return {
       whatsapp: `https://wa.me/${CONTACTS.whatsappNumber}?text=${text}`,
       facebook: `https://m.me/${CONTACTS.facebookPage}`,
@@ -410,7 +421,7 @@ const Walkie = () => {
   const clear = useCallback(() => setMessage(""), []);
   const applySuggestion = useCallback(
     () => setMessage(suggestion.fill),
-    [suggestion.fill]
+    [suggestion.fill],
   );
 
   useEffect(() => {
@@ -426,17 +437,20 @@ const Walkie = () => {
           DESKTOP: abajo derecha */}
       <button
         onClick={openChat}
-        className="
-          fixed bottom-[40svh] right-0 -translate-y-1/2 -translate-x-1/2 z-50
-          sm:bottom-6 sm:right-6 sm:left-auto sm:translate-x-0
-          group inline-flex items-center justify-center
-          h-14 w-14 rounded-full
-          bg-[#C0FDB9]/90 text-black
-          hover:bg-[#C0FDB9] transition
-          shadow-[0_22px_70px_-35px_rgba(192,253,185,0.95)]
-          ring-1 ring-white/10
-          focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40
-        "
+        className={cx(
+          `
+    fixed bottom-[40svh] right-0 -translate-y-1/2 -translate-x-1/2 z-50
+    sm:bottom-6 sm:right-6 sm:left-auto sm:translate-x-0
+    group inline-flex items-center justify-center
+    h-14 w-14 rounded-full
+    bg-[#C0FDB9]/90 text-black
+    hover:bg-[#C0FDB9] transition
+    shadow-[0_22px_70px_-35px_rgba(192,253,185,0.95)]
+    ring-1 ring-white/10
+    focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40
+  `,
+          !open && "animate-bounce",
+        )}
         aria-label="Abrir chat"
         title="Abrir chat"
         type="button"

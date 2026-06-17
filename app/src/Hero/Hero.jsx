@@ -26,6 +26,7 @@ const Hero = () => {
         relative min-h-[calc(100svh-64px)]
         w-full overflow-hidden
         bg-[var(--color-bg-secondary)]
+        opacity-90
       "
     >
       <button
@@ -42,6 +43,7 @@ const Hero = () => {
     transition-all duration-300
     hover:scale-110
     hover:shadow-[0_0_25px_rgba(192,253,185,0.45)]
+    animate-bounce
   "
       >
         <ChevronDown className="h-5 w-5" />
@@ -54,7 +56,7 @@ const Hero = () => {
           aria-hidden="true"
           className="
             h-full w-full
-            object-fill object-center
+            object-fit object-center
             select-none
           "
         />
