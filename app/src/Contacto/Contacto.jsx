@@ -6,8 +6,15 @@ import Header from "../Header/Header";
 
 const Contacto = () => {
   return (
-    <div className="  bg-[#474B4E] text-white">
-      <Header/>
+    <div
+      className="min-h-screen"
+      style={{
+        backgroundColor: "var(--color-bg-secondary)",
+        color: "var(--color-text)",
+      }}
+    >
+      <Header />
+
       <div className="relative z-10">
         <ContactHero />
 

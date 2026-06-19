@@ -1,5 +1,6 @@
 import { ChevronDown } from "lucide-react";
 import Logo from "../../public/Soluciones_Tecnologicas_Ortegon.png";
+import { animate } from "framer-motion";
 
 import { useTheme } from "../context/ThemeContext";
 import ImageHero from "../assets/zeus_milo.png";
@@ -12,12 +13,18 @@ const Hero = () => {
   const goTo = (id) => {
     const el = document.getElementById(id);
 
-    if (el) {
-      el.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    }
+    if (!el) return;
+
+    const start = window.scrollY;
+    const end = el.offsetTop;
+
+    animate(start, end, {
+      duration: 1.2,
+      ease: "easeInOut",
+      onUpdate: (value) => {
+        window.scrollTo(0, value);
+      },
+    });
   };
 
   return (
@@ -69,33 +76,6 @@ const Hero = () => {
           bg-[var(--color-bg-secondary)]/5
         "
       />
-
-      {/* Contenido */}
-      <div
-        className="
-    relative z-10
-    flex min-h-[calc(100svh-64px)]
-    w-full
-    items-start justify-center
-    px-1 pt-16 pb-10
-    sm:px-1 sm:pt-20 sm:pb-12
-    lg:px-1 lg:pt-5
-  "
-      >
-        <div className="w-full max-w-4xl ml-40">
-          <h1
-            className="
-        font-extrabold
-        leading-[1.08]
-        tracking-tight
-        text-[clamp(1.75rem,5.2vw,3.4rem)]
-        text-[var(--color-primary)]
-      "
-          >
-            Soluciones Tecnológicas Ortegón
-          </h1>
-        </div>
-      </div>
     </section>
   );
 };

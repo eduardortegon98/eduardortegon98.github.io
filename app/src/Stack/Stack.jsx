@@ -10,7 +10,9 @@ import {
   Wind,
   Terminal,
   Plug,
+  ChevronDown,
 } from "lucide-react";
+import { animate } from "framer-motion";
 
 import imgStack from "../assets/img_stack.png";
 
@@ -403,6 +405,20 @@ const Stack = () => {
     automation: useRef(null),
   };
 
+  const goTo = (id) => {
+    const el = document.getElementById(id);
+
+    if (!el) return;
+
+    animate(window.scrollY, el.offsetTop, {
+      duration: 1.2,
+      ease: "easeInOut",
+      onUpdate: (latest) => {
+        window.scrollTo(0, latest);
+      },
+    });
+  };
+
   const m = useMeasurePorts(wrapRef, refs);
 
   return (
@@ -511,6 +527,27 @@ const Stack = () => {
                 side="right"
               />
             </div>
+          </div>
+          <div className=" flex justify-center">
+            <button
+              type="button"
+              onClick={() => goTo("projects")}
+              className="
+      rounded-full
+      bg-[var(--color-primary)]
+      p-4
+      text-black
+      shadow-lg
+      transition-all duration-300
+      hover:scale-110
+      hover:bg-[var(--color-primary-hover)]
+      hover:shadow-[0_0_25px_rgba(192,253,185,0.45)]
+      animate-bounce
+    "
+              aria-label="Ir a tecnologías"
+            >
+              <ChevronDown className="h-5 w-5" />
+            </button>
           </div>
         </div>
       </div>

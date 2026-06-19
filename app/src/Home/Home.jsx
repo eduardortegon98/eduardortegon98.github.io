@@ -17,25 +17,26 @@ const DeferredSection = memo(function DeferredSection({
   children,
   minHeight = 400,
   rootMargin = "250px 0px",
+  id,
 }) {
   const { ref, inView } = useInViewOnce({ rootMargin });
 
   return (
-    <section ref={ref} style={{ minHeight }}>
+    <section id={id} ref={ref} style={{ minHeight }}>
       {inView ? <Suspense fallback={null}>{children}</Suspense> : null}
     </section>
   );
 });
 
-function Home({theme, setTheme}) {
+function Home({ theme, setTheme }) {
   return (
     <>
       <Suspense fallback={null}>
-        <Header setTheme = {setTheme} />
+        <Header setTheme={setTheme} />
         <Hero />
       </Suspense>
 
-      <DeferredSection minHeight={720} rootMargin="300px 0px">
+      <DeferredSection id="products" minHeight={720} rootMargin="300px 0px">
         <Products />
       </DeferredSection>
 

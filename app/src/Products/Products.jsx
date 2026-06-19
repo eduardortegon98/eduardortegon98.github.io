@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, ChevronDown } from "lucide-react";
+import { animate } from "framer-motion";
 
 import { PRODUCTS } from "./constants";
 
@@ -29,6 +30,20 @@ const Products = () => {
     }
   };
 
+  const goTo = (id) => {
+    const el = document.getElementById(id);
+
+    if (!el) return;
+
+    animate(window.scrollY, el.offsetTop, {
+      duration: 1.2,
+      ease: "easeInOut",
+      onUpdate: (latest) => {
+        window.scrollTo(0, latest);
+      },
+    });
+  };
+
   const arrowButtonClass = (disabled) =>
     [
       "rounded-full p-3 transition-all",
@@ -50,7 +65,6 @@ const Products = () => {
 
   return (
     <section
-      id="products"
       className="
     relative flex min-h-screen w-full flex-col
     items-center justify-center overflow-hidden
@@ -66,51 +80,73 @@ const Products = () => {
         onChange={setActiveIndex}
       />
 
-        <div className="relative z-10 mx-auto w-full max-w-7xl px-6 sm:px-10 lg:px-16">
-          {/* Flecha izquierda */}
-          <div
-            className="
+      <div className="relative z-10 mx-auto w-full max-w-7xl px-6 sm:px-10 lg:px-16">
+        {/* Flecha izquierda */}
+        <div
+          className="
               absolute -left-4 top-1/2 z-20 hidden
               -translate-y-1/2 xl:block 
             "
+        >
+          <button
+            onClick={goPrev}
+            disabled={isFirst}
+            className={arrowButtonClass(isFirst)}
+            aria-label="Producto anterior"
           >
-            <button
-              onClick={goPrev}
-              disabled={isFirst}
-              className={arrowButtonClass(isFirst)}
-              aria-label="Producto anterior"
-            >
-              <ArrowLeft className="size-6" />
-            </button>
-          </div>
+            <ArrowLeft className="size-6" />
+          </button>
+        </div>
 
-          {/* Flecha derecha */}
-          <div
-            className="
+        {/* Flecha derecha */}
+        <div
+          className="
               absolute -right-4 top-1/2 z-20 hidden
               -translate-y-1/2 xl:block
             "
+        >
+          <button
+            onClick={goNext}
+            disabled={isLast}
+            className={arrowButtonClass(isLast)}
+            aria-label="Siguiente producto"
           >
-            <button
-              onClick={goNext}
-              disabled={isLast}
-              className={arrowButtonClass(isLast)}
-              aria-label="Siguiente producto"
-            >
-              <ArrowRight className="size-6" />
-            </button>
-          </div>
-
-          {/* Layout principal */}
-          <div className="grid w-full items-center gap-16 lg:grid-cols-2">
-            <ProductDetails product={activeProduct} />
-
-            <ProductDisplay
-              image={activeProduct.image}
-              altText={activeProduct.title}
-            />
-          </div>
+            <ArrowRight className="size-6" />
+          </button>
         </div>
+
+        {/* Layout principal */}
+        <div className="grid w-full items-center gap-16 lg:grid-cols-2">
+          <ProductDetails product={activeProduct} />
+
+          <ProductDisplay
+            image={activeProduct.image}
+            altText={activeProduct.title}
+          />
+        </div>
+
+        <div className="mt-16 flex justify-center">
+          <button
+            type="button"
+            onClick={() => goTo("stack")}
+            className="
+      rounded-full
+      bg-[var(--color-primary)]
+      p-4
+      text-black
+      shadow-lg
+      transition-all duration-300
+      hover:scale-110
+      hover:bg-[var(--color-primary-hover)]
+      hover:shadow-[0_0_25px_rgba(192,253,185,0.45)]
+      animate-bounce
+    "
+            aria-label="Ir a tecnologías"
+          >
+            <ChevronDown className="h-5 w-5" />
+          </button>
+        </div>
+      </div>
     </section>
   );
 };
