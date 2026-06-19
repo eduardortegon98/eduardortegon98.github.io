@@ -16,14 +16,14 @@ const PROJECTS = [
     tags: ["React", "Node.js", "Tailwind", "CSS", "Azure"],
     href: "https://5igsolutions.com/",
     status: "Done",
-  }
-  // {
-  //   title: "Mariagua Group",
-  //   description: "Desarrollo de marca y creación de sitio web.",
-  //   tags: ["React", "Node", "Tailwind", "Firebase"],
-  //   href: "https://adiston.com/",
-  //   status: "Beta",
-  // },
+  },
+  {
+    title: "enSEÑArte LSC",
+    description: "Plataforma aprendizaje de lengua de señas Colombiana",
+    tags: ["React", "Node", "Tailwind", "Firebase", "Docker"],
+    href: "https://www.linkedin.com/feed/update/urn:li:activity:7346741868321288192/",
+    status: "Beta",
+  },
 ];
 
 const Background = () => (

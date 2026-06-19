@@ -118,7 +118,7 @@ const StackCard = React.forwardRef(function StackCard(
       `}
     >
       <div className="flex items-center justify-between gap-3">
-        <div className="text-[10px] sm:text-[11px] font-semibold tracking-[0.22em] sm:tracking-[0.24em] text-white/60">
+        <div className="text-[10px] sm:text-[11px] font-semibold tracking-[0.22em] sm:tracking-[0.24em] text-black">
           {title}
         </div>
         <div className="h-px w-10 sm:w-16 bg-gradient-to-r from-transparent via-cyan-300/30 to-transparent" />
@@ -189,7 +189,7 @@ const StackCard = React.forwardRef(function StackCard(
           </div>
 
           <div className="flex items-center justify-between gap-3">
-            <div className="text-[10px] sm:text-[11px] font-semibold tracking-[0.22em] sm:tracking-[0.24em] text-white/60">
+            <div className="text-xs font-semibold uppercase tracking-widest text-black] font-mono">
               {title}
             </div>
             <div className="h-px w-10 sm:w-16 bg-gradient-to-r from-transparent via-cyan-300/30 to-transparent" />
@@ -442,7 +442,7 @@ const Stack = () => {
             Nuestras Tecnologías
           </h2>
 
-          <p className="mx-auto mt-3 max-w-2xl px-2 text-sm leading-relaxed text-[var(--color-surface)] sm:text-base">
+          <p className="mx-auto mt-3 max-w-2xl px-2 text-sm leading-relaxed  sm:text-base">
             Diseñamos soluciones donde la IA, el software y la automatización
             trabajan juntos para optimizar procesos reales.
           </p>

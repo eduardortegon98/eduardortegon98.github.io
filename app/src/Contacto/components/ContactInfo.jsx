@@ -25,11 +25,11 @@ const CONTACT_INFO = [
 
 const ContactInfo = () => {
   return (
-    <div className="space-y-6 lg:col-span-2">
+    <div className="space-y-6 lg:col-span-2 text-[var(--color-primary-text)]">
       <div>
         <h2 className="text-2xl font-bold">Hablemos</h2>
 
-        <p className="mt-3 text-white/70">
+        <p className="mt-3 ">
           Puedes comunicarte con nosotros a través de cualquiera de estos
           canales.
         </p>

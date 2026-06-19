@@ -6,7 +6,7 @@ import { useTheme } from "../context/ThemeContext";
 import Logo from "../../public/Soluciones_Tecnologicas_Ortegon.png";
 
 const navItems = [
-  { label: "Log In", href: "/login" },
+  { label: "Login", href: "/login" },
   { label: "Contacto", href: "/contacto" },
 ];
 

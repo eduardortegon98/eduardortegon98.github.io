@@ -6,12 +6,12 @@ const inputClass =
 
 const ContactForm = () => {
   return (
-    <div className="rounded-3xl border border-white/10 bg-white/5 p-8 backdrop-blur-xl lg:col-span-3">
+    <div className="rounded-3xl border border-white bg-[var(--color-text)]/15 text-black p-8 backdrop-blur-xl lg:col-span-3">
       <h2 className="text-2xl font-bold">
         Envíanos un mensaje
       </h2>
 
-      <p className="mt-3 text-white/70">
+      <p className="mt-3">
         Completa la siguiente información y nos pondremos en contacto contigo.
       </p>
 

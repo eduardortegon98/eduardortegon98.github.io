@@ -38,7 +38,7 @@ const ProductDetails = ({ product }) => {
         className="
           mt-6 max-w-lg
           text-sm leading-relaxed
-          text-[var(--color-text)]
+          
           sm:text-base
         "
       >

@@ -19,7 +19,7 @@ const Contacto = () => {
         <ContactHero />
 
         <section className="px-6 pb-24">
-          <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-5">
+          <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-5">
             <ContactInfo />
             <ContactForm />
           </div>

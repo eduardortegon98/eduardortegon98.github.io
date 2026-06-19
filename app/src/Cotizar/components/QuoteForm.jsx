@@ -19,14 +19,14 @@ const selectClass = `${inputClass} appearance-none pr-12 cursor-pointer`;
 const QuoteForm = () => {
   return (
     <section className="px-6 py-24 justify-center items-center">
-      <div className="mx-auto max-w-4xl rounded-3xl border border-white/10 bg-white/5 p-8 backdrop-blur-xl md:p-10">
+      <div className="text-black mx-auto  rounded-3xl border border-white bg-[var(--color-text)]/15 p-8 backdrop-blur-xl md:p-10">
         {/* Encabezado */}
         <div>
           <h2 className="text-3xl font-bold">
             Solicitar cotización
           </h2>
 
-          <p className="mt-3 text-white/70">
+          <p className="mt-3 ">
             Completa el formulario y prepararemos una propuesta personalizada.
           </p>
         </div>
@@ -149,7 +149,7 @@ const QuoteForm = () => {
                 ¿Prefieres atención inmediata?
               </h3>
 
-              <p className="mt-1 text-sm text-white/70">
+              <p className="mt-1 text-sm ">
                 Escríbenos directamente por WhatsApp.
               </p>
             </div>

@@ -15,7 +15,7 @@ const ProductTabs = ({ products, activeIndex, onChange }) => {
             px-5 py-2 text-sm font-semibold rounded-md tracking-wider transition-all
             ${
               isActive
-                ? "bg-[#C0FDB9] text-black"
+                ? "bg-black text-white"
                 : "text-black/60 hover:text-black"
             }
           `}
