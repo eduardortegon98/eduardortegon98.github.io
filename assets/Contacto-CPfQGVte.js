@@ -1,0 +1,25 @@
+import{j as e}from"./index-C39VJYhb.js";import{c as a}from"./createLucideIcon-DkJTexPn.js";import{M as n}from"./mail-CNku8pQE.js";import{M as c,A as i}from"./message-circle-CROi7gOa.js";import d from"./Header-C0A2ryvo.js";const x=[["path",{d:"M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0",key:"1r0f0z"}],["circle",{cx:"12",cy:"10",r:"3",key:"ilqhr7"}]],m=a("map-pin",x);const p=[["path",{d:"M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384",key:"9njp5v"}]],h=a("phone",p),u=()=>e.jsx("section",{className:`\r
+        relative flex w-full flex-col items-center justify-center \r
+        overflow-hidden  py-32 px-6\r
+        transition-colors duration-300 \r
+        text-[var(--color-primary-text)]\r
+      `,children:e.jsx("div",{className:"relative z-10 mx-auto w-full max-w-7xl sm:px-10 lg:px-16",children:e.jsxs("div",{className:"max-w-3xl",children:[e.jsx("span",{className:`\r
+              inline-flex rounded-full border border-[var(--color-primary)]/30 \r
+              bg-[var(--color-primary)]/60 px-4 py-1 text-sm font-medium \r
+            \r
+            `,children:"Contacto"}),e.jsx("h1",{className:`\r
+              mt-6 text-4xl font-extrabold tracking-tight \r
+               md:text-6xl\r
+            `,children:"Estamos listos para ayudarte."}),e.jsx("p",{className:`\r
+              mt-6 text-lg leading-relaxed \r
+              \r
+            `,children:"Cuéntanos sobre tu proyecto o necesidad y encontraremos la mejor solución para tu negocio."})]})})}),j=({icon:s,title:l,value:o})=>e.jsxs("div",{className:"flex items-start gap-4 rounded-2xl border border-white bg-[var(--color-text)]/15 p-5",children:[e.jsx("div",{className:"rounded-xl bg-[#C0FDB9]/10 p-3",children:e.jsx(s,{size:22,className:"text-[#C0FDB9]"})}),e.jsxs("div",{children:[e.jsx("p",{className:"font-semibold",children:l}),e.jsx("p",{className:"mt-1 ",children:o})]})]}),t="3337255586",b=[{icon:h,title:"Teléfono",value:t},{icon:n,title:"Correo electrónico",value:"eduardortegon2398@gmail.com"},{icon:m,title:"Ubicación",value:"Bogotá, Colombia"}],v=()=>e.jsxs("div",{className:"space-y-6 lg:col-span-2 text-[var(--color-primary-text)]",children:[e.jsxs("div",{children:[e.jsx("h2",{className:"text-2xl font-bold",children:"Hablemos"}),e.jsx("p",{className:"mt-3 ",children:"Puedes comunicarte con nosotros a través de cualquiera de estos canales."})]}),e.jsx("div",{className:"space-y-4",children:b.map(s=>e.jsx(j,{icon:s.icon,title:s.title,value:s.value},s.title))}),e.jsxs("a",{href:`https://wa.me/${t}`,target:"_blank",rel:"noopener noreferrer",className:`\r
+          inline-flex items-center gap-3 rounded-2xl\r
+          bg-[#C0FDB9] px-6 py-4 font-bold text-black\r
+          transition hover:brightness-110\r
+        `,children:[e.jsx(c,{size:20}),"Hablar por WhatsApp"]})]}),r="w-full rounded-2xl border border-white/10 bg-black/40 px-4 py-3 text-white placeholder:text-white/40 outline-none transition focus:border-[#C0FDB9]",N=()=>e.jsxs("div",{className:"rounded-3xl border border-white bg-[var(--color-text)]/15 text-black p-8 backdrop-blur-xl lg:col-span-3",children:[e.jsx("h2",{className:"text-2xl font-bold",children:"Envíanos un mensaje"}),e.jsx("p",{className:"mt-3",children:"Completa la siguiente información y nos pondremos en contacto contigo."}),e.jsxs("form",{className:"mt-10 space-y-6",children:[e.jsxs("div",{className:"grid gap-6 md:grid-cols-2",children:[e.jsxs("div",{children:[e.jsx("label",{className:"mb-2 block text-sm font-medium",children:"Nombre"}),e.jsx("input",{type:"text",placeholder:"Tu nombre",className:r})]}),e.jsxs("div",{children:[e.jsx("label",{className:"mb-2 block text-sm font-medium",children:"Correo electrónico"}),e.jsx("input",{type:"email",placeholder:"correo@ejemplo.com",className:r})]})]}),e.jsxs("div",{children:[e.jsx("label",{className:"mb-2 block text-sm font-medium",children:"Asunto"}),e.jsx("input",{type:"text",placeholder:"¿En qué podemos ayudarte?",className:r})]}),e.jsxs("div",{children:[e.jsx("label",{className:"mb-2 block text-sm font-medium",children:"Mensaje"}),e.jsx("textarea",{rows:6,placeholder:"Describe tu proyecto...",className:r})]}),e.jsxs("button",{type:"submit",className:`\r
+            inline-flex w-full items-center justify-center gap-2\r
+            rounded-2xl bg-[#C0FDB9]\r
+            px-6 py-4 font-bold text-black\r
+            transition hover:brightness-110\r
+          `,children:["Enviar mensaje",e.jsx(i,{size:20})]})]})]}),k=()=>e.jsxs("div",{className:"min-h-screen",style:{backgroundColor:"var(--color-bg-secondary)",color:"var(--color-text)"},children:[e.jsx(d,{}),e.jsxs("div",{className:"relative z-10",children:[e.jsx(u,{}),e.jsx("section",{className:"px-6 pb-24",children:e.jsxs("div",{className:"mx-auto grid max-w-6xl gap-10 lg:grid-cols-5",children:[e.jsx(v,{}),e.jsx(N,{})]})})]})]});export{k as default};
