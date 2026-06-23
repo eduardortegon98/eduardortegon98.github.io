@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { ArrowLeft, ArrowRight, ChevronDown } from "lucide-react";
-import { animate } from "framer-motion";
+import { animate, AnimatePresence, motion } from "framer-motion";
 
 import { PRODUCTS } from "./constants";
 
@@ -12,6 +12,7 @@ import ProductTabs from "./ProductTabs";
 
 const Products = () => {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [direction, setDirection] = useState(0);
 
   const activeProduct = PRODUCTS[activeIndex];
 
@@ -20,12 +21,14 @@ const Products = () => {
 
   const goNext = () => {
     if (!isLast) {
+      setDirection(1);
       setActiveIndex((prev) => prev + 1);
     }
   };
 
   const goPrev = () => {
     if (!isFirst) {
+      setDirection(-1);
       setActiveIndex((prev) => prev - 1);
     }
   };
@@ -116,14 +119,42 @@ const Products = () => {
         </div>
 
         {/* Layout principal */}
-        <div className="grid w-full items-center gap-16 lg:grid-cols-2">
-          <ProductDetails product={activeProduct} />
+        <AnimatePresence mode="wait" custom={direction}>
+          <motion.div
+            key={activeIndex}
+            custom={direction}
+            variants={{
+              enter: (direction) => ({
+                x: direction > 0 ? 100 : -100,
+                opacity: 0,
+              }),
+              center: {
+                x: 0,
+                opacity: 1,
+              },
+              exit: (direction) => ({
+                x: direction > 0 ? -100 : 100,
+                opacity: 0,
+              }),
+            }}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{
+              duration: 0.45,
+              ease: "easeInOut",
+            }}
+          >
+            <div className="grid w-full items-center gap-16 lg:grid-cols-2">
+              <ProductDetails product={activeProduct} />
 
-          <ProductDisplay
-            image={activeProduct.image}
-            altText={activeProduct.title}
-          />
-        </div>
+              <ProductDisplay
+                image={activeProduct.image}
+                altText={activeProduct.title}
+              />
+            </div>
+          </motion.div>
+        </AnimatePresence>
 
         <div className="mt-16 flex justify-center">
           <button

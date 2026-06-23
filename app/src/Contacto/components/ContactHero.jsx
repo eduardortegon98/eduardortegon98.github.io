@@ -5,7 +5,7 @@ const ContactHero = () => {
     <section
       className="
         relative flex w-full flex-col items-center justify-center 
-        overflow-hidden  py-32 px-6
+        overflow-hidden  py-16 px-6
         transition-colors duration-300 
         text-[var(--color-primary-text)]
       "
@@ -24,12 +24,7 @@ const ContactHero = () => {
           </span>
 
           {/* Título Principal */}
-          <h1
-            className="
-              mt-6 text-4xl font-extrabold tracking-tight 
-               md:text-6xl
-            "
-          >
+          <h1 className="mt-6 text-4xl font-extrabold tracking-tight md:text-5xl">
             Estamos listos para ayudarte.
           </h1>
 

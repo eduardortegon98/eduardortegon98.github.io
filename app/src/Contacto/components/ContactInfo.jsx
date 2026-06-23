@@ -25,9 +25,9 @@ const CONTACT_INFO = [
 
 const ContactInfo = () => {
   return (
-    <div className="space-y-6 lg:col-span-2 text-[var(--color-primary-text)]">
+    <div className="space-y-4 lg:col-span-2 text-[var(--color-primary-text)]">
       <div>
-        <h2 className="text-2xl font-bold">Hablemos</h2>
+        <h2 className="text-xl font-bold">Hablemos</h2>
 
         <p className="mt-3 ">
           Puedes comunicarte con nosotros a través de cualquiera de estos
@@ -35,7 +35,7 @@ const ContactInfo = () => {
         </p>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-3">
         {CONTACT_INFO.map((item) => (
           <ContactCard
             key={item.title}

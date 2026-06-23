@@ -1,5 +1,6 @@
 import React from "react";
 import { FaFacebookF, FaInstagram, FaLinkedinIn } from "react-icons/fa";
+import { animate } from "framer-motion";
 
 const socials = [
   {
@@ -24,7 +25,14 @@ const Footer = () => {
 
   const scrollToTop = (e) => {
     e.preventDefault();
-    window.scrollTo({ top: 0, behavior: "smooth" });
+
+    animate(window.scrollY, 0, {
+      duration: 1.2,
+      ease: "easeInOut",
+      onUpdate: (latest) => {
+        window.scrollTo(0, latest);
+      },
+    });
   };
 
   return (
