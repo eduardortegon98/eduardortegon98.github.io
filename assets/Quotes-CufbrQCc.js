@@ -1,4 +1,4 @@
-import{r,j as e}from"./index-C39VJYhb.js";const m="La IA es una herramienta, no un destino: el juicio, la ética y la creatividad siguen siendo tuyos.",i="— Anónimo",v=r.memo(function(){return e.jsxs("div",{className:"pointer-events-none absolute inset-0",children:[e.jsx("div",{className:`\r
+import{r,j as e}from"./index-CGfH34VH.js";const m="La IA es una herramienta, no un destino: el juicio, la ética y la creatividad siguen siendo tuyos.",i="— Anónimo",v=r.memo(function(){return e.jsxs("div",{className:"pointer-events-none absolute inset-0",children:[e.jsx("div",{className:`\r
           absolute -top-20 left-4\r
           h-32 w-32 rounded-full\r
           bg-[var(--color-primary)]/10\r
