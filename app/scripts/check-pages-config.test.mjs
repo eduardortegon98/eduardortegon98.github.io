@@ -1,0 +1,11 @@
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { validatePagesConfig } from "./check-pages-config.mjs";
+const jwt = (role, exp) => "header." + Buffer.from(JSON.stringify({ role, exp })).toString("base64url") + ".signature";
+const env = { VITE_SUPABASE_URL: "https://example.supabase.co", VITE_SUPABASE_ANON_KEY: "sb_publishable_example_public_key" };
+test("accepts a public publishable key", () => assert.doesNotThrow(() => validatePagesConfig(env)));
+test("accepts a legacy anon JWT", () => assert.doesNotThrow(() => validatePagesConfig({ ...env, VITE_SUPABASE_ANON_KEY: jwt("anon", Math.floor(Date.now()/1000)+3600) })));
+test("rejects missing configuration", () => { assert.throws(() => validatePagesConfig({})); assert.throws(() => validatePagesConfig({ VITE_SUPABASE_URL: env.VITE_SUPABASE_URL })); });
+test("rejects secret and service_role keys", () => { for (const key of ["sb_secret_example_secret_key", jwt("service_role")]) assert.throws(() => validatePagesConfig({ ...env, VITE_SUPABASE_ANON_KEY: key })); });
+test("rejects invalid, expired and unexpected-role keys", () => { for (const key of ["invalid", jwt("anon",1), jwt("authenticated")]) assert.throws(() => validatePagesConfig({ ...env, VITE_SUPABASE_ANON_KEY: key })); });
+test("rejects invalid or unsafe project URLs", () => { for (const url of ["invalid", "http://example.com", "https://user:password@example.com", "https://example.com/path", "https://example.com?key=value"]) assert.throws(() => validatePagesConfig({ ...env, VITE_SUPABASE_URL: url })); });

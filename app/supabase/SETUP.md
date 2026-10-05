@@ -12,7 +12,7 @@ La aplicación utiliza un único proyecto Supabase para contacto, cotizaciones, 
 6. Configura Site URL como `https://eduardortegon98.github.io` y agrega `https://eduardortegon98.github.io/login` y `http://localhost:5173/login` a las URL de redirección autorizadas. Para otro dominio, usa sus URL reales.
 7. Para recuperación por correo a destinatarios reales, configura SMTP. El servicio de correo predeterminado de Supabase tiene restricciones para pruebas; no garantiza el envío a cualquier visitante.
 
-GitHub Pages: `npm run deploy` publica `dist/`, con `404.html` generado para que las rutas de React y los enlaces de recuperación puedan cargar. La petición inicial a una ruta desconocida devuelve HTTP 404, aunque renderiza la aplicación. En otros hosts configura una reescritura de las rutas a `index.html` para responder HTTP 200.
+GitHub Pages: sigue la [guía de CI/CD](../docs/DEPLOYMENT.md) para publicar automáticamente desde `main`. Se publica `dist/`, con `404.html` generado para que las rutas de React y los enlaces de recuperación puedan cargar. La petición inicial a una ruta desconocida devuelve HTTP 404, aunque renderiza la aplicación. En otros hosts configura una reescritura de las rutas a `index.html` para responder HTTP 200.
 
 ## Datos y privacidad
 

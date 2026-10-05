@@ -105,7 +105,13 @@ Sigue [la guía de activación y verificación](./supabase/SETUP.md) para config
 | `npm run lint` | Ejecutar ESLint. |
 | `npm run deploy` | Compilar y publicar `dist/` en la rama `gh-pages`. |
 
-La configuración de Vite utiliza `base: '/'`, adecuada para el sitio raíz de este repositorio. GitHub Pages debe estar configurado para servir la rama publicada. Como la aplicación usa `BrowserRouter`, el alojamiento también necesita una estrategia de fallback para abrir o recargar rutas como `/contacto`.
+## Despliegue automático
+
+El workflow [CI / GitHub Pages](../.github/workflows/pages.yml) compila y publica con cada push a `main`. Los pull requests validan la compilación sin desplegar. Usa caché de npm y cancela ejecuciones antiguas de la misma rama.
+
+**Activación inicial:** selecciona **GitHub Actions** en Settings → Pages y configura `VITE_SUPABASE_URL` y `VITE_SUPABASE_ANON_KEY` en las variables de Actions. Sigue la [guía de despliegue](./docs/DEPLOYMENT.md). Sin estas variables se valida el build, pero se bloquea la publicación para conservar el sitio actual.
+
+La base de Vite es `/`, adecuada para este sitio raíz. El build genera `404.html` para las rutas de React en GitHub Pages. El comando `npm run deploy` queda como herramienta manual anterior; para el flujo automático usa Actions.
 
 ## Guía del código
 
