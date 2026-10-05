@@ -1,6 +1,13 @@
 import { pathToFileURL } from "node:url";
 
 export function validatePagesConfig(env) {
+  if (env.VITE_CHAT_URL) {
+    let chat;
+    try { chat = new URL(env.VITE_CHAT_URL); } catch { throw new Error("VITE_CHAT_URL debe ser el endpoint HTTPS del Worker."); }
+    if (chat.protocol !== "https:" || chat.username || chat.password || chat.search || chat.hash || chat.pathname !== "/chat" || !env.VITE_TURNSTILE_SITE_KEY?.trim()) {
+      throw new Error("Configura VITE_CHAT_URL con ruta /chat y VITE_TURNSTILE_SITE_KEY antes de activar la IA.");
+    }
+  }
   const url = env.VITE_SUPABASE_URL?.trim();
   const key = env.VITE_SUPABASE_ANON_KEY?.trim();
   if (!url || !key) throw new Error("Configura VITE_SUPABASE_URL y VITE_SUPABASE_ANON_KEY en Settings > Secrets and variables > Actions antes de publicar.");

@@ -150,3 +150,7 @@ El frontend incluye formularios de contacto, cotización y opiniones conectados 
 ## Licencia
 
 Código distribuido bajo la [licencia MIT](../LICENSE).
+
+## Asistente con IA y control de consumo
+
+Backend preparado con cuotas persistentes por IP y cuenta, CAPTCHA, presupuesto global y solicitudes de agente. La IA permanece desactivada hasta configurar los secretos del Worker y las variables públicas correspondientes. Consulta [la guía del chatbot](docs/CHATBOT.md).

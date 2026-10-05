@@ -1,0 +1,11 @@
+name = "ortegon-chat"
+main = "index.mjs"
+compatibility_date = "2026-10-05"
+
+[vars]
+ALLOWED_ORIGIN = "https://eduardortegon98.github.io"
+SUPABASE_URL = "https://gocnygelxokbnuxlfrtg.supabase.co"
+WHATSAPP_TO = "573337255586"
+
+[triggers]
+crons = ["*/5 * * * *"]

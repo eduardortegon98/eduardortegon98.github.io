@@ -464,4 +464,7 @@ const Walkie = () => {
   );
 };
 
-export default Walkie;
+export default function ChatWidget() {
+  return import.meta.env.VITE_CHAT_URL ? <AIChat /> : <Walkie />;
+}
+import AIChat from "./AIChat";

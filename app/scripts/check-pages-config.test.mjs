@@ -9,3 +9,9 @@ test("rejects missing configuration", () => { assert.throws(() => validatePagesC
 test("rejects secret and service_role keys", () => { for (const key of ["sb_secret_example_secret_key", jwt("service_role")]) assert.throws(() => validatePagesConfig({ ...env, VITE_SUPABASE_ANON_KEY: key })); });
 test("rejects invalid, expired and unexpected-role keys", () => { for (const key of ["invalid", jwt("anon",1), jwt("authenticated")]) assert.throws(() => validatePagesConfig({ ...env, VITE_SUPABASE_ANON_KEY: key })); });
 test("rejects invalid or unsafe project URLs", () => { for (const url of ["invalid", "http://example.com", "https://user:password@example.com", "https://example.com/path", "https://example.com?key=value"]) assert.throws(() => validatePagesConfig({ ...env, VITE_SUPABASE_URL: url })); });
+test("chat activation requires a safe endpoint and CAPTCHA site key", () => {
+  const base = { VITE_SUPABASE_URL: "https://project.supabase.co", VITE_SUPABASE_ANON_KEY: "sb_publishable_test_public_key" };
+  assert.throws(() => validatePagesConfig({ ...base, VITE_CHAT_URL: "https://worker.example/chat" }));
+  assert.throws(() => validatePagesConfig({ ...base, VITE_CHAT_URL: "http://worker.example/chat", VITE_TURNSTILE_SITE_KEY: "site" }));
+  assert.doesNotThrow(() => validatePagesConfig({ ...base, VITE_CHAT_URL: "https://worker.example/chat", VITE_TURNSTILE_SITE_KEY: "site" }));
+});
