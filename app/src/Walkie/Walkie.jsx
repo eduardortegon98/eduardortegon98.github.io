@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState, useCallback } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Bot, Mic, TrashIcon, Sparkles } from "lucide-react";
+import { Bot, TrashIcon, Sparkles } from "lucide-react";
 import {
   FaFacebookF,
   FaInstagram,
@@ -9,7 +9,7 @@ import {
 } from "react-icons/fa";
 
 const CONTACTS = {
-  whatsappNumber: "57XXXXXXXXXX",
+  whatsappNumber: "573337255586",
   facebookPage: "TU_PAGE_ID_O_USERNAME",
   instagramUsername: "tu_usuario",
 };
@@ -193,7 +193,7 @@ function WalkieModal({
   setMessage,
   suggestion,
   applySuggestion,
-  send,
+  whatsappHref,
   clear,
 }) {
   return (
@@ -253,10 +253,10 @@ function WalkieModal({
                   <div className="flex items-center justify-between gap-3">
                     <div className="min-w-0">
                       <p className="font-extrabold tracking-tight text-white">
-                        Enviar mensaje
+                        Habla con Eduard
                       </p>
                       <p className="truncate text-sm text-white/55">
-                        Elige canal, escribe y envía
+                        Escríbenos a Soluciones Tecnológicas Ortegón
                       </p>
                     </div>
 
@@ -330,6 +330,8 @@ function WalkieModal({
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
                         rows={4}
+                        maxLength={500}
+                        aria-label="Mensaje para WhatsApp"
                         placeholder="Hola, quiero información sobre..."
                         className="
                           w-full resize-none rounded-2xl px-4 py-3
@@ -339,30 +341,27 @@ function WalkieModal({
                         "
                       />
                       <div className="mt-2 flex items-center justify-between gap-3">
-                        <p className="truncate text-xs text-white/40">
-                          WhatsApp prellena el texto.
+                        <p className="text-xs text-white/40">
+                          Se abrirá WhatsApp. Confirma allí el envío.
                         </p>
                         <p className="shrink-0 text-xs text-white/35">
-                          {Math.min(message.length, 500)}/500
+                          {message.length}/500
                         </p>
                       </div>
                     </div>
 
                     <div className="flex shrink-0 flex-row gap-2 sm:flex-col">
-                      <IconAction
-                        onClick={send}
-                        title="Enviar"
-                        variant="primary"
+                      <a
+                        href={whatsappHref}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="Continuar en WhatsApp"
+                        title="Continuar en WhatsApp"
+                        className="inline-flex items-center justify-center gap-2 rounded-2xl bg-[#C0FDB9] px-4 py-3 text-sm font-bold text-black hover:bg-[#a8ef9e] focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
                       >
-                        <FaPaperPlane className="text-[18px]" />
-                      </IconAction>
-
-                      <IconAction
-                        onClick={() => console.log("Mic")}
-                        title="Audio (próximamente)"
-                      >
-                        <Mic className="text-[18px]" />
-                      </IconAction>
+                        <FaPaperPlane aria-hidden="true" />
+                        Continuar en WhatsApp
+                      </a>
 
                       <IconAction onClick={clear} title="Limpiar">
                         <TrashIcon className="text-[18px]" />
@@ -393,7 +392,7 @@ const Walkie = () => {
 
   const links = useMemo(() => {
     const text = encodeURIComponent(
-      message || "Hola, quiero más información 😊",
+      `Hola Eduard, te escribo desde la página de Soluciones Tecnológicas Ortegón.\n\n${message.trim() || "Quiero más información sobre tus servicios."}`,
     );
     return {
       whatsapp: `https://wa.me/${CONTACTS.whatsappNumber}?text=${text}`,
@@ -405,18 +404,6 @@ const Walkie = () => {
 
   const openChat = useCallback(() => setOpen(true), []);
   const closeChat = useCallback(() => setOpen(false), []);
-
-  const send = useCallback(() => {
-    if (channel === "instagram") {
-      const dm = window.open(links.instagram, "_blank", "noopener,noreferrer");
-      if (!dm) {
-        window.open(links.instagramFallback, "_blank", "noopener,noreferrer");
-      }
-      return;
-    }
-
-    window.open(links[channel], "_blank", "noopener,noreferrer");
-  }, [channel, links]);
 
   const clear = useCallback(() => setMessage(""), []);
   const applySuggestion = useCallback(
@@ -470,7 +457,7 @@ const Walkie = () => {
         setMessage={setMessage}
         suggestion={suggestion}
         applySuggestion={applySuggestion}
-        send={send}
+        whatsappHref={links.whatsapp}
         clear={clear}
       />
     </>
