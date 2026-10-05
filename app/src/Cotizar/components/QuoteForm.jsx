@@ -1,3 +1,5 @@
+import useSubmission from "../../hooks/useSubmission";
+import FormStatus, { Honeypot } from "../../components/FormStatus";
 import React from "react";
 import {
   ArrowRight,
@@ -17,6 +19,7 @@ const inputClass =
 const selectClass = `${inputClass} appearance-none pr-12 cursor-pointer`;
 
 const QuoteForm = () => {
+  const { submit, pending, status } = useSubmission("quote", "Tu solicitud quedó guardada. Te contactaremos para preparar la propuesta.");
   return (
     <section className="px-6 py-24 justify-center items-center">
       <div className="text-black mx-auto  rounded-3xl border border-white bg-[var(--color-text)]/15 p-8 backdrop-blur-xl md:p-10">
@@ -32,7 +35,8 @@ const QuoteForm = () => {
         </div>
 
         {/* Formulario */}
-        <form className="mt-10 grid gap-6 md:grid-cols-2">
+        <form className="mt-10 grid gap-6 md:grid-cols-2" onSubmit={submit} aria-busy={pending}>
+          <Honeypot />
           {/* Empresa / Persona */}
           <div>
             <label className="mb-2 block text-sm font-medium">
@@ -41,7 +45,7 @@ const QuoteForm = () => {
 
             <input
               type="text"
-              placeholder="Ej: Panadería San José o Juan Pérez"
+              name="name" aria-label="Empresa o persona" required maxLength={120} placeholder="Ej: Panadería San José o Juan Pérez"
               className={inputClass}
             />
           </div>
@@ -53,7 +57,7 @@ const QuoteForm = () => {
             </label>
 
             <div className="relative">
-              <select className={selectClass} defaultValue="">
+              <select name="service" aria-label="Servicio" required className={selectClass} defaultValue="">
                 <option
                   value=""
                   disabled
@@ -92,7 +96,7 @@ const QuoteForm = () => {
             </label>
 
             <div className="relative">
-              <select className={selectClass} defaultValue="">
+              <select name="budget" aria-label="Presupuesto" required className={selectClass} defaultValue="">
                 <option
                   value=""
                   disabled
@@ -124,10 +128,13 @@ const QuoteForm = () => {
             </div>
           </div>
 
+          <div><label className="mb-2 block text-sm font-medium" htmlFor="quote-email">Correo electrónico</label><input id="quote-email" name="email" type="email" required maxLength={254} className={inputClass} autoComplete="email" /></div>
+          <div><label className="mb-2 block text-sm font-medium" htmlFor="quote-phone">Teléfono (opcional)</label><input id="quote-phone" name="phone" type="tel" maxLength={40} className={inputClass} autoComplete="tel" /></div>
+          <div className="md:col-span-2"><label className="mb-2 block text-sm font-medium" htmlFor="quote-message">Cuéntanos sobre tu proyecto</label><textarea id="quote-message" name="message" required maxLength={5000} rows={4} className={inputClass} /></div>
           {/* Botón */}
           <div className="flex items-end">
             <button
-              type="submit"
+              type="submit" disabled={pending}
               className="
                 inline-flex w-full items-center justify-center gap-2
                 rounded-2xl bg-[#C0FDB9]
@@ -135,10 +142,11 @@ const QuoteForm = () => {
                 transition hover:brightness-110
               "
             >
-              Solicitar cotización
+              {pending ? "Enviando..." : "Solicitar cotización"}
               <ArrowRight size={20} />
             </button>
           </div>
+        <div className="md:col-span-2"><FormStatus status={status} /></div>
         </form>
 
         {/* WhatsApp */}

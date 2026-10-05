@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Send, Star } from "lucide-react";
-import { supabase } from "../lib/supabase";
+import { submitForm } from "../lib/submissions";
+import { useRef } from "react";
 
 const initialState = {
   name: "",
@@ -10,6 +11,7 @@ const initialState = {
 };
 
 const FeedbackForm = () => {
+  const lock = useRef(false);
   const [formData, setFormData] = useState(initialState);
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
@@ -34,33 +36,20 @@ const FeedbackForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (loading) return;
-
-    setLoading(true);
-    setSuccessMessage("");
-    setErrorMessage("");
-
-    const payload = {
-      name: formData.name.trim(),
-      email: formData.email.trim(),
-      message: formData.message.trim(),
-      rating: formData.rating,
-    };
-
-    const { error } = await supabase.from("FeedBack").insert([payload]);
-
-    if (error) {
-      console.error("Error saving feedback:", error);
-      setErrorMessage("No se pudo enviar tu comentario. Inténtalo otra vez.");
-      setLoading(false);
-      return;
+    if (lock.current) return;
+    if (!formData.name.trim() || !formData.message.trim()) {
+      setErrorMessage("Escribe tu nombre y tu experiencia."); return;
     }
-
-    setSuccessMessage(
-      "¡Gracias! Tu comentario fue enviado correctamente y quedará pendiente de aprobación."
-    );
-    setFormData(initialState);
-    setLoading(false);
+    lock.current = true; setLoading(true); setSuccessMessage(""); setErrorMessage("");
+    try {
+      await submitForm("feedback", {
+        p_name: formData.name.trim(), p_email: formData.email.trim(),
+        p_message: formData.message.trim(), p_rating: formData.rating,
+      });
+      setSuccessMessage("¡Gracias! Tu opinión quedó guardada y pendiente de aprobación.");
+      setFormData(initialState);
+    } catch (error) { setErrorMessage(error.message); }
+    finally { lock.current = false; setLoading(false); }
   };
 
   return (
@@ -78,7 +67,7 @@ const FeedbackForm = () => {
             <label className="block text-sm text-gray-300 mb-2">Nombre</label>
             <input
               type="text"
-              name="name"
+              name="name" maxLength={120}
               value={formData.name}
               onChange={handleChange}
               placeholder="Tu nombre"
@@ -93,7 +82,7 @@ const FeedbackForm = () => {
             </label>
             <input
               type="email"
-              name="email"
+              name="email" maxLength={254}
               value={formData.email}
               onChange={handleChange}
               placeholder="tucorreo@ejemplo.com"
@@ -132,7 +121,7 @@ const FeedbackForm = () => {
             </label>
             <textarea
               rows="5"
-              name="message"
+              name="message" maxLength={5000}
               value={formData.message}
               onChange={handleChange}
               placeholder="Cuéntanos qué te pareció nuestro servicio..."
@@ -142,11 +131,11 @@ const FeedbackForm = () => {
           </div>
 
           {successMessage && (
-            <p className="text-green-400 text-sm">{successMessage}</p>
+            <p role="status" className="text-green-400 text-sm">{successMessage}</p>
           )}
 
           {errorMessage && (
-            <p className="text-red-400 text-sm">{errorMessage}</p>
+            <p role="alert" className="text-red-400 text-sm">{errorMessage}</p>
           )}
 
           <button

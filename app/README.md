@@ -43,7 +43,7 @@ Este repositorio contiene el frontend del sitio. Su objetivo es comunicar la pro
 - **Navegación por rutas:** páginas de contacto, cotización e inicio de sesión.
 - **Interacciones y animaciones:** transiciones con Framer Motion, desplazamiento animado y elementos visuales.
 - **Carga diferida:** páginas con `React.lazy` y secciones que se renderizan al acercarse al área visible.
-- **Base para testimonios:** componentes de envío y consulta de opiniones conectados a Supabase, actualmente sin montar en la página principal.
+- **Opiniones de clientes:** envío a Supabase y publicación de testimonios aprobados en la página principal.
 
 ## Proyectos destacados
 
@@ -91,9 +91,9 @@ VITE_SUPABASE_URL=https://tu-proyecto.supabase.co
 VITE_SUPABASE_ANON_KEY=tu-clave-publica-anon
 ```
 
-Los componentes utilizan la tabla `FeedBack`, con campos `id`, `name`, `email`, `message`, `rating`, `approved` y `created_at`. La consulta muestra hasta seis opiniones aprobadas, de la más reciente a la más antigua.
+Ejecuta [supabase/schema.sql](./supabase/schema.sql) en el SQL Editor del proyecto. Crea tablas privadas para contacto, cotizaciones y opiniones, junto con funciones de envío y consulta pública de opiniones aprobadas. La tabla antigua `FeedBack` se conserva sin cambios.
 
-Configura el esquema y las políticas de acceso en Supabase antes de habilitar el módulo. Para mantener la aprobación manual, `approved` debe iniciar en `false` y los visitantes no deben poder modificarlo. Utiliza únicamente la clave pública del cliente; una clave `service_role` no debe incluirse en variables `VITE_*`.
+Sigue [la guía de activación y verificación](./supabase/SETUP.md) para configurar Auth, las redirecciones y las variables del hosting. Utiliza únicamente la clave pública; las claves secretas nunca deben incluirse en variables `VITE_*`.
 
 ### Comandos disponibles
 
@@ -125,13 +125,15 @@ La configuración de Vite utiliza `base: '/'`, adecuada para el sitio raíz de e
 
 ## Estado actual
 
-La presentación comercial y el portafolio están implementados en el frontend. Algunas funciones requieren integración antes de utilizarlas como servicios completos:
+El frontend incluye formularios de contacto, cotización y opiniones conectados a Supabase, junto con inicio de sesión, cierre de sesión y recuperación de contraseña mediante Supabase Auth.
 
-- **Contacto y cotización:** formularios visuales, todavía sin lógica de envío.
-- **Inicio de sesión:** interfaz disponible, sin autenticación conectada.
-- **Widget de mensajes:** utiliza sugerencias basadas en palabras clave; el destino de WhatsApp contiene un valor de ejemplo y el audio está pendiente.
-- **Opiniones:** componentes con integración a Supabase, actualmente sin renderizar en el home.
-- **Datos comerciales:** revisar los teléfonos de ejemplo antes de publicar para clientes.
+**Activación pendiente en cada entorno:** ejecutar el esquema SQL, configurar las variables públicas, crear los usuarios y recompilar/publicar. Sin esa configuración los formularios muestran un error de servicio, sin simular que el envío se guardó.
+
+- **Contacto y cotización:** validación, estados de envío y conservación de datos si falla la petición.
+- **Opiniones:** moderación manual antes de su publicación; los correos no se exponen al público.
+- **Inicio de sesión:** autentica usuarios de Supabase; no concede acceso público a las solicitudes ni incluye un panel de administración.
+- **Widget de mensajes:** sugerencias basadas en palabras clave y salida a WhatsApp; su destino contiene un valor de ejemplo y el audio está pendiente.
+- **Antispam:** honeypot en contacto/cotización; para tráfico intensivo se requiere protección adicional en servidor.
 
 ## Autor y contacto
 

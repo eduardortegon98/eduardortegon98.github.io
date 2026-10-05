@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { MessageSquareQuote, Star } from "lucide-react";
-import { supabase } from "../lib/supabase";
+import { requireSupabase } from "../lib/supabase";
 
 const FeedbackCard = ({ item }) => {
   return (
@@ -38,12 +38,7 @@ const FeedbackList = () => {
 
     async function fetchApprovedFeedback() {
       try {
-        const { data, error } = await supabase
-          .from("FeedBack")
-          .select("id, name, message, rating, created_at")
-          .eq("approved", true)
-          .order("created_at", { ascending: false })
-          .limit(6);
+        const { data, error } = await requireSupabase().rpc("list_approved_feedback");
 
         if (ignore) return;
         if (error) throw error;

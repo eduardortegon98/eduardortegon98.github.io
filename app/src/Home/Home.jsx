@@ -48,6 +48,10 @@ function Home({ theme, setTheme }) {
         <Projects />
       </DeferredSection>
 
+      <DeferredSection minHeight={520} rootMargin="220px 0px">
+        <FeedBack />
+      </DeferredSection>
+
       {/* <DeferredSection minHeight={520} rootMargin="220px 0px">
         <Quotes />
       </DeferredSection> */}
