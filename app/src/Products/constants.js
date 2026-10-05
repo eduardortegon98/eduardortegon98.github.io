@@ -1,3 +1,7 @@
+import crmBot from "../assets/crm_bot.png";
+import webBot from "../assets/web_bot.png";
+import ortdeskBot from "../assets/ortdesk-bot.png";
+
 import {
   MessageCircle,
   Globe,
@@ -18,7 +22,7 @@ export const PRODUCTS = [
     title: "Gestiona tus clientes y ventas en un solo lugar",
     description:
       "Centraliza contactos y el seguimiento comercial.",
-    image: "/src/assets/crm_bot.png",
+    image: crmBot,
     features: [
       { label: "Gestión clientes", Icon: Users },
       { label: "Embudo de ventas", Icon: GitMerge },
@@ -32,7 +36,7 @@ export const PRODUCTS = [
     title: "Sitios web que impulsan tu negocio",
     description:
       "Diseñamos páginas rápidas y adaptadas a todos los dispositivos.",
-    image: "/src/assets/web_bot.png",
+    image: webBot,
     features: [
       { label: "Diseño responsive", Icon: Globe },
       { label: "Rápido y seguro", Icon: ShieldCheck },
@@ -45,7 +49,7 @@ export const PRODUCTS = [
     title: "Asistente inteligente para WhatsApp y Web",
     description:
       "Atiende, responde y convierte 24/7 con Inteligencia Artificial.",
-    image: "/src/assets/ortdesk-bot.png", // Asegúrate de tener las rutas correctas
+    image: ortdeskBot,
     features: [
       { label: "Atención 24/7", Icon: MessageCircle },
       { label: "Respuestas automáticas", Icon: ShieldCheck },
