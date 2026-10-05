@@ -1,89 +1,78 @@
-import { ChevronDown, Cpu } from "lucide-react";
-import { animate } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { ArrowDown, ArrowUpRight, Pause, Play, Sparkles } from "lucide-react";
+import { Link } from "react-router-dom";
+import { motion, useInView, useReducedMotion, useMotionValue, useSpring } from "framer-motion";
 import { useTheme } from "../context/ThemeContext";
-import ImageHero from "../assets/zeus_milo_lulu.webp";
+import "./Hero.css";
 
-const Hero = () => {
+export default function Hero() {
   const { theme } = useTheme();
-  const isDark = theme === "dark";
-
-  const goTo = (id) => {
-    const el = document.getElementById(id);
-    if (!el) return;
-
-    const start = window.scrollY;
-    const end = el.offsetTop;
-
-    animate(start, end, {
-      duration: 1.2,
-      ease: "easeInOut",
-      onUpdate: (value) => {
-        window.scrollTo(0, value);
-      },
-    });
+  const reduced = useReducedMotion();
+  const section = useRef(null), video = useRef(null);
+  const visible = useInView(section, { amount: 0.15 });
+  const [paused, setPaused] = useState(false), [ready, setReady] = useState(false);
+  const [pageVisible, setPageVisible] = useState(!document.hidden);
+  const x = useMotionValue(0), y = useMotionValue(0);
+  const rotateX = useSpring(x, { stiffness: 80, damping: 22 });
+  const rotateY = useSpring(y, { stiffness: 80, damping: 22 });
+  const base = import.meta.env.BASE_URL + "media/";
+  useEffect(() => { if (reduced) setPaused(true); }, [reduced]);
+  useEffect(() => {
+    const change = () => setPageVisible(!document.hidden);
+    document.addEventListener("visibilitychange", change);
+    return () => document.removeEventListener("visibilitychange", change);
+  }, []);
+  useEffect(() => {
+    if (!video.current) return;
+    if (visible && pageVisible && !paused && !reduced) {
+      video.current.play().catch(() => setReady(false));
+    } else video.current.pause();
+  }, [visible, pageVisible, paused, reduced]);
+  const enter = {
+    hidden: { opacity: reduced ? 1 : 0, y: reduced ? 0 : 22 },
+    show: { opacity: 1, y: 0, transition: { duration: reduced ? 0 : 0.75, ease: [0.22, 1, 0.36, 1] } },
   };
-
+  function tilt(event) {
+    if (reduced || event.pointerType !== "mouse") return;
+    const rect = event.currentTarget.getBoundingClientRect();
+    x.set(-((event.clientY - rect.top) / rect.height - 0.5) * 6);
+    y.set(((event.clientX - rect.left) / rect.width - 0.5) * 6);
+  }
+  function explore() {
+    document.getElementById("products")?.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" });
+  }
   return (
-    <section
-      className="
-        relative h-[calc(98svh-64px)] w-full overflow-hidden mx-auto
-        bg-[var(--color-bg-secondary)] flex items-center justify-center isolation-isolate
-      "
-    >
-      
-      {/* BLOQUE IZQUIERDO: Contenido y Propuesta de Valor (50% exacto) */}
-      <div className="animated-border">
-        <div className="flex flex-col rounded-2xl  dark:bg-neutral-950 justify-center px-6 sm:px-12 lg:px-20 xl:px-28 py-12 z-10 selection:bg-[var(--color-primary)] selection:text-black">
-          {/* Título Principal */}
-          <h1 className="text-center text-4xl sm:text-5xl xl:text-6xl font-black mb-6 tracking-tight leading-[1.1] text-neutral-900 dark:text-white">
-            Soluciones de Ingeniería, <br />
-            <span className="text-[var(--color-primary)]">
-              Diseñadas con IA
-            </span>
-          </h1>
-
-          {/* Descripción */}
-          <p className="mx-auto text-base sm:text-lg text-neutral-600 dark:text-gray-400 font-normal leading-relaxed max-w-md mb-8 text-center">
-            Menos tareas manuales, más productividad. Con la{" "}
-            <span className="font-semibold text-neutral-900 dark:text-white">
-              fidelidad y el compromiso de un aliado tecnológico
-            </span>
-            , automatizamos tus procesos, te acompañamos durante todo tu
-            proyecto y te ayudamos a lograr tus objetivos de crecimiento.
-          </p>
-
-          {/* Botón */}
-          <div className="flex flex-wrap items-center gap-4 justify-center">
-            <button
-              type="button"
-              onClick={() => goTo("products")}
-              className="px-6 py-3 rounded-xl bg-[var(--color-primary)] text-[var(--color-primary-text)] font-semibold text-sm tracking-wide shadow-lg shadow-[var(--color-primary)]/20 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
-            >
-              Explorar Soluciones
-            </button>
+    <section ref={section} className={`premium-hero ${theme === "light" ? "premium-hero--light" : ""} ${paused || !visible || !pageVisible ? "premium-hero--paused" : ""}`} aria-labelledby="hero-title">
+      <div className="hero-ambient" aria-hidden="true" />
+      <div className="hero-grid" aria-hidden="true" />
+      <div className="hero-shell">
+        <motion.div className="hero-copy" initial="hidden" animate="show" transition={{ staggerChildren: reduced ? 0 : 0.12, delayChildren: reduced ? 0 : 0.12 }}>
+          <motion.p variants={enter} className="hero-eyebrow"><span /> SOLUCIONES TECNOLÓGICAS ORTEGÓN</motion.p>
+          <motion.h1 variants={enter} id="hero-title">Soluciones de<br />ingeniería.<br /><span>Diseñadas con IA.</span></motion.h1>
+          <motion.p variants={enter} className="hero-description">Menos tareas manuales. Más posibilidades para tu negocio. Creamos software y automatizamos procesos con el compromiso de un aliado tecnológico.</motion.p>
+          <motion.div variants={enter} className="hero-actions">
+            <button type="button" className="hero-primary" onClick={explore}>Explorar soluciones <ArrowUpRight size={19} /></button>
+            <Link to="/cotizar" className="hero-secondary">Hablemos de tu proyecto <ArrowUpRight size={17} /></Link>
+          </motion.div>
+          <motion.div variants={enter} className="hero-capabilities"><span>Desarrollo web</span><i /><span>Automatización</span><i /><span>Inteligencia artificial</span></motion.div>
+        </motion.div>
+        <motion.div className="hero-visual-wrap" initial={{ opacity: reduced ? 1 : 0, scale: reduced ? 1 : 0.92 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: reduced ? 0 : 1.2, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}>
+          <div className="hero-visual" onPointerMove={tilt} onPointerLeave={() => { x.set(0); y.set(0); }}>
+            <motion.div className="hero-orbital-scene" style={{ rotateX, rotateY }}>
+              <div className="hero-orbit hero-orbit--outer" aria-hidden="true"><span /></div>
+              <div className="hero-orbit hero-orbit--inner" aria-hidden="true"><span /></div>
+              <div className="hero-planet">
+                <img src={base + "earth-orbit-poster.webp"} alt="Globo terrestre: tecnología que conecta ideas y negocios" width="480" height="480" fetchPriority="high" />
+                {!reduced && <video ref={video} src={base + "earth-orbit.mp4"} poster={base + "earth-orbit-poster.webp"} muted loop playsInline preload="metadata" aria-hidden="true" tabIndex={-1} className={ready ? "is-ready" : ""} onPlay={() => setReady(true)} onError={() => setReady(false)} />}
+              </div>
+              <div className="hero-orbit-label hero-orbit-label--top"><Sparkles size={14} /> Ideas que evolucionan</div>
+              <div className="hero-orbit-label hero-orbit-label--bottom"><span className="hero-signal" /> Ingeniería + IA</div>
+            </motion.div>
           </div>
-        </div>
+          <div className="hero-visual-footer"><span>TECNOLOGÍA SIN FRONTERAS</span>{!reduced && <button type="button" className="hero-motion-control" onClick={() => setPaused(value => !value)} aria-label={paused ? "Reanudar animación" : "Pausar animación"} aria-pressed={paused}>{paused ? <Play size={12} /> : <Pause size={12} />}{paused ? "Reanudar" : "Pausar"}</button>}</div>
+        </motion.div>
       </div>
-
-      {/* Indicador de scroll inferior central */}
-      <div className="absolute bottom-6 z-20 hidden md:block">
-        <button
-          type="button"
-          onClick={() => goTo("products")}
-          aria-label="Ir a la sección de productos"
-          className="
-            flex items-center justify-center
-            rounded-full bg-neutral-200/50 dark:bg-white/5 border border-neutral-300 dark:border-white/10 backdrop-blur-md p-3.5
-            text-neutral-600 dark:text-gray-400 hover:text-[var(--color-primary)] hover:border-[var(--color-primary)]/30
-            shadow-xl transition-all duration-300 hover:scale-110
-            animate-bounce
-          "
-        >
-          <ChevronDown className="h-5 w-5" />
-        </button>
-      </div>
+      <div className="hero-bottom"><span>DE LA IDEA A LO QUE SIGUE.</span><button type="button" onClick={explore}>Descubre nuestras soluciones <ArrowDown size={14} /></button><span className="hero-bottom-index">01 / EXPLORA</span></div>
     </section>
   );
-};
-
-export default Hero;
+}
