@@ -115,3 +115,14 @@ test("a local answer consumes interaction quota without a paid generation", asyn
     assert.equal(response.status,200);assert.ok((await response.json()).answer);
   });
 });
+test("a spoofed alternate IP header does not change quota identity", async () => {
+  const identities=[];
+  await mockFetch(async (_url,init)=>{
+    identities.push(JSON.parse(init.body).p_ip);
+    return Response.json({code:"login_required"});
+  },async()=>{
+    await worker.fetch(req({action:"message",message:"web"}),env,ctx);
+    await worker.fetch(req({action:"message",message:"web"},{"CF-Connecting-IPv6":"forged","X-Forwarded-For":"forged"}),env,ctx);
+  });
+  assert.equal(identities.length,2);assert.equal(identities[0],identities[1]);
+});

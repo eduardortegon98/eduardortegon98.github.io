@@ -72,7 +72,7 @@ export default {
     let reservation, ip;
     try {
       // Cloudflare supplies this header at its ingress. Never accept an IP from JSON or X-Forwarded-For.
-      const clientIP = request.headers.get("CF-Connecting-IPv6") || request.headers.get("CF-Connecting-IP");
+      const clientIP = request.headers.get("CF-Connecting-IP");
       if (!request.cf || !clientIP) return reply({ code: "unavailable" }, 503);
       if (!request.headers.get("Content-Type")?.startsWith("application/json")) return reply({ code: "invalid" }, 400);
       if (Number(request.headers.get("Content-Length") || 0) > 6000) return reply({ code: "invalid" }, 413);
