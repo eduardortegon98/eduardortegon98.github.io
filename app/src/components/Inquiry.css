@@ -54,3 +54,9 @@
 .inquiry-shell{padding-top:16px;padding-bottom:16px}
 .inquiry-main{height:var(--inquiry-available-height,auto);display:flex;align-items:center}
 .inquiry-card{width:100%}
+/* Balance both desktop columns, retaining a comfortable gutter. */
+@media(min-width:761px){
+  .inquiry-shell{column-gap:clamp(32px,5vw,80px);align-items:center}
+  .inquiry-sidebar{align-self:center;padding-top:0;max-height:var(--inquiry-available-height,calc(100dvh - 112px));overflow-y:auto;scrollbar-width:thin;scrollbar-color:#b5cebc transparent}
+}
+@media(min-width:761px) and (max-width:1000px){.inquiry-shell{column-gap:28px}}

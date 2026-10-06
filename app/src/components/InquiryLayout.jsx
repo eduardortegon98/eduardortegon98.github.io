@@ -8,8 +8,9 @@ export function InquiryLayout({ sidebar, children }) {
   const main = useRef(null);
   useLayoutEffect(() => {
     const update = () => {
-      const top = main.current.getBoundingClientRect().top + window.scrollY;
-      main.current.style.setProperty("--inquiry-available-height", `${Math.max(180, window.innerHeight - top - 16)}px`);
+      const narrow = window.matchMedia("(max-width: 760px)").matches;
+      const top = narrow ? main.current.getBoundingClientRect().top + window.scrollY : main.current.parentElement.getBoundingClientRect().top + window.scrollY + parseFloat(getComputedStyle(main.current.parentElement).paddingTop);
+      main.current.parentElement.style.setProperty("--inquiry-available-height", `max(180px, calc(100dvh - ${top + 16}px))`);
     };
     const observer = new ResizeObserver(update);
     observer.observe(main.current.parentElement);
