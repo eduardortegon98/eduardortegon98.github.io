@@ -1,3 +1,4 @@
+import { Localized, useLanguage, translate } from "../i18n/Language";
 import React, { useEffect, useMemo, useState, useCallback } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Bot, TrashIcon, Sparkles } from "lucide-react";
@@ -130,7 +131,7 @@ const overlayVariants = {
 
 function ChannelPill({ id, Icon, title, active, onSelect }) {
   return (
-    <button
+    <Localized as="button"
       onClick={() => onSelect(id)}
       type="button"
       aria-label={title}
@@ -144,7 +145,7 @@ function ChannelPill({ id, Icon, title, active, onSelect }) {
           : "bg-[var(--color-surface)] text-[var(--color-text-muted)] hover:text-[var(--color-text)] hover:bg-[var(--color-surface)] ring-[var(--color-border)]",
       )}
     >
-      <span
+      <Localized as="span"
         className={cx(
           "pointer-events-none absolute -inset-10 blur-2xl transition",
           active
@@ -153,13 +154,13 @@ function ChannelPill({ id, Icon, title, active, onSelect }) {
         )}
       />
       <Icon className="relative text-[18px]" />
-    </button>
+    </Localized>
   );
 }
 
 function IconAction({ onClick, title, children, variant = "ghost" }) {
   return (
-    <button
+    <Localized as="button"
       onClick={onClick}
       type="button"
       aria-label={title}
@@ -175,12 +176,12 @@ function IconAction({ onClick, title, children, variant = "ghost" }) {
     >
       {variant === "primary" && (
         <>
-          <span className="pointer-events-none absolute -inset-10 bg-[var(--color-primary)]/25 blur-2xl opacity-0 group-hover:opacity-100 transition" />
-          <span className="pointer-events-none absolute inset-0 bg-gradient-to-r from-white/40 via-white/10 to-transparent opacity-55 group-hover:opacity-75 transition" />
+          <Localized as="span" className="pointer-events-none absolute -inset-10 bg-[var(--color-primary)]/25 blur-2xl opacity-0 group-hover:opacity-100 transition" />
+          <Localized as="span" className="pointer-events-none absolute inset-0 bg-gradient-to-r from-white/40 via-white/10 to-transparent opacity-55 group-hover:opacity-75 transition" />
         </>
       )}
-      <span className="relative">{children}</span>
-    </button>
+      <Localized as="span" className="relative">{children}</Localized>
+    </Localized>
   );
 }
 
@@ -199,14 +200,14 @@ function WalkieModal({
   return (
     <AnimatePresence>
       {open && (
-        <motion.div
+        <Localized as={motion.div}
           className="fixed inset-0 z-[60]"
           variants={overlayVariants}
           initial="initial"
           animate="animate"
           exit="exit"
         >
-          <motion.button
+          <Localized as={motion.button}
             className="absolute inset-0 bg-[var(--color-text)]/10"
             onClick={onClose}
             aria-label="Cerrar modal"
@@ -216,14 +217,14 @@ function WalkieModal({
 
           {/* MOBILE: centrado vertical
               DESKTOP: abajo derecha */}
-          <div
+          <Localized as="div"
             className="
               absolute inset-x-4 top-1/2 -translate-y-1/2
               sm:left-auto sm:right-6 sm:top-auto sm:bottom-6 sm:translate-y-0 sm:inset-x-auto
             "
           >
-            <div className="mx-auto w-full max-w-[560px] sm:mx-0 sm:w-[92vw] sm:max-w-md">
-              <motion.div
+            <Localized as="div" className="mx-auto w-full max-w-[560px] sm:mx-0 sm:w-[92vw] sm:max-w-md">
+              <Localized as={motion.div}
                 variants={modalVariants}
                 initial="initial"
                 animate="animate"
@@ -235,7 +236,7 @@ function WalkieModal({
                   "max-h-[calc(100svh-2rem)] sm:max-h-[calc(100svh-3rem)] flex flex-col",
                 )}
               >
-                <motion.div
+                <Localized as={motion.div}
                   className="pointer-events-none absolute -inset-40"
                   style={{
                     background:
@@ -247,20 +248,20 @@ function WalkieModal({
                   transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
                 />
 
-                <div className="pointer-events-none absolute -top-10 left-0 right-0 h-24 bg-[var(--color-primary)]/20 blur-3xl" />
+                <Localized as="div" className="pointer-events-none absolute -top-10 left-0 right-0 h-24 bg-[var(--color-primary)]/20 blur-3xl" />
 
-                <div className="relative shrink-0 border-b border-[var(--color-border)] px-4 py-4 sm:px-5">
-                  <div className="flex items-center justify-between gap-3">
-                    <div className="min-w-0">
-                      <p className="font-extrabold tracking-tight text-[var(--color-text)]">
+                <Localized as="div" className="relative shrink-0 border-b border-[var(--color-border)] px-4 py-4 sm:px-5">
+                  <Localized as="div" className="flex items-center justify-between gap-3">
+                    <Localized as="div" className="min-w-0">
+                      <Localized as="p" className="font-extrabold tracking-tight text-[var(--color-text)]">
                         Habla con Eduard
-                      </p>
-                      <p className="truncate text-sm text-[var(--color-text-muted)]">
+                      </Localized>
+                      <Localized as="p" className="truncate text-sm text-[var(--color-text-muted)]">
                         Escríbenos a Soluciones Tecnológicas Ortegón
-                      </p>
-                    </div>
+                      </Localized>
+                    </Localized>
 
-                    <button
+                    <Localized as="button"
                       onClick={onClose}
                       className="h-10 w-10 rounded-2xl bg-[var(--color-surface)] text-[var(--color-text-muted)] ring-1 ring-[var(--color-border)] transition hover:bg-[var(--color-surface)] hover:text-[var(--color-text)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]/60"
                       aria-label="Cerrar"
@@ -268,11 +269,11 @@ function WalkieModal({
                       type="button"
                     >
                       ✕
-                    </button>
-                  </div>
+                    </Localized>
+                  </Localized>
 
-                  <div className="mt-4 flex items-center justify-between gap-3">
-                    <div className="flex items-center gap-2">
+                  <Localized as="div" className="mt-4 flex items-center justify-between gap-3">
+                    <Localized as="div" className="flex items-center gap-2">
                       {CHANNELS.map((c) => (
                         <ChannelPill
                           key={c.id}
@@ -281,20 +282,20 @@ function WalkieModal({
                           onSelect={setChannel}
                         />
                       ))}
-                    </div>
+                    </Localized>
 
                     {channel === "instagram" && (
-                      <span className="text-right text-[11px] leading-tight text-[var(--color-text-muted)]">
+                      <Localized as="span" className="text-right text-[11px] leading-tight text-[var(--color-text-muted)]">
                         IG no siempre
-                        <br />
+                        <Localized as="br" />
                         prellena texto
-                      </span>
+                      </Localized>
                     )}
-                  </div>
-                </div>
+                  </Localized>
+                </Localized>
 
-                <div className="relative flex-1 min-h-0 overflow-y-auto px-4 py-4 sm:px-5 space-y-3">
-                  <button
+                <Localized as="div" className="relative flex-1 min-h-0 overflow-y-auto px-4 py-4 sm:px-5 space-y-3">
+                  <Localized as="button"
                     onClick={applySuggestion}
                     type="button"
                     className="
@@ -304,29 +305,29 @@ function WalkieModal({
                       focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]/60
                     "
                   >
-                    <div className="flex items-start gap-3">
-                      <span className="mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[var(--color-primary)]/15 ring-1 ring-[var(--color-accent)]/20">
+                    <Localized as="div" className="flex items-start gap-3">
+                      <Localized as="span" className="mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[var(--color-primary)]/15 ring-1 ring-[var(--color-accent)]/20">
                         <Sparkles className="text-[var(--color-accent)]" />
-                      </span>
+                      </Localized>
 
-                      <div className="min-w-0">
-                        <p className="text-sm font-extrabold text-[var(--color-text-muted)]">
+                      <Localized as="div" className="min-w-0">
+                        <Localized as="p" className="text-sm font-extrabold text-[var(--color-text-muted)]">
                           {suggestion.label}
-                        </p>
-                        <p className="mt-1 truncate text-xs text-[var(--color-text-muted)]">
+                        </Localized>
+                        <Localized as="p" className="mt-1 truncate text-xs text-[var(--color-text-muted)]">
                           {suggestion.fill}
-                        </p>
-                      </div>
+                        </Localized>
+                      </Localized>
 
-                      <span className="ml-auto shrink-0 text-xs font-bold text-[var(--color-text-muted)] transition group-hover:text-[var(--color-text-muted)]">
+                      <Localized as="span" className="ml-auto shrink-0 text-xs font-bold text-[var(--color-text-muted)] transition group-hover:text-[var(--color-text-muted)]">
                         Usar
-                      </span>
-                    </div>
-                  </button>
+                      </Localized>
+                    </Localized>
+                  </Localized>
 
-                  <div className="flex flex-col gap-3 sm:flex-row sm:items-stretch">
-                    <div className="min-w-0 flex-1">
-                      <textarea
+                  <Localized as="div" className="flex flex-col gap-3 sm:flex-row sm:items-stretch">
+                    <Localized as="div" className="min-w-0 flex-1">
+                      <Localized as="textarea"
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
                         rows={4}
@@ -340,18 +341,18 @@ function WalkieModal({
                           focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]/60
                         "
                       />
-                      <div className="mt-2 flex items-center justify-between gap-3">
-                        <p className="text-xs text-[var(--color-text-muted)]">
+                      <Localized as="div" className="mt-2 flex items-center justify-between gap-3">
+                        <Localized as="p" className="text-xs text-[var(--color-text-muted)]">
                           Se abrirá WhatsApp. Confirma allí el envío.
-                        </p>
-                        <p className="shrink-0 text-xs text-[var(--color-text-muted)]">
+                        </Localized>
+                        <Localized as="p" className="shrink-0 text-xs text-[var(--color-text-muted)]">
                           {message.length}/500
-                        </p>
-                      </div>
-                    </div>
+                        </Localized>
+                      </Localized>
+                    </Localized>
 
-                    <div className="flex shrink-0 flex-row gap-2 sm:flex-col">
-                      <a
+                    <Localized as="div" className="flex shrink-0 flex-row gap-2 sm:flex-col">
+                      <Localized as="a"
                         href={whatsappHref}
                         target="_blank"
                         rel="noopener noreferrer"
@@ -361,26 +362,27 @@ function WalkieModal({
                       >
                         <FaPaperPlane aria-hidden="true" />
                         Continuar en WhatsApp
-                      </a>
+                      </Localized>
 
                       <IconAction onClick={clear} title="Limpiar">
                         <TrashIcon className="text-[18px]" />
                       </IconAction>
-                    </div>
-                  </div>
-                </div>
+                    </Localized>
+                  </Localized>
+                </Localized>
 
-                <div className="h-px w-full shrink-0 bg-gradient-to-r from-transparent via-[var(--color-primary)]/10 to-transparent" />
-              </motion.div>
-            </div>
-          </div>
-        </motion.div>
+                <Localized as="div" className="h-px w-full shrink-0 bg-gradient-to-r from-transparent via-[var(--color-primary)]/10 to-transparent" />
+              </Localized>
+            </Localized>
+          </Localized>
+        </Localized>
       )}
     </AnimatePresence>
   );
 }
 
 const Walkie = () => {
+  const { language } = useLanguage();
   const [open, setOpen] = useState(false);
   const [channel, setChannel] = useState("whatsapp");
   const [message, setMessage] = useState("");
@@ -392,7 +394,7 @@ const Walkie = () => {
 
   const links = useMemo(() => {
     const text = encodeURIComponent(
-      `Hola Eduard, te escribo desde la página de Soluciones Tecnológicas Ortegón.\n\n${message.trim() || "Quiero más información sobre tus servicios."}`,
+      `${language === "en" ? "Hi Eduard, I am contacting you from the Soluciones Tecnológicas Ortegón website." : "Hola Eduard, te escribo desde la página de Soluciones Tecnológicas Ortegón."}\n\n${message.trim() || translate("Quiero más información sobre tus servicios.", language)}`,
     );
     return {
       whatsapp: `https://wa.me/${CONTACTS.whatsappNumber}?text=${text}`,
@@ -400,15 +402,15 @@ const Walkie = () => {
       instagram: `https://ig.me/m/${CONTACTS.instagramUsername}`,
       instagramFallback: `https://instagram.com/${CONTACTS.instagramUsername}`,
     };
-  }, [message]);
+  }, [message, language]);
 
   const openChat = useCallback(() => setOpen(true), []);
   const closeChat = useCallback(() => setOpen(false), []);
 
   const clear = useCallback(() => setMessage(""), []);
   const applySuggestion = useCallback(
-    () => setMessage(suggestion.fill),
-    [suggestion.fill],
+    () => setMessage(translate(suggestion.fill, language)),
+    [suggestion.fill, language],
   );
 
   useEffect(() => {
@@ -422,7 +424,7 @@ const Walkie = () => {
       {/* Botón flotante
           MOBILE: centrado abajo y fijo
           DESKTOP: abajo derecha */}
-      <button
+      <Localized as="button"
         onClick={openChat}
         className={cx(
           `
@@ -441,11 +443,11 @@ const Walkie = () => {
         title="Abrir chat"
         type="button"
       >
-        <span className="relative flex h-10 w-10 items-center justify-center rounded-full bg-[var(--color-bg-secondary)]">
-          <span className="absolute -inset-2 rounded-full bg-[var(--color-bg-secondary)] opacity-0 transition group-hover:opacity-100" />
+        <Localized as="span" className="relative flex h-10 w-10 items-center justify-center rounded-full bg-[var(--color-bg-secondary)]">
+          <Localized as="span" className="absolute -inset-2 rounded-full bg-[var(--color-bg-secondary)] opacity-0 transition group-hover:opacity-100" />
           <Bot />
-        </span>
-      </button>
+        </Localized>
+      </Localized>
 
       <WalkieModal
         open={open}

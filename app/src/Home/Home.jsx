@@ -1,3 +1,4 @@
+import { Localized } from "../i18n/Language";
 // src/Home/Home.jsx
 
 import { Suspense, lazy, memo } from "react";
@@ -22,9 +23,9 @@ const DeferredSection = memo(function DeferredSection({
   const { ref, inView } = useInViewOnce({ rootMargin });
 
   return (
-    <section id={id} ref={ref} style={{ minHeight }}>
+    <Localized as="section" id={id} ref={ref} style={{ minHeight }}>
       {inView ? <Suspense fallback={null}>{children}</Suspense> : null}
-    </section>
+    </Localized>
   );
 });
 

@@ -1,3 +1,4 @@
+import { Localized } from "../i18n/Language";
 import React, { memo, useMemo, useState, useCallback } from "react";
 import { ExternalLink, Github, BookOpen, Search } from "lucide-react";
 
@@ -56,34 +57,34 @@ const KeyButton = memo(function KeyButton({
 
   if (!isReal) {
     return (
-      <button
+      <Localized as="button"
         type="button"
         disabled
         className={className}
         aria-label="Empty key"
         title="Empty"
       >
-        <span className="block text-center leading-tight">{label}</span>
-        <span className="mt-1 block text-center text-[9px] font-black tracking-widest text-[var(--color-text-muted)]">
+        <Localized as="span" className="block text-center leading-tight">{label}</Localized>
+        <Localized as="span" className="mt-1 block text-center text-[9px] font-black tracking-widest text-[var(--color-text-muted)]">
           —
-        </span>
-      </button>
+        </Localized>
+      </Localized>
     );
   }
 
   return (
-    <button
+    <Localized as="button"
       type="button"
       onClick={() => onSelect(item)}
       className={className}
       title={`Abrir ${official ? "docs oficiales" : "búsqueda"} de ${label}`}
       aria-label={`Seleccionar documentación de ${label}`}
     >
-      <span className="block text-center leading-tight">{label}</span>
-      <span className="mt-1 block text-center text-[9px] font-black tracking-widest text-[var(--color-text-muted)]">
+      <Localized as="span" className="block text-center leading-tight">{label}</Localized>
+      <Localized as="span" className="mt-1 block text-center text-[9px] font-black tracking-widest text-[var(--color-text-muted)]">
         {official ? "OFFICIAL" : "SEARCH"}
-      </span>
-    </button>
+      </Localized>
+    </Localized>
   );
 });
 
@@ -120,10 +121,10 @@ const PhoneProjectCard = memo(function PhoneProjectCard({ p }) {
   }, []);
 
   return (
-    <article className="relative mx-auto select-none" style={{ width: PHONE_W, height: PHONE_H }}>
-      <div className="absolute inset-4 -z-10 rounded-[2.5rem] bg-[var(--color-bg-secondary)] blur-xl" />
+    <Localized as="article" className="relative mx-auto select-none" style={{ width: PHONE_W, height: PHONE_H }}>
+      <Localized as="div" className="absolute inset-4 -z-10 rounded-[2.5rem] bg-[var(--color-bg-secondary)] blur-xl" />
 
-      <div
+      <Localized as="div"
         className="
           relative h-full w-full rounded-[2.5rem] p-[10px]
           border border-[var(--color-border)]
@@ -131,40 +132,40 @@ const PhoneProjectCard = memo(function PhoneProjectCard({ p }) {
           shadow-[0_14px_40px_rgba(32,58,43,0.08)]
         "
       >
-        <div className="relative flex h-full flex-col overflow-hidden rounded-[2rem] border border-[var(--color-border)] bg-[var(--color-surface)]">
-          <div className="pointer-events-none absolute left-1/2 top-3 z-10 -translate-x-1/2">
-            <div className="h-1.5 w-20 rounded-full bg-[var(--color-bg-secondary)]" />
-          </div>
+        <Localized as="div" className="relative flex h-full flex-col overflow-hidden rounded-[2rem] border border-[var(--color-border)] bg-[var(--color-surface)]">
+          <Localized as="div" className="pointer-events-none absolute left-1/2 top-3 z-10 -translate-x-1/2">
+            <Localized as="div" className="h-1.5 w-20 rounded-full bg-[var(--color-bg-secondary)]" />
+          </Localized>
 
-          <div className="relative flex-1 overflow-hidden px-5 pb-4 pt-10">
-            <div className="pointer-events-none absolute inset-0">
-              <div className="absolute -top-16 -left-12 h-44 w-44 rounded-full bg-[var(--color-primary-soft)] blur-xl" />
-              <div className="absolute -bottom-16 -right-12 h-44 w-44 rounded-full bg-[var(--color-primary-soft)] blur-xl" />
-            </div>
+          <Localized as="div" className="relative flex-1 overflow-hidden px-5 pb-4 pt-10">
+            <Localized as="div" className="pointer-events-none absolute inset-0">
+              <Localized as="div" className="absolute -top-16 -left-12 h-44 w-44 rounded-full bg-[var(--color-primary-soft)] blur-xl" />
+              <Localized as="div" className="absolute -bottom-16 -right-12 h-44 w-44 rounded-full bg-[var(--color-primary-soft)] blur-xl" />
+            </Localized>
 
-            <div className="relative">
-              <div className="flex items-start justify-between gap-3">
-                <div className="min-w-0">
-                  <div className="flex items-center gap-2">
-                    <h3 className="truncate text-[var(--color-text)] font-extrabold tracking-tight">
+            <Localized as="div" className="relative">
+              <Localized as="div" className="flex items-start justify-between gap-3">
+                <Localized as="div" className="min-w-0">
+                  <Localized as="div" className="flex items-center gap-2">
+                    <Localized as="h3" className="truncate text-[var(--color-text)] font-extrabold tracking-tight">
                       {p.title}
-                    </h3>
+                    </Localized>
 
                     {p.status ? (
-                      <span className="shrink-0 rounded-full bg-[var(--color-primary)] px-2 py-0.5 text-[10px] font-black tracking-widest text-[var(--color-text)]">
+                      <Localized as="span" className="shrink-0 rounded-full bg-[var(--color-primary)] px-2 py-0.5 text-[10px] font-black tracking-widest text-[var(--color-text)]">
                         {p.status.toUpperCase()}
-                      </span>
+                      </Localized>
                     ) : null}
-                  </div>
+                  </Localized>
 
-                  <p className="mt-2 line-clamp-3 text-sm font-medium leading-relaxed text-[var(--color-text-muted)]">
+                  <Localized as="p" className="mt-2 line-clamp-3 text-sm font-medium leading-relaxed text-[var(--color-text-muted)]">
                     {p.description}
-                  </p>
-                </div>
+                  </Localized>
+                </Localized>
 
-                <div className="flex shrink-0 items-center gap-2">
+                <Localized as="div" className="flex shrink-0 items-center gap-2">
                   {p.github ? (
-                    <a
+                    <Localized as="a"
                       href={p.github}
                       target="_blank"
                       rel="noreferrer"
@@ -172,11 +173,11 @@ const PhoneProjectCard = memo(function PhoneProjectCard({ p }) {
                       className="grid size-9 place-items-center rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-muted)] transition-colors hover:bg-[var(--color-surface)]"
                     >
                       <Github className="size-4" />
-                    </a>
+                    </Localized>
                   ) : null}
 
                   {p.href ? (
-                    <a
+                    <Localized as="a"
                       href={p.href}
                       target="_blank"
                       rel="noreferrer"
@@ -184,23 +185,23 @@ const PhoneProjectCard = memo(function PhoneProjectCard({ p }) {
                       className="grid size-9 place-items-center rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-muted)] transition-colors hover:bg-[var(--color-surface)]"
                     >
                       <ExternalLink className="size-4" />
-                    </a>
+                    </Localized>
                   ) : null}
-                </div>
-              </div>
+                </Localized>
+              </Localized>
 
-              <div className="mt-4 h-px w-full bg-[var(--color-surface)]" />
+              <Localized as="div" className="mt-4 h-px w-full bg-[var(--color-surface)]" />
 
-              <div className="mt-3">
+              <Localized as="div" className="mt-3">
                 {selectedItem ? (
-                  <div className="flex items-center justify-between gap-3 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-3">
-                    <div className="min-w-0">
-                      <div className="flex items-center gap-2">
-                        <span className="text-[11px] font-black tracking-widest text-[var(--color-text-muted)]">
+                  <Localized as="div" className="flex items-center justify-between gap-3 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-3">
+                    <Localized as="div" className="min-w-0">
+                      <Localized as="div" className="flex items-center gap-2">
+                        <Localized as="span" className="text-[11px] font-black tracking-widest text-[var(--color-text-muted)]">
                           SELECTED
-                        </span>
+                        </Localized>
 
-                        <span
+                        <Localized as="span"
                           className={[
                             "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-black tracking-widest",
                             selectedItem.official
@@ -219,19 +220,19 @@ const PhoneProjectCard = memo(function PhoneProjectCard({ p }) {
                               SEARCH
                             </>
                           )}
-                        </span>
-                      </div>
+                        </Localized>
+                      </Localized>
 
-                      <div className="mt-1 truncate text-[13px] font-extrabold text-[var(--color-text)]">
+                      <Localized as="div" className="mt-1 truncate text-[13px] font-extrabold text-[var(--color-text)]">
                         {selectedItem.label}
-                      </div>
+                      </Localized>
 
-                      <div className="mt-1 truncate text-[11px] text-[var(--color-text-muted)]">
+                      <Localized as="div" className="mt-1 truncate text-[11px] text-[var(--color-text-muted)]">
                         {selectedItem.link}
-                      </div>
-                    </div>
+                      </Localized>
+                    </Localized>
 
-                    <a
+                    <Localized as="a"
                       href={selectedItem.link}
                       target="_blank"
                       rel="noreferrer"
@@ -243,24 +244,24 @@ const PhoneProjectCard = memo(function PhoneProjectCard({ p }) {
                       aria-label="Open selected documentation"
                     >
                       Open docs →
-                    </a>
-                  </div>
+                    </Localized>
+                  </Localized>
                 ) : (
-                  <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-3">
-                    <div className="text-[11px] font-black tracking-widest text-[var(--color-text-muted)]">
+                  <Localized as="div" className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-3">
+                    <Localized as="div" className="text-[11px] font-black tracking-widest text-[var(--color-text-muted)]">
                       TIP
-                    </div>
-                    <div className="mt-1 text-[12px] text-[var(--color-text-muted)]">
+                    </Localized>
+                    <Localized as="div" className="mt-1 text-[12px] text-[var(--color-text-muted)]">
                       Toca una tech abajo para ver y abrir su documentación.
-                    </div>
-                  </div>
+                    </Localized>
+                  </Localized>
                 )}
-              </div>
-            </div>
-          </div>
+              </Localized>
+            </Localized>
+          </Localized>
 
-          <div className="shrink-0 border-t border-[var(--color-border)] bg-gradient-to-b from-[var(--color-surface)] to-[var(--color-surface)] p-5 pt-4">
-            <div className="grid grid-cols-3 gap-3">
+          <Localized as="div" className="shrink-0 border-t border-[var(--color-border)] bg-gradient-to-b from-[var(--color-surface)] to-[var(--color-surface)] p-5 pt-4">
+            <Localized as="div" className="grid grid-cols-3 gap-3">
               {keys.map((item) => (
                 <KeyButton
                   key={item.id}
@@ -269,15 +270,15 @@ const PhoneProjectCard = memo(function PhoneProjectCard({ p }) {
                   onSelect={onSelect}
                 />
               ))}
-            </div>
+            </Localized>
 
-            <div className="mt-4 flex justify-center">
-              <div className="h-1.5 w-16 rounded-full bg-[var(--color-bg-secondary)]" />
-            </div>
-          </div>
-        </div>
-      </div>
-    </article>
+            <Localized as="div" className="mt-4 flex justify-center">
+              <Localized as="div" className="h-1.5 w-16 rounded-full bg-[var(--color-bg-secondary)]" />
+            </Localized>
+          </Localized>
+        </Localized>
+      </Localized>
+    </Localized>
   );
 });
 

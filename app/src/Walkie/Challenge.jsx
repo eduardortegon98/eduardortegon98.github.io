@@ -1,3 +1,4 @@
+import { Localized } from "../i18n/Language";
 import { useEffect, useRef } from "react";
 export default function Challenge({ onToken, reset }) {
   const container = useRef(null);
@@ -18,5 +19,5 @@ export default function Challenge({ onToken, reset }) {
     if (window.turnstile) render(); else script.addEventListener("load", render);
     return () => { alive = false; script.removeEventListener("load", render); if (widget !== undefined) window.turnstile?.remove(widget); };
   }, [onToken, reset]);
-  return <div ref={container} className="min-h-12" aria-label="Verificación contra abuso"/>;
+  return <Localized as="div" ref={container} className="min-h-12" aria-label="Verificación contra abuso"/>;
 }

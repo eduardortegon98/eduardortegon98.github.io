@@ -1,3 +1,4 @@
+import { Localized } from "../i18n/Language";
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   BrainCircuit,
@@ -109,7 +110,7 @@ const StackCard = React.forwardRef(function StackCard(
   const isLeft = side === "left";
 
   const FrontContent = ({ invisible = false }) => (
-    <div
+    <Localized as="div"
       className={`
         rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] backdrop-blur-md
         px-4 py-4 sm:px-5 sm:py-5 lg:px-6
@@ -117,23 +118,23 @@ const StackCard = React.forwardRef(function StackCard(
         ${invisible ? "invisible" : ""}
       `}
     >
-      <div className="flex items-center justify-between gap-3">
-        <div className="text-[10px] sm:text-[11px] font-semibold tracking-[0.22em] sm:tracking-[0.24em] text-[var(--color-text)]">
+      <Localized as="div" className="flex items-center justify-between gap-3">
+        <Localized as="div" className="text-[10px] sm:text-[11px] font-semibold tracking-[0.22em] sm:tracking-[0.24em] text-[var(--color-text)]">
           {title}
-        </div>
-        <div className="h-px w-10 sm:w-16 bg-gradient-to-r from-transparent via-[var(--color-primary-soft)] to-transparent" />
-      </div>
+        </Localized>
+        <Localized as="div" className="h-px w-10 sm:w-16 bg-gradient-to-r from-transparent via-[var(--color-primary-soft)] to-transparent" />
+      </Localized>
 
-      <div className="mt-4 space-y-3">
+      <Localized as="div" className="mt-4 space-y-3">
         {items.map(({ label, Icon }, idx) => (
-          <div
+          <Localized as="div"
             key={idx}
             className="
               flex items-center gap-3 rounded-xl border border-[var(--color-accent)] bg-[var(--color-bg)]
               px-3 py-3 sm:px-4
             "
           >
-            <div
+            <Localized as="div"
               className="
                 grid size-9 shrink-0 place-items-center rounded-xl border border-[var(--color-accent)]
                 bg-[var(--color-primary-soft)] text-[var(--color-accent)] shadow-[0_0_18px_rgba(47,107,69,0.10)]
@@ -141,23 +142,23 @@ const StackCard = React.forwardRef(function StackCard(
               "
             >
               <Icon className="size-5 sm:size-6" />
-            </div>
+            </Localized>
 
-            <div className="text-sm sm:text-base font-medium text-[var(--color-text-muted)]">
+            <Localized as="div" className="text-sm sm:text-base font-medium text-[var(--color-text-muted)]">
               {label}
-            </div>
-          </div>
+            </Localized>
+          </Localized>
         ))}
-      </div>
-    </div>
+      </Localized>
+    </Localized>
   );
 
   return (
-    <div ref={ref} className="group relative [perspective:1200px]">
+    <Localized as="div" ref={ref} className="group relative [perspective:1200px]">
       {/* Este bloque define el tamaño real de la card */}
       <FrontContent invisible />
 
-      <div
+      <Localized as="div"
         className="
           absolute inset-0 rounded-2xl transition-transform duration-700
           [transform-style:preserve-3d]
@@ -165,7 +166,7 @@ const StackCard = React.forwardRef(function StackCard(
         "
       >
         {/* FRONT */}
-        <div
+        <Localized as="div"
           className="
             absolute inset-0 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] backdrop-blur-md
             px-4 py-4 sm:px-5 sm:py-5 lg:px-6
@@ -174,30 +175,30 @@ const StackCard = React.forwardRef(function StackCard(
             [backface-visibility:hidden]
           "
         >
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[var(--color-primary-soft)] to-transparent" />
+          <Localized as="div" className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[var(--color-primary-soft)] to-transparent" />
 
-          <div
+          <Localized as="div"
             className={[
               "pointer-events-none absolute top-1/2 hidden -translate-y-1/2 lg:block",
               isLeft ? "-right-2" : "-left-2",
             ].join(" ")}
           >
-            <div className="relative size-4">
-              <div className="absolute inset-0 rounded-full bg-[var(--color-primary-soft)] blur-[6px] opacity-0 transition group-hover:opacity-100" />
-              <div className="absolute inset-0 rounded-full bg-[var(--color-primary-soft)] blur-[10px] opacity-60" />
-            </div>
-          </div>
+            <Localized as="div" className="relative size-4">
+              <Localized as="div" className="absolute inset-0 rounded-full bg-[var(--color-primary-soft)] blur-[6px] opacity-0 transition group-hover:opacity-100" />
+              <Localized as="div" className="absolute inset-0 rounded-full bg-[var(--color-primary-soft)] blur-[10px] opacity-60" />
+            </Localized>
+          </Localized>
 
-          <div className="flex items-center justify-between gap-3">
-            <div className="text-xs font-semibold uppercase tracking-widest text-[var(--color-text)] font-mono">
+          <Localized as="div" className="flex items-center justify-between gap-3">
+            <Localized as="div" className="text-xs font-semibold uppercase tracking-widest text-[var(--color-text)] font-mono">
               {title}
-            </div>
-            <div className="h-px w-10 sm:w-16 bg-gradient-to-r from-transparent via-[var(--color-primary-soft)] to-transparent" />
-          </div>
+            </Localized>
+            <Localized as="div" className="h-px w-10 sm:w-16 bg-gradient-to-r from-transparent via-[var(--color-primary-soft)] to-transparent" />
+          </Localized>
 
-          <div className="mt-4 space-y-3">
+          <Localized as="div" className="mt-4 space-y-3">
             {items.map(({ label, Icon }, idx) => (
-              <div
+              <Localized as="div"
                 key={idx}
                 className="
                   flex items-center gap-3 rounded-xl border border-[var(--color-accent)] bg-[var(--color-bg)]
@@ -205,7 +206,7 @@ const StackCard = React.forwardRef(function StackCard(
                   transition group-hover:border-[var(--color-accent)]
                 "
               >
-                <div
+                <Localized as="div"
                   className="
                     grid size-9 shrink-0 place-items-center rounded-xl border border-[var(--color-accent)]
                     bg-[var(--color-primary-soft)] text-[var(--color-accent)] shadow-[0_0_18px_rgba(47,107,69,0.10)]
@@ -213,18 +214,18 @@ const StackCard = React.forwardRef(function StackCard(
                   "
                 >
                   <Icon className="size-5 sm:size-6" />
-                </div>
+                </Localized>
 
-                <div className="text-sm sm:text-base font-medium text-[var(--color-text-muted)]">
+                <Localized as="div" className="text-sm sm:text-base font-medium text-[var(--color-text-muted)]">
                   {label}
-                </div>
-              </div>
+                </Localized>
+              </Localized>
             ))}
-          </div>
-        </div>
+          </Localized>
+        </Localized>
 
         {/* BACK */}
-        <div
+        <Localized as="div"
           className="
     absolute inset-0 rounded-2xl border border-[var(--color-accent)]
     bg-gradient-to-br from-[var(--color-surface)] via-[var(--color-surface)] to-[var(--color-surface)]
@@ -237,24 +238,24 @@ const StackCard = React.forwardRef(function StackCard(
     [scrollbar-width:none]
   "
         >
-          <div className="flex items-center justify-between gap-3">
-            <div className="text-[10px] sm:text-[11px] font-semibold tracking-[0.22em] sm:tracking-[0.24em] text-[var(--color-accent)]">
+          <Localized as="div" className="flex items-center justify-between gap-3">
+            <Localized as="div" className="text-[10px] sm:text-[11px] font-semibold tracking-[0.22em] sm:tracking-[0.24em] text-[var(--color-accent)]">
               {title}
-            </div>
-            <div className="h-px w-10 sm:w-16 bg-gradient-to-r from-transparent via-[var(--color-primary-soft)] to-transparent" />
-          </div>
+            </Localized>
+            <Localized as="div" className="h-px w-10 sm:w-16 bg-gradient-to-r from-transparent via-[var(--color-primary-soft)] to-transparent" />
+          </Localized>
 
-          <h3 className="mt-3 text-sm sm:text-base font-extrabold text-[var(--color-accent)]">
+          <Localized as="h3" className="mt-3 text-sm sm:text-base font-extrabold text-[var(--color-accent)]">
             {items[0]?.label}
-          </h3>
+          </Localized>
 
-          <p className="mt-2 text-[11px] sm:text-xs leading-relaxed text-[var(--color-text-muted)]">
+          <Localized as="p" className="mt-2 text-[11px] sm:text-xs leading-relaxed text-[var(--color-text-muted)]">
             {description}
-          </p>
+          </Localized>
 
-          <div className="mt-3 space-y-1.5">
+          <Localized as="div" className="mt-3 space-y-1.5">
             {details.slice(0, 3).map((detail, idx) => (
-              <div
+              <Localized as="div"
                 key={idx}
                 className="
           rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)]
@@ -262,12 +263,12 @@ const StackCard = React.forwardRef(function StackCard(
         "
               >
                 ✦ {detail}
-              </div>
+              </Localized>
             ))}
-          </div>
-        </div>
-      </div>
-    </div>
+          </Localized>
+        </Localized>
+      </Localized>
+    </Localized>
   );
 });
 
@@ -354,7 +355,7 @@ function useMeasurePorts(wrapperRef, refs) {
 
 const ChipCenter = React.forwardRef(function ChipCenter(_, ref) {
   return (
-    <div
+    <Localized as="div"
       ref={ref}
       className="
         relative
@@ -366,11 +367,11 @@ const ChipCenter = React.forwardRef(function ChipCenter(_, ref) {
         max-w-[700px]
       "
     >
-      <div className="pointer-events-none absolute -inset-16 rounded-full bg-[var(--color-primary-soft)] blur-3xl" />
+      <Localized as="div" className="pointer-events-none absolute -inset-16 rounded-full bg-[var(--color-primary-soft)] blur-3xl" />
 
-      <div className="pointer-events-none absolute -inset-16 translate-x-10 rounded-full bg-[var(--color-primary-soft)] blur-3xl" />
+      <Localized as="div" className="pointer-events-none absolute -inset-16 translate-x-10 rounded-full bg-[var(--color-primary-soft)] blur-3xl" />
 
-      <img
+      <Localized as="img"
         loading="lazy"
         decoding="async"
         src={imgStack}
@@ -389,7 +390,7 @@ const ChipCenter = React.forwardRef(function ChipCenter(_, ref) {
       />
 
 
-    </div>
+    </Localized>
   );
 });
 
@@ -421,7 +422,7 @@ const Stack = () => {
   const m = useMeasurePorts(wrapRef, refs);
 
   return (
-    <section
+    <Localized as="section"
       className="
     relative w-full overflow-hidden
     bg-[var(--color-bg)]
@@ -429,43 +430,43 @@ const Stack = () => {
   "
       id="stack"
     >
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute -top-28 left-6 h-52 w-52 rounded-full bg-[var(--color-primary)]/10 blur-3xl sm:left-10 sm:h-72 sm:w-72" />
+      <Localized as="div" className="pointer-events-none absolute inset-0">
+        <Localized as="div" className="absolute -top-28 left-6 h-52 w-52 rounded-full bg-[var(--color-primary)]/10 blur-3xl sm:left-10 sm:h-72 sm:w-72" />
 
-        <div className="absolute -bottom-32 right-6 h-56 w-56 rounded-full bg-[var(--color-primary)]/5 blur-3xl sm:right-10 sm:h-80 sm:w-80" />
-      </div>
+        <Localized as="div" className="absolute -bottom-32 right-6 h-56 w-56 rounded-full bg-[var(--color-primary)]/5 blur-3xl sm:right-10 sm:h-80 sm:w-80" />
+      </Localized>
 
-      <div className="relative mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
-        <div className="text-center">
-          <h2 className="mt-3 font-extrabold tracking-tight text-[var(--color-accent)] text-[clamp(1.9rem,5vw,3.4rem)]">
+      <Localized as="div" className="relative mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
+        <Localized as="div" className="text-center">
+          <Localized as="h2" className="mt-3 font-extrabold tracking-tight text-[var(--color-accent)] text-[clamp(1.9rem,5vw,3.4rem)]">
             Nuestras Tecnologías
-          </h2>
+          </Localized>
 
-          <p className="mx-auto mt-3 max-w-2xl px-2 text-sm leading-relaxed  sm:text-base">
+          <Localized as="p" className="mx-auto mt-3 max-w-2xl px-2 text-sm leading-relaxed  sm:text-base">
             Diseñamos soluciones donde la IA, el software y la automatización
             trabajan juntos para optimizar procesos reales.
-          </p>
-        </div>
+          </Localized>
+        </Localized>
 
-        <div ref={wrapRef} className="relative mt-10 sm:mt-14">
+        <Localized as="div" ref={wrapRef} className="relative mt-10 sm:mt-14">
           {/* SVG solo desktop */}
           {m && (
-            <svg
+            <Localized as="svg"
               className="pointer-events-none absolute inset-0 hidden lg:block"
               width={m.w}
               height={m.h}
               viewBox={`0 0 ${m.w} ${m.h}`}
             >
-              <defs>
-                <linearGradient id="wire" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0" stopColor="rgba(47,107,69,0.08)" />
-                  <stop offset="0.5" stopColor="rgba(47,107,69,0.85)" />
-                  <stop offset="1" stopColor="rgba(47,107,69,0.08)" />
-                </linearGradient>
+              <Localized as="defs">
+                <Localized as="linearGradient" id="wire" x1="0" y1="0" x2="1" y2="0">
+                  <Localized as="stop" offset="0" stopColor="rgba(47,107,69,0.08)" />
+                  <Localized as="stop" offset="0.5" stopColor="rgba(47,107,69,0.85)" />
+                  <Localized as="stop" offset="1" stopColor="rgba(47,107,69,0.08)" />
+                </Localized>
 
-                <filter id="softGlow">
-                  <feGaussianBlur stdDeviation="3" result="b" />
-                  <feColorMatrix
+                <Localized as="filter" id="softGlow">
+                  <Localized as="feGaussianBlur" stdDeviation="3" result="b" />
+                  <Localized as="feColorMatrix"
                     in="b"
                     type="matrix"
                     values="
@@ -475,18 +476,18 @@ const Stack = () => {
                       0 0 0 1.8 0"
                     result="g"
                   />
-                  <feMerge>
-                    <feMergeNode in="g" />
-                    <feMergeNode in="SourceGraphic" />
-                  </feMerge>
-                </filter>
-              </defs>
-            </svg>
+                  <Localized as="feMerge">
+                    <Localized as="feMergeNode" in="g" />
+                    <Localized as="feMergeNode" in="SourceGraphic" />
+                  </Localized>
+                </Localized>
+              </Localized>
+            </Localized>
           )}
 
           {/* layout responsive */}
-          <div className="grid grid-cols-1 items-center gap-6 lg:grid-cols-3 lg:gap-8">
-            <div className="order-2 space-y-5 lg:order-1 lg:space-y-6">
+          <Localized as="div" className="grid grid-cols-1 items-center gap-6 lg:grid-cols-3 lg:gap-8">
+            <Localized as="div" className="order-2 space-y-5 lg:order-1 lg:space-y-6">
               <StackCard
                 ref={refs.intelligence}
                 title={STACK[0].title}
@@ -503,13 +504,13 @@ const Stack = () => {
                 details={STACK[2].details}
                 side="left"
               />
-            </div>
+            </Localized>
 
-            <div className="order-1 flex justify-center lg:order-2">
+            <Localized as="div" className="order-1 flex justify-center lg:order-2">
               <ChipCenter ref={refs.chip} />
-            </div>
+            </Localized>
 
-            <div className="order-3 space-y-5 lg:space-y-6">
+            <Localized as="div" className="order-3 space-y-5 lg:space-y-6">
               <StackCard
                 title={STACK[1].title}
                 items={STACK[1].items}
@@ -525,10 +526,10 @@ const Stack = () => {
                 details={STACK[3].details}
                 side="right"
               />
-            </div>
-          </div>
-          <div className=" flex justify-center">
-            <button
+            </Localized>
+          </Localized>
+          <Localized as="div" className=" flex justify-center">
+            <Localized as="button"
               type="button"
               onClick={() => goTo("projects")}
               className="
@@ -546,11 +547,11 @@ const Stack = () => {
               aria-label="Ir a tecnologías"
             >
               <ChevronDown className="h-5 w-5" />
-            </button>
-          </div>
-        </div>
-      </div>
-    </section>
+            </Localized>
+          </Localized>
+        </Localized>
+      </Localized>
+    </Localized>
   );
 };
 

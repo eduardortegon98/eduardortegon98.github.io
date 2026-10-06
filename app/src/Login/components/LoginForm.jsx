@@ -1,3 +1,4 @@
+import { Localized } from "../../i18n/Language";
 import { useEffect, useRef, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { requireSupabase, supabase, isPasswordRecovery, finishPasswordRecovery } from "../../lib/supabase";
@@ -77,18 +78,18 @@ export default function LoginForm() {
   if (user && !recovery) return <Navigate to="/panel" replace />;
   return <>
     <LoginHeader mode={recovery ? "recovery" : mode} />
-    {!recovery && <div className="mt-7 grid grid-cols-2 gap-1 rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-secondary)] p-1" aria-label="Opciones de acceso">{[["login", "Iniciar sesión"], ["register", "Crear cuenta"]].map(([value, label]) => <button key={value} type="button" disabled={pending} aria-pressed={mode === value} onClick={() => switchMode(value)} className={`rounded-lg px-3 py-3 text-sm font-semibold transition ${mode === value ? "bg-[var(--color-primary)]" : "text-[var(--color-text-muted)] hover:bg-[var(--color-surface)]"}`}>{label}</button>)}</div>}
-    <form key={recovery ? "recovery" : mode} onSubmit={submit} className="mt-7 space-y-5" aria-busy={pending}>
-      <fieldset disabled={pending} className="space-y-5">
-        {!recovery && <label className="block text-sm font-medium">Correo electrónico<input name="email" type="email" required maxLength={254} autoComplete="email" className={field} /></label>}
-        <div><label htmlFor="account-password" className="block text-sm font-medium">{recovery ? "Nueva contraseña" : "Contraseña"}</label><input id="account-password" name="password" type="password" required minLength={recovery || register ? 8 : undefined} maxLength={128} autoComplete={recovery || register ? "new-password" : "current-password"} aria-describedby={register ? "password-help" : undefined} className={field} />{register && <p id="password-help" className="mt-2 text-xs text-[var(--color-text-muted)]">Usa al menos 8 caracteres. Recomendamos letras, números y símbolos.</p>}</div>
-        {(recovery || register) && <label className="block text-sm font-medium">Confirmar contraseña<input name="confirmation" type="password" required minLength={8} maxLength={128} autoComplete="new-password" className={field} /></label>}
-        {!recovery && !register && <button type="button" onClick={reset} className="text-sm text-[var(--color-accent)] hover:underline">¿Olvidaste tu contraseña?</button>}
-        {register && <p className="text-xs leading-relaxed text-[var(--color-text-muted)]">Tu cuenta te permite continuar tus consultas con el asistente. Podemos pedirte confirmar tu correo antes de iniciar sesión.</p>}
+    {!recovery && <Localized as="div" className="mt-7 grid grid-cols-2 gap-1 rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-secondary)] p-1" aria-label="Opciones de acceso">{[["login", "Iniciar sesión"], ["register", "Crear cuenta"]].map(([value, label]) => <Localized as="button" key={value} type="button" disabled={pending} aria-pressed={mode === value} onClick={() => switchMode(value)} className={`rounded-lg px-3 py-3 text-sm font-semibold transition ${mode === value ? "bg-[var(--color-primary)]" : "text-[var(--color-text-muted)] hover:bg-[var(--color-surface)]"}`}>{label}</Localized>)}</Localized>}
+    <Localized as="form" key={recovery ? "recovery" : mode} onSubmit={submit} className="mt-7 space-y-5" aria-busy={pending}>
+      <Localized as="fieldset" disabled={pending} className="space-y-5">
+        {!recovery && <Localized as="label" className="block text-sm font-medium">Correo electrónico<Localized as="input" name="email" type="email" required maxLength={254} autoComplete="email" className={field} /></Localized>}
+        <Localized as="div"><Localized as="label" htmlFor="account-password" className="block text-sm font-medium">{recovery ? "Nueva contraseña" : "Contraseña"}</Localized><Localized as="input" id="account-password" name="password" type="password" required minLength={recovery || register ? 8 : undefined} maxLength={128} autoComplete={recovery || register ? "new-password" : "current-password"} aria-describedby={register ? "password-help" : undefined} className={field} />{register && <Localized as="p" id="password-help" className="mt-2 text-xs text-[var(--color-text-muted)]">Usa al menos 8 caracteres. Recomendamos letras, números y símbolos.</Localized>}</Localized>
+        {(recovery || register) && <Localized as="label" className="block text-sm font-medium">Confirmar contraseña<Localized as="input" name="confirmation" type="password" required minLength={8} maxLength={128} autoComplete="new-password" className={field} /></Localized>}
+        {!recovery && !register && <Localized as="button" type="button" onClick={reset} className="text-sm text-[var(--color-accent)] hover:underline">¿Olvidaste tu contraseña?</Localized>}
+        {register && <Localized as="p" className="text-xs leading-relaxed text-[var(--color-text-muted)]">Tu cuenta te permite continuar tus consultas con el asistente. Podemos pedirte confirmar tu correo antes de iniciar sesión.</Localized>}
         {hasCaptcha && !recovery && <Challenge onToken={setCaptcha} reset={challengeReset} />}
-        <button disabled={pending || (hasCaptcha && !recovery && !captcha)} className={button}>{pending ? "Procesando..." : recovery ? "Guardar contraseña" : register ? "Registrarme" : "Entrar"}</button>
-      </fieldset>
+        <Localized as="button" disabled={pending || (hasCaptcha && !recovery && !captcha)} className={button}>{pending ? "Procesando..." : recovery ? "Guardar contraseña" : register ? "Registrarme" : "Entrar"}</Localized>
+      </Localized>
       <FormStatus status={status} />
-    </form>
+    </Localized>
   </>;
 }

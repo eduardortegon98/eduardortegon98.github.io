@@ -1,9 +1,10 @@
+import { Localized } from "../i18n/Language";
 import FeedbackList from "./FeedbackList";
 import FeedbackForm from "./FeedbackForm";
 
 const FeedBack = () => {
   return (
-    <section
+    <Localized as="section"
       className="
         w-full
         bg-[var(--color-bg)]
@@ -11,9 +12,9 @@ const FeedBack = () => {
         md:px-12
       "
     >
-      <div className="mx-auto max-w-7xl">
-        <div className="mb-14 text-center">
-          <p
+      <Localized as="div" className="mx-auto max-w-7xl">
+        <Localized as="div" className="mb-14 text-center">
+          <Localized as="p"
             className="
               mb-4 text-sm uppercase
               tracking-[0.3em]
@@ -21,9 +22,9 @@ const FeedBack = () => {
             "
           >
             Feedback
-          </p>
+          </Localized>
 
-          <h2
+          <Localized as="h2"
             className="
               mb-4 text-4xl font-extrabold
               text-[var(--color-accent)]
@@ -31,9 +32,9 @@ const FeedBack = () => {
             "
           >
             Lo que opinan nuestros clientes
-          </h2>
+          </Localized>
 
-          <p
+          <Localized as="p"
             className="
               mx-auto max-w-2xl
               text-base leading-relaxed
@@ -43,10 +44,10 @@ const FeedBack = () => {
           >
             Nos encanta escuchar a quienes confían en nuestros servicios.
             Comparte tu experiencia y ayúdanos a seguir mejorando.
-          </p>
-        </div>
+          </Localized>
+        </Localized>
 
-        <div
+        <Localized as="div"
           className="
             grid grid-cols-1 gap-10
             items-stretch
@@ -55,9 +56,9 @@ const FeedBack = () => {
         >
           <FeedbackList />
           <FeedbackForm />
-        </div>
-      </div>
-    </section>
+        </Localized>
+      </Localized>
+    </Localized>
   );
 };
 

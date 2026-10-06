@@ -1,3 +1,4 @@
+import { Localized } from "../i18n/Language";
 import React, { useState } from "react";
 import { ArrowLeft, ArrowRight, ChevronDown } from "lucide-react";
 import { animate, AnimatePresence, motion } from "framer-motion";
@@ -67,7 +68,7 @@ const Products = () => {
     ].join(" ");
 
   return (
-    <section
+    <Localized as="section"
       className="
     relative flex min-h-screen w-full flex-col
     items-center justify-center overflow-hidden
@@ -83,44 +84,44 @@ const Products = () => {
         onChange={setActiveIndex}
       />
 
-      <div className="relative z-10 mx-auto w-full max-w-7xl px-6 sm:px-10 lg:px-16">
+      <Localized as="div" className="relative z-10 mx-auto w-full max-w-7xl px-6 sm:px-10 lg:px-16">
         {/* Flecha izquierda */}
-        <div
+        <Localized as="div"
           className="
               absolute -left-4 top-1/2 z-20 hidden
               -translate-y-1/2 xl:block 
             "
         >
-          <button
+          <Localized as="button"
             onClick={goPrev}
             disabled={isFirst}
             className={arrowButtonClass(isFirst)}
             aria-label="Producto anterior"
           >
             <ArrowLeft className="size-6" />
-          </button>
-        </div>
+          </Localized>
+        </Localized>
 
         {/* Flecha derecha */}
-        <div
+        <Localized as="div"
           className="
               absolute -right-4 top-1/2 z-20 hidden
               -translate-y-1/2 xl:block
             "
         >
-          <button
+          <Localized as="button"
             onClick={goNext}
             disabled={isLast}
             className={arrowButtonClass(isLast)}
             aria-label="Siguiente producto"
           >
             <ArrowRight className="size-6" />
-          </button>
-        </div>
+          </Localized>
+        </Localized>
 
         {/* Layout principal */}
         <AnimatePresence mode="wait" custom={direction}>
-          <motion.div
+          <Localized as={motion.div}
             key={activeIndex}
             custom={direction}
             variants={{
@@ -145,19 +146,19 @@ const Products = () => {
               ease: "easeInOut",
             }}
           >
-            <div className="grid w-full items-center gap-16 lg:grid-cols-2">
+            <Localized as="div" className="grid w-full items-center gap-16 lg:grid-cols-2">
               <ProductDetails product={activeProduct} />
 
               <ProductDisplay
                 image={activeProduct.image}
                 altText={activeProduct.title}
               />
-            </div>
-          </motion.div>
+            </Localized>
+          </Localized>
         </AnimatePresence>
 
-        <div className="mt-16 flex justify-center">
-          <button
+        <Localized as="div" className="mt-16 flex justify-center">
+          <Localized as="button"
             type="button"
             onClick={() => goTo("stack")}
             className="
@@ -175,10 +176,10 @@ const Products = () => {
             aria-label="Ir a tecnologías"
           >
             <ChevronDown className="h-5 w-5" />
-          </button>
-        </div>
-      </div>
-    </section>
+          </Localized>
+        </Localized>
+      </Localized>
+    </Localized>
   );
 };
 

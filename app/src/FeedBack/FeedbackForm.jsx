@@ -1,3 +1,4 @@
+import { Localized } from "../i18n/Language";
 import { useState } from "react";
 import { Send, Star } from "lucide-react";
 import { submitForm } from "../lib/submissions";
@@ -53,19 +54,19 @@ const FeedbackForm = () => {
   };
 
   return (
-    <div className="relative">
-      <div className="relative bg-[var(--color-surface)] border border-[var(--color-border)] rounded-3xl p-8 md:p-10 shadow-[0_8px_24px_rgba(32,58,43,0.06)]">
-        <h3 className="text-2xl md:text-3xl font-bold text-[var(--color-text)] mb-3">
+    <Localized as="div" className="relative">
+      <Localized as="div" className="relative bg-[var(--color-surface)] border border-[var(--color-border)] rounded-3xl p-8 md:p-10 shadow-[0_8px_24px_rgba(32,58,43,0.06)]">
+        <Localized as="h3" className="text-2xl md:text-3xl font-bold text-[var(--color-text)] mb-3">
           Déjanos tu opinión
-        </h3>
-        <p className="text-[var(--color-text-muted)] mb-8">
+        </Localized>
+        <Localized as="p" className="text-[var(--color-text-muted)] mb-8">
           Tu feedback es muy importante para nosotros.
-        </p>
+        </Localized>
 
-        <form className="space-y-5" onSubmit={handleSubmit}>
-          <div>
-            <label className="block text-sm text-[var(--color-text-muted)] mb-2">Nombre</label>
-            <input
+        <Localized as="form" className="space-y-5" onSubmit={handleSubmit}>
+          <Localized as="div">
+            <Localized as="label" className="block text-sm text-[var(--color-text-muted)] mb-2">Nombre</Localized>
+            <Localized as="input"
               type="text"
               name="name" maxLength={120}
               value={formData.name}
@@ -74,13 +75,13 @@ const FeedbackForm = () => {
               required
               className="w-full rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)] px-4 py-3 text-[var(--color-text)] placeholder:text-[var(--color-text-muted)] outline-none focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent)]/20 transition"
             />
-          </div>
+          </Localized>
 
-          <div>
-            <label className="block text-sm text-[var(--color-text-muted)] mb-2">
+          <Localized as="div">
+            <Localized as="label" className="block text-sm text-[var(--color-text-muted)] mb-2">
               Correo electrónico
-            </label>
-            <input
+            </Localized>
+            <Localized as="input"
               type="email"
               name="email" maxLength={254}
               value={formData.email}
@@ -88,16 +89,16 @@ const FeedbackForm = () => {
               placeholder="tucorreo@ejemplo.com"
               className="w-full rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)] px-4 py-3 text-[var(--color-text)] placeholder:text-[var(--color-text-muted)] outline-none focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent)]/20 transition"
             />
-          </div>
+          </Localized>
 
-          <div>
-            <label className="block text-sm text-[var(--color-text-muted)] mb-2">
+          <Localized as="div">
+            <Localized as="label" className="block text-sm text-[var(--color-text-muted)] mb-2">
               Calificación
-            </label>
+            </Localized>
 
-            <div className="flex items-center gap-2">
+            <Localized as="div" className="flex items-center gap-2">
               {[1, 2, 3, 4, 5].map((value) => (
-                <button
+                <Localized as="button"
                   key={value}
                   type="button"
                   onClick={() => handleRatingClick(value)}
@@ -110,16 +111,16 @@ const FeedbackForm = () => {
                     fill={value <= formData.rating ? "currentColor" : "none"}
                     strokeWidth={1.8}
                   />
-                </button>
+                </Localized>
               ))}
-            </div>
-          </div>
+            </Localized>
+          </Localized>
 
-          <div>
-            <label className="block text-sm text-[var(--color-text-muted)] mb-2">
+          <Localized as="div">
+            <Localized as="label" className="block text-sm text-[var(--color-text-muted)] mb-2">
               Tu experiencia
-            </label>
-            <textarea
+            </Localized>
+            <Localized as="textarea"
               rows="5"
               name="message" maxLength={5000}
               value={formData.message}
@@ -128,27 +129,27 @@ const FeedbackForm = () => {
               required
               className="w-full rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)] px-4 py-3 text-[var(--color-text)] placeholder:text-[var(--color-text-muted)] outline-none resize-none focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent)]/20 transition"
             />
-          </div>
+          </Localized>
 
           {successMessage && (
-            <p role="status" className="text-green-400 text-sm">{successMessage}</p>
+            <Localized as="p" role="status" className="text-green-400 text-sm">{successMessage}</Localized>
           )}
 
           {errorMessage && (
-            <p role="alert" className="text-red-400 text-sm">{errorMessage}</p>
+            <Localized as="p" role="alert" className="text-red-400 text-sm">{errorMessage}</Localized>
           )}
 
-          <button
+          <Localized as="button"
             type="submit"
             disabled={loading}
             className="inline-flex items-center gap-2 bg-[var(--color-primary)] text-[var(--color-text)] font-semibold px-6 py-3 rounded-full hover:scale-[1.02] transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {loading ? "Enviando..." : "Enviar feedback"}
             <Send size={18} />
-          </button>
-        </form>
-      </div>
-    </div>
+          </Localized>
+        </Localized>
+      </Localized>
+    </Localized>
   );
 };
 

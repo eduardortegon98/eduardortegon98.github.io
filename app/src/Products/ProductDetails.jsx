@@ -1,11 +1,12 @@
+import { Localized } from "../i18n/Language";
 import React from "react";
 import ProductFeatures from "./ProductFeatures";
 
 const ProductDetails = ({ product }) => {
   return (
-    <div className="relative z-10">
+    <Localized as="div" className="relative z-10">
       {/* Badge */}
-      <div
+      <Localized as="div"
         className="
           inline-flex items-center rounded-full
           border border-[var(--color-primary)]
@@ -18,10 +19,10 @@ const ProductDetails = ({ product }) => {
         "
       >
         {product.eyebrow}
-      </div>
+      </Localized>
 
       {/* Título */}
-      <h2
+      <Localized as="h2"
         className="
           mt-6 max-w-xl
           text-3xl font-black
@@ -31,10 +32,10 @@ const ProductDetails = ({ product }) => {
         "
       >
         {product.title}
-      </h2>
+      </Localized>
 
       {/* Descripción */}
-      <p
+      <Localized as="p"
         className="
           mt-6 max-w-lg
           text-sm leading-relaxed
@@ -43,15 +44,15 @@ const ProductDetails = ({ product }) => {
         "
       >
         {product.description}
-      </p>
+      </Localized>
 
       {/* Características */}
       <ProductFeatures features={product.features} />
 
       {/* Botones */}
-      <div className="mt-10 flex flex-col gap-4 sm:flex-row">
+      <Localized as="div" className="mt-10 flex flex-col gap-4 sm:flex-row">
         {/* CTA principal */}
-        <button
+        <Localized as="button"
           className="
             inline-flex items-center justify-center
             rounded-2xl
@@ -65,10 +66,10 @@ const ProductDetails = ({ product }) => {
           "
         >
           Solicitar demo
-        </button>
+        </Localized>
 
         {/* CTA secundario */}
-        <button
+        <Localized as="button"
           className="
             inline-flex items-center justify-center
             rounded-2xl
@@ -83,9 +84,9 @@ const ProductDetails = ({ product }) => {
           "
         >
           Ver producto
-        </button>
-      </div>
-    </div>
+        </Localized>
+      </Localized>
+    </Localized>
   );
 };
 

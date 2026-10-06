@@ -1,3 +1,4 @@
+import { Localized } from "../i18n/Language";
 import { useEffect, useRef, useMemo } from "react";
 import { App } from "./core/App";
 import { distortions } from "./core/distortions";
@@ -36,7 +37,7 @@ const Hyperspeed = ({ effectOptions = null, isDark = true }) => {
     return () => appRef.current?.dispose();
   }, [resolvedOptions]);
 
-  return <div ref={hyperspeed} style={{ width: "100%", height: "100%" }} />;
+  return <Localized as="div" ref={hyperspeed} style={{ width: "100%", height: "100%" }} />;
 };
 
 export default Hyperspeed;

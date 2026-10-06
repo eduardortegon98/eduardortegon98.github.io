@@ -1,3 +1,4 @@
+import { Localized, useLanguage, translate } from "../i18n/Language";
 import React, { memo, useEffect, useMemo, useRef, useState } from "react";
 
 const QUOTE =
@@ -6,8 +7,8 @@ const AUTHOR = "— Anónimo";
 
 const Background = memo(function Background() {
   return (
-    <div className="pointer-events-none absolute inset-0">
-      <div
+    <Localized as="div" className="pointer-events-none absolute inset-0">
+      <Localized as="div"
         className="
           absolute -top-20 left-4
           h-32 w-32 rounded-full
@@ -18,7 +19,7 @@ const Background = memo(function Background() {
         "
       />
 
-      <div
+      <Localized as="div"
         className="
           absolute -bottom-20 right-4
           h-36 w-36 rounded-full
@@ -28,11 +29,14 @@ const Background = memo(function Background() {
           lg:h-60 lg:w-60
         "
       />
-    </div>
+    </Localized>
   );
 });
 
 export default function Quotes() {
+  const { language } = useLanguage();
+  const quote = translate(QUOTE, language);
+  const author = translate(AUTHOR, language);
   const sectionRef = useRef(null);
   const [started, setStarted] = useState(false);
   const [quoteIndex, setQuoteIndex] = useState(0);
@@ -64,12 +68,12 @@ export default function Quotes() {
 
     quoteTimer = setInterval(() => {
       setQuoteIndex((prev) => {
-        if (prev >= QUOTE.length) {
+        if (prev >= quote.length) {
           clearInterval(quoteTimer);
 
           authorTimer = setInterval(() => {
             setAuthorIndex((aPrev) => {
-              if (aPrev >= AUTHOR.length) {
+              if (aPrev >= author.length) {
                 clearInterval(authorTimer);
                 return aPrev;
               }
@@ -88,18 +92,18 @@ export default function Quotes() {
       clearInterval(quoteTimer);
       clearInterval(authorTimer);
     };
-  }, [started]);
+  }, [started, quote, author]);
 
-  const typedQuote = useMemo(() => QUOTE.slice(0, quoteIndex), [quoteIndex]);
+  const typedQuote = useMemo(() => quote.slice(0, quoteIndex), [quoteIndex, quote]);
   const typedAuthor = useMemo(
-    () => AUTHOR.slice(0, authorIndex),
-    [authorIndex],
+    () => author.slice(0, authorIndex),
+    [authorIndex, author],
   );
 
-  const showCursor = started && authorIndex < AUTHOR.length;
+  const showCursor = started && authorIndex < author.length;
 
   return (
-    <section
+    <Localized as="section"
       ref={sectionRef}
       id="quotes"
       className="
@@ -116,27 +120,27 @@ export default function Quotes() {
     >
       <Background />
 
-      <div className="relative z-10 mx-auto w-full max-w-4xl text-center">
-        <div
+      <Localized as="div" className="relative z-10 mx-auto w-full max-w-4xl text-center">
+        <Localized as="div"
           className="
     italianno-regular
     text-[var(--color-text-muted)]
     drop-shadow-[0_4px_12px_rgba(0,0,0,0.18)]
   "
         >
-          <span className="inline leading-[1.2] text-[clamp(1.45rem,4.8vw,3.4rem)] sm:text-[clamp(1.7rem,4.4vw,4rem)]">
+          <Localized as="span" className="inline leading-[1.2] text-[clamp(1.45rem,4.8vw,3.4rem)] sm:text-[clamp(1.7rem,4.4vw,4rem)]">
             {typedQuote}
-          </span>
+          </Localized>
 
           {showCursor && (
-            <span className="typing-cursor ml-1 inline-block align-baseline sm:ml-2" />
+            <Localized as="span" className="typing-cursor ml-1 inline-block align-baseline sm:ml-2" />
           )}
 
-          <span className="mt-4 block text-[clamp(1rem,2.8vw,2rem)] opacity-90 sm:mt-5">
+          <Localized as="span" className="mt-4 block text-[clamp(1rem,2.8vw,2rem)] opacity-90 sm:mt-5">
             {typedAuthor}
-          </span>
-        </div>
-      </div>
-    </section>
+          </Localized>
+        </Localized>
+      </Localized>
+    </Localized>
   );
 }

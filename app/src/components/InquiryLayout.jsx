@@ -1,3 +1,4 @@
+import { Localized } from "../i18n/Language";
 import { Children, cloneElement, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { ArrowUpRight, Check, ChevronDown } from "lucide-react";
 import Header from "../Header/Header";
@@ -18,22 +19,22 @@ export function InquiryLayout({ sidebar, children }) {
     window.addEventListener("resize", update); update();
     return () => { observer.disconnect(); window.removeEventListener("resize", update); };
   }, []);
-  return <div className="inquiry-page"><Header /><main className="inquiry-shell"><aside className="inquiry-sidebar">{sidebar}<Link className="inquiry-home" to="/">Volver al inicio <ArrowUpRight size={14} /></Link></aside><div ref={main} className="inquiry-main">{children}</div></main><footer className="inquiry-footer">Soluciones Tecnológicas Ortegón<span>Ingeniería con propósito.</span></footer></div>;
+  return <Localized as="div" className="inquiry-page"><Header /><Localized as="main" className="inquiry-shell"><Localized as="aside" className="inquiry-sidebar">{sidebar}<Localized as={Link} className="inquiry-home" to="/">Volver al inicio <ArrowUpRight size={14} /></Localized></Localized><Localized as="div" ref={main} className="inquiry-main">{children}</Localized></Localized><Localized as="footer" className="inquiry-footer">Soluciones Tecnológicas Ortegón<Localized as="span">Ingeniería con propósito.</Localized></Localized></Localized>;
 }
 export function InquiryHeading({ eyebrow, title, children }) {
-  return <div className="inquiry-heading"><p className="inquiry-eyebrow"><span />{eyebrow}</p><h1>{title}</h1><p className="inquiry-intro">{children}</p></div>;
+  return <Localized as="div" className="inquiry-heading"><Localized as="p" className="inquiry-eyebrow"><Localized as="span" />{eyebrow}</Localized><Localized as="h1">{title}</Localized><Localized as="p" className="inquiry-intro">{children}</Localized></Localized>;
 }
 export function InquirySection({ number, title, description, children, hidden = false }) {
-  return <fieldset className="inquiry-group" hidden={hidden}><legend tabIndex={-1}><span className="inquiry-number">{number}</span>{title}</legend>{description && <p className="inquiry-group-note">{description}</p>}<div className="inquiry-fields">{children}</div></fieldset>;
+  return <Localized as="fieldset" className="inquiry-group" hidden={hidden}><Localized as="legend" tabIndex={-1}><Localized as="span" className="inquiry-number">{number}</Localized>{title}</Localized>{description && <Localized as="p" className="inquiry-group-note">{description}</Localized>}<Localized as="div" className="inquiry-fields">{children}</Localized></Localized>;
 }
 export function InquiryField({ id, label, optional = false, hint, wide = false, children }) {
-  return <div className={`inquiry-field ${wide ? "inquiry-field--wide" : ""}`}><label htmlFor={id}>{label}{optional && <span>Opcional</span>}</label>{hint ? cloneElement(children, { "aria-describedby": `${id}-hint` }) : children}{hint && <p id={`${id}-hint`} className="inquiry-hint">{hint}</p>}</div>;
+  return <Localized as="div" className={`inquiry-field ${wide ? "inquiry-field--wide" : ""}`}><Localized as="label" htmlFor={id}>{label}{optional && <Localized as="span">Opcional</Localized>}</Localized>{hint ? cloneElement(children, { "aria-describedby": `${id}-hint` }) : children}{hint && <Localized as="p" id={`${id}-hint`} className="inquiry-hint">{hint}</Localized>}</Localized>;
 }
 export function InquirySelect({ id, name, options, placeholder }) {
-  return <div className="inquiry-select"><select id={id} name={name} required defaultValue=""><option value="" disabled>{placeholder}</option>{options.map(value => <option key={value} value={value}>{value}</option>)}</select><ChevronDown size={16} aria-hidden="true" /></div>;
+  return <Localized as="div" className="inquiry-select"><Localized as="select" id={id} name={name} required defaultValue=""><Localized as="option" value="" disabled>{placeholder}</Localized>{options.map(value => <Localized as="option" key={value} value={value}>{value}</Localized>)}</Localized><ChevronDown size={16} aria-hidden="true" /></Localized>;
 }
 export function InquiryNote({ children }) {
-  return <p className="inquiry-note"><Check size={15} aria-hidden="true" />{children}</p>;
+  return <Localized as="p" className="inquiry-note"><Check size={15} aria-hidden="true" />{children}</Localized>;
 }
 
 export function InquiryStepForm({ pending, submit, status, children, submitLabel, pendingLabel, note, honeypot }) {
@@ -66,15 +67,15 @@ export function InquiryStepForm({ pending, submit, status, children, submitLabel
     submit(event);
   }
   // Validate only the visible step on narrow/short screens; the submit hook validates all fields before sending.
-  return <form ref={form} className={`inquiry-form ${compact ? "inquiry-form--stepped" : ""}`} onSubmit={onSubmit} noValidate={compact} aria-busy={pending}>
+  return <Localized as="form" ref={form} className={`inquiry-form ${compact ? "inquiry-form--stepped" : ""}`} onSubmit={onSubmit} noValidate={compact} aria-busy={pending}>
     {honeypot}
-    {compact && <div className="inquiry-step-progress" aria-live="polite"><strong>Paso {step + 1} de {groups.length}</strong><div aria-hidden="true">{groups.map((_, index) => <i key={index} className={index <= step ? "is-active" : ""} />)}</div></div>}
-    <fieldset disabled={pending} className="inquiry-form-fields">{groups.map((group, index) => cloneElement(group, { hidden: compact && index !== step }))}</fieldset>
-    <div className="inquiry-form-bottom">
-      <div className="inquiry-form-actions">{compact && step > 0 && <button type="button" className="inquiry-back" disabled={pending} onClick={() => setStep(value => value - 1)}>Atrás</button>}
-      {compact && step < groups.length - 1 ? <button type="button" className="inquiry-submit" onClick={next} disabled={pending}>Continuar <ArrowUpRight size={17} /></button> : <button type="submit" disabled={pending} className="inquiry-submit">{pending ? pendingLabel : submitLabel}<ArrowUpRight size={17} /></button>}</div>
+    {compact && <Localized as="div" className="inquiry-step-progress" aria-live="polite"><Localized as="strong">Paso {step + 1} de {groups.length}</Localized><Localized as="div" aria-hidden="true">{groups.map((_, index) => <Localized as="i" key={index} className={index <= step ? "is-active" : ""} />)}</Localized></Localized>}
+    <Localized as="fieldset" disabled={pending} className="inquiry-form-fields">{groups.map((group, index) => cloneElement(group, { hidden: compact && index !== step }))}</Localized>
+    <Localized as="div" className="inquiry-form-bottom">
+      <Localized as="div" className="inquiry-form-actions">{compact && step > 0 && <Localized as="button" type="button" className="inquiry-back" disabled={pending} onClick={() => setStep(value => value - 1)}>Atrás</Localized>}
+      {compact && step < groups.length - 1 ? <Localized as="button" type="button" className="inquiry-submit" onClick={next} disabled={pending}>Continuar <ArrowUpRight size={17} /></Localized> : <Localized as="button" type="submit" disabled={pending} className="inquiry-submit">{pending ? pendingLabel : submitLabel}<ArrowUpRight size={17} /></Localized>}</Localized>
       <InquiryNote>{note}</InquiryNote>
-      {status && <div className="inquiry-status" role={status.success ? "status" : "alert"}>{status.message}</div>}
-    </div>
-  </form>;
+      {status && <Localized as="div" className="inquiry-status" role={status.success ? "status" : "alert"}>{status.message}</Localized>}
+    </Localized>
+  </Localized>;
 }

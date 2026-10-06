@@ -1,3 +1,4 @@
+import { Localized } from "../i18n/Language";
 import { useEffect, useRef, useState } from "react";
 import { Bot, X } from "lucide-react";
 import { supabase, requireSupabase } from "../lib/supabase";
@@ -86,39 +87,39 @@ export default function AIChat() {
     });
   }
   return <>
-    <button type="button" onClick={() => setOpen(true)} aria-label="Abrir asistente de la empresa" className="fixed bottom-6 right-6 z-50 rounded-full bg-[var(--color-primary)] p-4 text-[var(--color-text)] shadow-xl"><Bot /></button>
-    {open && <section role="dialog" aria-modal="false" aria-label="Asistente de Soluciones Ortegón" className="fixed bottom-4 right-4 left-4 z-[60] flex max-h-[90svh] flex-col overflow-hidden rounded-3xl border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text)] shadow-[0_14px_40px_rgba(32,58,43,0.08)] sm:left-auto sm:w-[420px]">
-      <header className="flex items-center justify-between border-b border-[var(--color-border)] p-4"><div><h2 className="font-bold">Asistente Ortegón</h2><p className="text-xs text-[var(--color-text-muted)]">IA para consultas sobre nuestros servicios</p></div><button type="button" onClick={() => setOpen(false)} aria-label="Cerrar asistente"><X /></button></header>
-      <div className="space-y-3 overflow-y-auto p-4">
-        <p className="rounded-xl bg-[var(--color-surface)] p-3 text-sm">Hola, ¿qué necesitas para tu negocio? Puedes consultar nuestros servicios o solicitar atención de Eduard.</p>
-        <p className="text-xs text-[var(--color-text-muted)]">Guardamos las consultas para continuar la conversación y controlar el uso. No compartas información sensible. La IA puede equivocarse.</p>
-        <div role="log" aria-label="Conversación" aria-live="polite" className="space-y-3">{turns.map((turn, index) => <p key={index} className={`whitespace-pre-wrap rounded-xl p-3 text-sm ${turn.role === "user" ? "ml-6 bg-[var(--color-primary)]/15" : "mr-6 bg-[var(--color-surface)]"}`}><strong className="block text-xs text-[var(--color-text-muted)]">{turn.role === "user" ? "Tú" : "Asistente"}</strong>{turn.text}</p>)}</div>
-        {pending && <p role="status" className="text-sm">Procesando…</p>}
-        {status && <p role="status" className="rounded-xl border border-[var(--color-border)] p-3 text-sm">{status}</p>}
-        {!user && <p className="text-xs text-[var(--color-text-muted)]">{remaining === null ? "Hasta 4 consultas sin registro." : `Consultas gratuitas restantes: ${remaining}.`} El límite se comparte por IP.</p>}
-        {user && <p className="text-xs text-[var(--color-text-muted)]">Sesión activa. Hasta 20 consultas al día; solo asuntos de la empresa.</p>}
-        {authOpen && !user && <form onSubmit={event => authenticate(event, false)} className="space-y-3 rounded-xl border border-[var(--color-border)] p-3">
-          <p className="text-sm">Inicia sesión o crea una cuenta con correo confirmado.</p>
-          <label className="block text-sm">Correo<input name="email" type="email" required maxLength={254} autoComplete="email" className={field}/></label>
-          <label className="block text-sm">Contraseña<input name="password" type="password" required minLength={8} maxLength={128} autoComplete="current-password" className={field}/></label>
-          <div className="flex gap-2"><button disabled={pending || !captcha} className={button}>Entrar</button><button type="button" disabled={pending || !captcha} onClick={event => authenticate(event, true)} className="rounded-xl border border-[var(--color-border)] p-3">Crear cuenta</button></div>
-        </form>}
-        {handoff && <form onSubmit={sendHandoff} className="space-y-3 rounded-xl border border-[var(--color-border)] p-3">
-          <label className="block text-sm">Nombre<input name="name" required maxLength={120} className={field}/></label>
-          <label className="block text-sm">WhatsApp o correo<input name="contact" required maxLength={254} className={field}/></label>
-          <label className="block text-sm">¿En qué necesitas ayuda?<textarea name="reason" required maxLength={500} defaultValue={message} className={field}/></label>
-          <label className="flex gap-2 text-xs"><input name="consent" type="checkbox" required/>Autorizo compartir estos datos con Eduard para que me contacte.</label>
-          <button disabled={pending || (!user && !captcha)} className={button}>Enviar solicitud a Eduard</button>
-        </form>}
-        <div ref={bottom}/>
-      </div>
-      <footer className="space-y-3 border-t border-[var(--color-border)] p-4">
+    <Localized as="button" type="button" onClick={() => setOpen(true)} aria-label="Abrir asistente de la empresa" className="fixed bottom-6 right-6 z-50 rounded-full bg-[var(--color-primary)] p-4 text-[var(--color-text)] shadow-xl"><Bot /></Localized>
+    {open && <Localized as="section" role="dialog" aria-modal="false" aria-label="Asistente de Soluciones Ortegón" className="fixed bottom-4 right-4 left-4 z-[60] flex max-h-[90svh] flex-col overflow-hidden rounded-3xl border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text)] shadow-[0_14px_40px_rgba(32,58,43,0.08)] sm:left-auto sm:w-[420px]">
+      <Localized as="header" className="flex items-center justify-between border-b border-[var(--color-border)] p-4"><Localized as="div"><Localized as="h2" className="font-bold">Asistente Ortegón</Localized><Localized as="p" className="text-xs text-[var(--color-text-muted)]">IA para consultas sobre nuestros servicios</Localized></Localized><Localized as="button" type="button" onClick={() => setOpen(false)} aria-label="Cerrar asistente"><X /></Localized></Localized>
+      <Localized as="div" className="space-y-3 overflow-y-auto p-4">
+        <Localized as="p" className="rounded-xl bg-[var(--color-surface)] p-3 text-sm">Hola, ¿qué necesitas para tu negocio? Puedes consultar nuestros servicios o solicitar atención de Eduard.</Localized>
+        <Localized as="p" className="text-xs text-[var(--color-text-muted)]">Guardamos las consultas para continuar la conversación y controlar el uso. No compartas información sensible. La IA puede equivocarse.</Localized>
+        <Localized as="div" role="log" aria-label="Conversación" aria-live="polite" className="space-y-3">{turns.map((turn, index) => <Localized as="p" key={index} className={`whitespace-pre-wrap rounded-xl p-3 text-sm ${turn.role === "user" ? "ml-6 bg-[var(--color-primary)]/15" : "mr-6 bg-[var(--color-surface)]"}`}><Localized as="strong" className="block text-xs text-[var(--color-text-muted)]">{turn.role === "user" ? "Tú" : "Asistente"}</Localized><Localized as="span" translate="no">{turn.text}</Localized></Localized>)}</Localized>
+        {pending && <Localized as="p" role="status" className="text-sm">Procesando…</Localized>}
+        {status && <Localized as="p" role="status" className="rounded-xl border border-[var(--color-border)] p-3 text-sm">{status}</Localized>}
+        {!user && <Localized as="p" className="text-xs text-[var(--color-text-muted)]">{remaining === null ? "Hasta 4 consultas sin registro." : `Consultas gratuitas restantes: ${remaining}.`} El límite se comparte por IP.</Localized>}
+        {user && <Localized as="p" className="text-xs text-[var(--color-text-muted)]">Sesión activa. Hasta 20 consultas al día; solo asuntos de la empresa.</Localized>}
+        {authOpen && !user && <Localized as="form" onSubmit={event => authenticate(event, false)} className="space-y-3 rounded-xl border border-[var(--color-border)] p-3">
+          <Localized as="p" className="text-sm">Inicia sesión o crea una cuenta con correo confirmado.</Localized>
+          <Localized as="label" className="block text-sm">Correo<Localized as="input" name="email" type="email" required maxLength={254} autoComplete="email" className={field}/></Localized>
+          <Localized as="label" className="block text-sm">Contraseña<Localized as="input" name="password" type="password" required minLength={8} maxLength={128} autoComplete="current-password" className={field}/></Localized>
+          <Localized as="div" className="flex gap-2"><Localized as="button" disabled={pending || !captcha} className={button}>Entrar</Localized><Localized as="button" type="button" disabled={pending || !captcha} onClick={event => authenticate(event, true)} className="rounded-xl border border-[var(--color-border)] p-3">Crear cuenta</Localized></Localized>
+        </Localized>}
+        {handoff && <Localized as="form" onSubmit={sendHandoff} className="space-y-3 rounded-xl border border-[var(--color-border)] p-3">
+          <Localized as="label" className="block text-sm">Nombre<Localized as="input" name="name" required maxLength={120} className={field}/></Localized>
+          <Localized as="label" className="block text-sm">WhatsApp o correo<Localized as="input" name="contact" required maxLength={254} className={field}/></Localized>
+          <Localized as="label" className="block text-sm">¿En qué necesitas ayuda?<Localized as="textarea" name="reason" required maxLength={500} defaultValue={message} className={field}/></Localized>
+          <Localized as="label" className="flex gap-2 text-xs"><Localized as="input" name="consent" type="checkbox" required/>Autorizo compartir estos datos con Eduard para que me contacte.</Localized>
+          <Localized as="button" disabled={pending || (!user && !captcha)} className={button}>Enviar solicitud a Eduard</Localized>
+        </Localized>}
+        <Localized as="div" ref={bottom}/>
+      </Localized>
+      <Localized as="footer" className="space-y-3 border-t border-[var(--color-border)] p-4">
         {!user && <Challenge onToken={setCaptcha} reset={challengeReset}/>}
-        <form onSubmit={send} className="space-y-2"><label className="sr-only" htmlFor="ai-message">Mensaje al asistente</label><textarea id="ai-message" value={message} onChange={event => setMessage(event.target.value)} required maxLength={500} rows={2} placeholder="Cuéntanos sobre tu proyecto…" disabled={pending || loginRequired} className={field}/>
-          <div className="flex items-center justify-between"><span className="text-xs text-[var(--color-text-muted)]">{message.length}/500</span><button disabled={pending || loginRequired || !message.trim() || (!user && !captcha)} className={button}>Enviar</button></div>
-        </form>
-        <div className="flex flex-wrap gap-3 text-sm"><button type="button" disabled={pending} onClick={() => {setHandoff(value => !value); setAuthOpen(false);}}>Solicitar agente</button><a href={whatsapp} target="_blank" rel="noopener noreferrer" className="text-[var(--color-accent)]">WhatsApp directo</a>{!user && <button type="button" onClick={() => setAuthOpen(value => !value)}>Iniciar sesión</button>}</div>
-      </footer>
-    </section>}
+        <Localized as="form" onSubmit={send} className="space-y-2"><Localized as="label" className="sr-only" htmlFor="ai-message">Mensaje al asistente</Localized><Localized as="textarea" id="ai-message" value={message} onChange={event => setMessage(event.target.value)} required maxLength={500} rows={2} placeholder="Cuéntanos sobre tu proyecto…" disabled={pending || loginRequired} className={field}/>
+          <Localized as="div" className="flex items-center justify-between"><Localized as="span" className="text-xs text-[var(--color-text-muted)]">{message.length}/500</Localized><Localized as="button" disabled={pending || loginRequired || !message.trim() || (!user && !captcha)} className={button}>Enviar</Localized></Localized>
+        </Localized>
+        <Localized as="div" className="flex flex-wrap gap-3 text-sm"><Localized as="button" type="button" disabled={pending} onClick={() => {setHandoff(value => !value); setAuthOpen(false);}}>Solicitar agente</Localized><Localized as="a" href={whatsapp} target="_blank" rel="noopener noreferrer" className="text-[var(--color-accent)]">WhatsApp directo</Localized>{!user && <Localized as="button" type="button" onClick={() => setAuthOpen(value => !value)}>Iniciar sesión</Localized>}</Localized>
+      </Localized>
+    </Localized>}
   </>;
 }

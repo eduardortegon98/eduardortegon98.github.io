@@ -1,3 +1,4 @@
+import { Localized } from "../../i18n/Language";
 import React from "react";
 
 const InputField = ({
@@ -7,12 +8,12 @@ const InputField = ({
   icon: Icon,
 }) => {
   return (
-    <div>
-      <label className="mb-2 block text-sm font-medium">
+    <Localized as="div">
+      <Localized as="label" className="mb-2 block text-sm font-medium">
         {label}
-      </label>
+      </Localized>
 
-      <div className="relative">
+      <Localized as="div" className="relative">
         <Icon
           size={18}
           className="
@@ -22,7 +23,7 @@ const InputField = ({
           "
         />
 
-        <input
+        <Localized as="input"
           type={type}
           placeholder={placeholder}
           className="
@@ -33,8 +34,8 @@ const InputField = ({
             focus:border-[var(--color-accent)]
           "
         />
-      </div>
-    </div>
+      </Localized>
+    </Localized>
   );
 };
 

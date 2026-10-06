@@ -1,8 +1,10 @@
+import { Localized } from "../i18n/Language";
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 
 
+import { LanguageSwitch } from "../i18n/Language";
 import Logo from "../../public/Soluciones_Tecnologicas_Ortegon.png";
 
 const navItems = [
@@ -37,26 +39,26 @@ const Header = () => {
 
 
   return (
-    <header className="sticky top-0 z-50">
+    <Localized as="header" className="sticky top-0 z-50">
       {/* Glow */}
-      <div className="pointer-events-none absolute inset-x-0 -top-10 h-24 bg-gradient-to-r from-[var(--color-primary-soft)] via-[var(--color-primary-soft)] to-[var(--color-primary-soft)] blur-3xl" />
+      <Localized as="div" className="pointer-events-none absolute inset-x-0 -top-10 h-24 bg-gradient-to-r from-[var(--color-primary-soft)] via-[var(--color-primary-soft)] to-[var(--color-primary-soft)] blur-3xl" />
 
       {/* Barra principal */}
-      <div
+      <Localized as="div"
         className="
           border-b border-[var(--color-border)]
           bg-[var(--color-bg)]
           shadow-[0_2px_16px_rgba(32,58,43,0.04)] backdrop-blur-xl
         "
       >
-        <div className="mx-auto max-w-7xl px-4 sm:px-6">
-          <div className="flex h-20 items-center justify-between">
+        <Localized as="div" className="mx-auto max-w-7xl px-4 sm:px-6">
+          <Localized as="div" className="flex h-20 items-center justify-between">
             {/* Branding */}
-            <Link
+            <Localized as={Link}
               to="/"
               className="flex items-center gap-3"
             >
-              <img
+              <Localized as="img"
         loading="lazy"
         decoding="async"
                 src={Logo}
@@ -68,25 +70,26 @@ const Header = () => {
                 "
               />
 
-              <div className="hidden sm:block text-[var(--color-text)]">
-                <p className="text-lg font-extrabold tracking-tight">
+              <Localized as="div" className="hidden lg:block text-[var(--color-text)]">
+                <Localized as="p" className="text-lg font-extrabold tracking-tight">
                   Soluciones Tecnológicas Ortegón
-                </p>
+                </Localized>
 
-                <p className="text-sm text-[var(--color-accent)]">
+                <Localized as="p" className="text-sm text-[var(--color-accent)]">
                   Ingeniería, software e IA para tu negocio.
-                </p>
-              </div>
-            </Link>
+                </Localized>
+              </Localized>
+            </Localized>
 
+            <LanguageSwitch />
             {/* Desktop */}
-            <div className="hidden items-center gap-6 md:flex">
-              <nav className="flex items-center gap-4">
+            <Localized as="div" className="hidden items-center gap-6 md:flex">
+              <Localized as="nav" className="flex items-center gap-4">
                 {navItems.map((item) => {
                   const isActive = pathname === item.href;
 
                   return (
-                    <Link
+                    <Localized as={Link}
                       key={item.href}
                       to={item.href}
                       className={[
@@ -97,12 +100,12 @@ const Header = () => {
                       ].join(" ")}
                     >
                       {item.label}
-                    </Link>
+                    </Localized>
                   );
                 })}
-              </nav>
+              </Localized>
 
-              <Link
+              <Localized as={Link}
                 to="/cotizar"
                 className="
                   rounded-full
@@ -117,13 +120,13 @@ const Header = () => {
                 "
               >
                 Cotizar
-              </Link>
+              </Localized>
 
 
-            </div>
+            </Localized>
 
             {/* Mobile Toggle */}
-            <button
+            <Localized as="button"
               type="button"
               aria-label={open ? "Cerrar menú" : "Abrir menú"}
               aria-expanded={open}
@@ -136,13 +139,13 @@ const Header = () => {
               "
             >
               {open ? "✕" : "☰"}
-            </button>
-          </div>
-        </div>
+            </Localized>
+          </Localized>
+        </Localized>
 
         {/* Mobile Menu */}
         {open && (
-          <div
+          <Localized as="div"
             className="
               border-t border-[var(--color-border-strong)]
               bg-[var(--color-surface)]
@@ -150,12 +153,12 @@ const Header = () => {
               md:hidden
             "
           >
-            <nav className="flex flex-col gap-2 px-4 py-4">
+            <Localized as="nav" className="flex flex-col gap-2 px-4 py-4">
               {navItems.map((item) => {
                 const isActive = pathname === item.href;
 
                 return (
-                  <Link
+                  <Localized as={Link}
                     key={item.href}
                     to={item.href}
                     className={[
@@ -166,11 +169,11 @@ const Header = () => {
                     ].join(" ")}
                   >
                     {item.label}
-                  </Link>
+                  </Localized>
                 );
               })}
 
-              <Link
+              <Localized as={Link}
                 to="/cotizar"
                 className="
                   mt-2 block rounded-lg
@@ -182,14 +185,14 @@ const Header = () => {
                 "
               >
                 Cotizar
-              </Link>
+              </Localized>
 
 
-            </nav>
-          </div>
+            </Localized>
+          </Localized>
         )}
-      </div>
-    </header>
+      </Localized>
+    </Localized>
   );
 };
 
