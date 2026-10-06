@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { requireSupabase, supabase, isPasswordRecovery, finishPasswordRecovery } from "../../lib/supabase";
 import FormStatus from "../../components/FormStatus";
 import Challenge from "../../Walkie/Challenge";
@@ -74,7 +74,7 @@ export default function LoginForm() {
       setStatus({ success: true, message: "Si el correo está registrado, recibirás un enlace para cambiar tu contraseña." });
     });
   }
-  if (user && !recovery) return <div className="space-y-5"><LoginHeader mode="session" /><p role="status" className="break-all">Sesión activa: {user.email}</p><Link to="/" className="block text-center text-[var(--color-accent)] hover:underline">Volver al inicio</Link><button disabled={pending} className={button} onClick={() => run(async client => { const { error } = await client.auth.signOut(); if (error) throw new Error("No pudimos cerrar sesión."); setUser(null); setMode("login"); })}>Cerrar sesión</button><FormStatus status={status} /></div>;
+  if (user && !recovery) return <Navigate to="/panel" replace />;
   return <>
     <LoginHeader mode={recovery ? "recovery" : mode} />
     {!recovery && <div className="mt-7 grid grid-cols-2 gap-1 rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-secondary)] p-1" aria-label="Opciones de acceso">{[["login", "Iniciar sesión"], ["register", "Crear cuenta"]].map(([value, label]) => <button key={value} type="button" disabled={pending} aria-pressed={mode === value} onClick={() => switchMode(value)} className={`rounded-lg px-3 py-3 text-sm font-semibold transition ${mode === value ? "bg-[var(--color-primary)]" : "text-[var(--color-text-muted)] hover:bg-[var(--color-surface)]"}`}>{label}</button>)}</div>}

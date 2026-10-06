@@ -2,6 +2,7 @@ import { Suspense, lazy, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import { useTheme } from "./context/ThemeContext.jsx";
 
+const Inbox = lazy(() => import("./Inbox/Inbox.jsx"));
 const Home = lazy(() => import("./Home/Home.jsx"));
 const Login = lazy(() => import("./Login/Login.jsx"));
 const Contacto = lazy(() => import("./Contacto/Contacto.jsx"));
@@ -18,6 +19,7 @@ function App() {
     <Suspense fallback={null}>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/panel" element={<Inbox />} />
         <Route path="/login" element={<Login />} />
         <Route path="/contacto" element={<Contacto />} />
         <Route path="/cotizar" element={<Cotizar />} />
