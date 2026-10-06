@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { MessageSquareQuote, Star } from "lucide-react";
+import { databaseErrorMessage } from "../lib/submissions";
 import { requireSupabase } from "../lib/supabase";
 
 const FeedbackCard = ({ item }) => {
@@ -19,7 +20,7 @@ const FeedbackCard = ({ item }) => {
       <div className="flex items-start gap-3">
         <MessageSquareQuote className="text-[var(--color-accent)] mt-1" size={26} />
         <div>
-          <p className="text-gray-200 leading-relaxed">{item.message}</p>
+          <p className="text-[var(--color-text)] leading-relaxed">{item.message}</p>
           <span className="block mt-4 text-sm text-[var(--color-accent)] font-semibold">
             — {item.name}
           </span>
@@ -31,6 +32,7 @@ const FeedbackCard = ({ item }) => {
 
 const FeedbackList = () => {
   const [feedbackList, setFeedbackList] = useState([]);
+  const [loadError, setLoadError] = useState("");
   const [loadingFeedback, setLoadingFeedback] = useState(true);
 
   useEffect(() => {
@@ -46,7 +48,8 @@ const FeedbackList = () => {
         setFeedbackList(data || []);
       } catch (error) {
         if (!ignore) {
-          console.error("Error loading feedback:", error);
+          console.error("Error loading feedback", { code: error.code });
+          setLoadError(databaseErrorMessage(error, "No pudimos cargar los testimonios. Inténtalo nuevamente más tarde."));
           setFeedbackList([]);
         }
       } finally {
@@ -70,6 +73,8 @@ const FeedbackList = () => {
       </div>
     );
   }
+
+  if (loadError) return <p role="alert" className="rounded-3xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6 text-[var(--color-text-muted)]">{loadError}</p>;
 
   if (feedbackList.length === 0) {
     return (

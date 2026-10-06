@@ -32,6 +32,7 @@ export default function AIChat() {
     return () => window.removeEventListener("keydown", escape);
   }, []);
   async function request(payload) {
+    if (!import.meta.env.VITE_CHAT_URL) throw new Error("El asistente aún no está configurado. Contáctanos por WhatsApp.");
     const { data } = await requireSupabase().auth.getSession();
     const response = await fetch(import.meta.env.VITE_CHAT_URL, {
       method: "POST", headers: { "Content-Type": "application/json",

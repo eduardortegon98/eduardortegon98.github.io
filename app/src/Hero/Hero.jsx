@@ -32,7 +32,7 @@ export default function Hero() {
         <motion.div className="hero-visual-wrap" initial={{ opacity: reduced ? 1 : 0 }} animate={{ opacity: 1 }} transition={{ duration: reduced ? 0 : 0.8 }}>
           <div ref={visual} className="hero-visual" onPointerMove={tilt} onPointerLeave={() => visual.current?.style.setProperty("--tilt", "0deg")}>
             <div className="hero-mascot-backdrop" aria-hidden="true" /><div className="hero-mascot-shadow" aria-hidden="true" />
-            <div className="hero-mascot-tilt"><img className="hero-mascot" src={robot} alt="El robot de Ortegón sonríe y sostiene una tablet" width="1000" height="1000" fetchPriority="high" draggable="false" /></div>
+            <div className="hero-mascot-tilt"><img className="hero-mascot" src={robot} alt="El robot de Ortegón sonríe y sostiene una tablet" width="1000" height="1000" loading="lazy" decoding="async" draggable="false" /></div>
             <div className="hero-label hero-label--top"><span className="hero-label-icon"><Sparkles size={18} /></span><div><strong>Ideas que evolucionan</strong><span>Ingeniería + inteligencia artificial</span></div></div>
             <div className="hero-label hero-label--bottom"><span className="hero-label-icon"><Code2 size={18} /></span><div><strong>Creado para tu negocio</strong><span>Soluciones a tu medida</span></div></div>
             <span className="hero-dot hero-dot--one" aria-hidden="true" /><span className="hero-dot hero-dot--two" aria-hidden="true" />

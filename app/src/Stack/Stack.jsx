@@ -371,6 +371,8 @@ const ChipCenter = React.forwardRef(function ChipCenter(_, ref) {
       <div className="pointer-events-none absolute -inset-16 translate-x-10 rounded-full bg-[var(--color-primary-soft)] blur-3xl" />
 
       <img
+        loading="lazy"
+        decoding="async"
         src={imgStack}
         alt="Robot de Ortegón: inteligencia artificial y tecnología"
         draggable={false}

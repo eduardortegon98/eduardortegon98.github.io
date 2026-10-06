@@ -47,4 +47,5 @@ language sql security definer set search_path = '' as $$
 $$;
 revoke all on function public.submit_contact(text,text,text,text), public.submit_quote(text,text,text,text,text,text), public.submit_feedback(text,text,text,integer), public.list_approved_feedback() from public;
 grant execute on function public.submit_contact(text,text,text,text), public.submit_quote(text,text,text,text,text,text), public.submit_feedback(text,text,text,integer), public.list_approved_feedback() to anon, authenticated;
+notify pgrst, 'reload schema';
 commit;

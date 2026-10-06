@@ -21,6 +21,8 @@ const ProductDisplay = ({ image, altText }) => {
       {/* IMAGEN PRINCIPAL */}
 
       <img
+        loading="lazy"
+        decoding="async"
         src={image}
         alt={altText}
         draggable="false"

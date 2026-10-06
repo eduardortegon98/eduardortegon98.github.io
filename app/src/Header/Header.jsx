@@ -57,6 +57,8 @@ const Header = () => {
               className="flex items-center gap-3"
             >
               <img
+        loading="lazy"
+        decoding="async"
                 src={Logo}
                 alt="Soluciones Tecnológicas Ortegón"
                 className="
