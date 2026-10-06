@@ -1,186 +1,21 @@
+import { ArrowUpRight, ClipboardList } from "lucide-react";
 import useSubmission from "../../hooks/useSubmission";
 import FormStatus, { Honeypot } from "../../components/FormStatus";
-import React from "react";
-import {
-  ArrowRight,
-  MessageCircle,
-  ChevronDown,
-} from "lucide-react";
-
-import {
-  PHONE,
-  SERVICE_OPTIONS,
-  BUDGET_OPTIONS,
-} from "../constants";
-
-const inputClass =
-  "w-full rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg-secondary)] px-4 py-3 text-[var(--color-text)] placeholder:text-[var(--color-text-muted)] outline-none transition focus:border-[var(--color-accent)]";
-
-const selectClass = `${inputClass} appearance-none pr-12 cursor-pointer`;
-
-const QuoteForm = () => {
+import { InquirySection, InquiryField, InquirySelect, InquiryNote } from "../../components/InquiryLayout";
+import { SERVICE_OPTIONS, BUDGET_OPTIONS } from "../constants";
+export default function QuoteForm() {
   const { submit, pending, status } = useSubmission("quote", "Tu solicitud quedó guardada. Te contactaremos para preparar la propuesta.");
-  return (
-    <section className="px-6 py-24 justify-center items-center">
-      <div className="text-[var(--color-text)] mx-auto  rounded-3xl border border-[var(--color-border)] bg-[var(--color-surface)] p-8 backdrop-blur-xl md:p-10">
-        {/* Encabezado */}
-        <div>
-          <h2 className="text-3xl font-bold">
-            Solicitar cotización
-          </h2>
-
-          <p className="mt-3 ">
-            Completa el formulario y prepararemos una propuesta personalizada.
-          </p>
-        </div>
-
-        {/* Formulario */}
-        <form className="mt-10 grid gap-6 md:grid-cols-2" onSubmit={submit} aria-busy={pending}>
-          <Honeypot />
-          {/* Empresa / Persona */}
-          <div>
-            <label className="mb-2 block text-sm font-medium">
-              Empresa o persona solicitante
-            </label>
-
-            <input
-              type="text"
-              name="name" aria-label="Empresa o persona" required maxLength={120} placeholder="Ej: Panadería San José o Juan Pérez"
-              className={inputClass}
-            />
-          </div>
-
-          {/* Servicio */}
-          <div>
-            <label className="mb-2 block text-sm font-medium">
-              Servicio de interés
-            </label>
-
-            <div className="relative">
-              <select name="service" aria-label="Servicio" required className={selectClass} defaultValue="">
-                <option
-                  value=""
-                  disabled
-                  className="bg-[var(--color-surface)] text-[var(--color-text)]"
-                >
-                  Selecciona una opción
-                </option>
-
-                {SERVICE_OPTIONS.map((service) => (
-                  <option
-                    key={service}
-                    value={service}
-                    className="bg-[var(--color-surface)] text-[var(--color-text)]"
-                  >
-                    {service}
-                  </option>
-                ))}
-              </select>
-
-              <ChevronDown
-                size={18}
-                className="
-                  pointer-events-none
-                  absolute right-4 top-1/2
-                  -translate-y-1/2
-                  text-[var(--color-text-muted)]
-                "
-              />
-            </div>
-          </div>
-
-          {/* Presupuesto */}
-          <div>
-            <label className="mb-2 block text-sm font-medium">
-              Presupuesto estimado
-            </label>
-
-            <div className="relative">
-              <select name="budget" aria-label="Presupuesto" required className={selectClass} defaultValue="">
-                <option
-                  value=""
-                  disabled
-                  className="bg-[var(--color-surface)] text-[var(--color-text)]"
-                >
-                  Selecciona un rango
-                </option>
-
-                {BUDGET_OPTIONS.map((budget) => (
-                  <option
-                    key={budget}
-                    value={budget}
-                    className="bg-[var(--color-surface)] text-[var(--color-text)]"
-                  >
-                    {budget}
-                  </option>
-                ))}
-              </select>
-
-              <ChevronDown
-                size={18}
-                className="
-                  pointer-events-none
-                  absolute right-4 top-1/2
-                  -translate-y-1/2
-                  text-[var(--color-text-muted)]
-                "
-              />
-            </div>
-          </div>
-
-          <div><label className="mb-2 block text-sm font-medium" htmlFor="quote-email">Correo electrónico</label><input id="quote-email" name="email" type="email" required maxLength={254} className={inputClass} autoComplete="email" /></div>
-          <div><label className="mb-2 block text-sm font-medium" htmlFor="quote-phone">Teléfono (opcional)</label><input id="quote-phone" name="phone" type="tel" maxLength={40} className={inputClass} autoComplete="tel" /></div>
-          <div className="md:col-span-2"><label className="mb-2 block text-sm font-medium" htmlFor="quote-message">Cuéntanos sobre tu proyecto</label><textarea id="quote-message" name="message" required maxLength={5000} rows={4} className={inputClass} /></div>
-          {/* Botón */}
-          <div className="flex items-end">
-            <button
-              type="submit" disabled={pending}
-              className="
-                inline-flex w-full items-center justify-center gap-2
-                rounded-2xl bg-[var(--color-primary)]
-                px-6 py-4 font-bold text-[var(--color-text)]
-                transition hover:brightness-110
-              "
-            >
-              {pending ? "Enviando..." : "Solicitar cotización"}
-              <ArrowRight size={20} />
-            </button>
-          </div>
-        <div className="md:col-span-2"><FormStatus status={status} /></div>
-        </form>
-
-        {/* WhatsApp */}
-        <div className="mt-8 rounded-2xl border border-[var(--color-accent)]/20 bg-[var(--color-primary)]/5 p-5">
-          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-            <div>
-              <h3 className="font-bold">
-                ¿Prefieres atención inmediata?
-              </h3>
-
-              <p className="mt-1 text-sm ">
-                Escríbenos directamente por WhatsApp.
-              </p>
-            </div>
-
-            <a
-              href={`https://wa.me/${PHONE}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="
-                inline-flex items-center justify-center gap-2
-                rounded-xl bg-[var(--color-primary)]
-                px-5 py-3 font-semibold text-[var(--color-text)]
-                transition hover:brightness-110
-              "
-            >
-              <MessageCircle size={18} />
-              WhatsApp
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-export default QuoteForm;
+  return <section className="inquiry-card" aria-labelledby="quote-form-title"><header className="inquiry-card-heading"><span className="inquiry-card-icon"><ClipboardList size={21} /></span><div><h2 id="quote-form-title">Cuéntanos sobre tu proyecto</h2><p>Los detalles nos ayudan a preparar una propuesta a tu medida.</p></div></header><form className="inquiry-form" onSubmit={submit} aria-busy={pending}><Honeypot /><fieldset disabled={pending}>
+    <InquirySection number="01" title="Tus datos de contacto">
+      <InquiryField id="quote-name" label="Tu nombre o empresa" wide><input id="quote-name" name="name" required maxLength={120} autoComplete="organization" placeholder="¿Para quién construiremos la solución?" /></InquiryField>
+      <InquiryField id="quote-email" label="Correo electrónico"><input id="quote-email" name="email" type="email" required maxLength={254} autoComplete="email" placeholder="tu@empresa.com" /></InquiryField>
+      <InquiryField id="quote-phone" label="Teléfono" optional><input id="quote-phone" name="phone" type="tel" maxLength={40} autoComplete="tel" placeholder="+57 300 000 0000" /></InquiryField>
+    </InquirySection>
+    <InquirySection number="02" title="La solución que buscas">
+      <InquiryField id="quote-service" label="Servicio de interés"><InquirySelect id="quote-service" name="service" options={SERVICE_OPTIONS} placeholder="Elige un servicio" /></InquiryField>
+      <InquiryField id="quote-budget" label="Presupuesto estimado"><InquirySelect id="quote-budget" name="budget" options={BUDGET_OPTIONS} placeholder="Elige un rango" /></InquiryField>
+      <InquiryField id="quote-message" label="¿Qué te gustaría lograr?" wide hint="Incluye el objetivo, las funciones que imaginas y si tienes una fecha en mente."><textarea id="quote-message" name="message" required maxLength={5000} rows={4} placeholder="Necesitamos una solución que nos ayude a..." /></InquiryField>
+    </InquirySection>
+    <div className="inquiry-form-bottom"><button type="submit" disabled={pending} className="inquiry-submit">{pending ? "Enviando tu solicitud..." : "Solicitar mi cotización"}<ArrowUpRight size={17} /></button><InquiryNote>Enviar esta solicitud no te compromete a contratar.</InquiryNote></div>
+  </fieldset><div className="inquiry-status"><FormStatus status={status} /></div></form></section>;
+}

@@ -1,66 +1,12 @@
-import React from "react";
-import { Mail, Phone, MapPin, MessageCircle } from "lucide-react";
-
-import ContactCard from "./ContactCard";
-
-const PHONE = "3337255586";
-
-const CONTACT_INFO = [
-  {
-    icon: Phone,
-    title: "Teléfono",
-    value: PHONE,
-  },
-  {
-    icon: Mail,
-    title: "Correo electrónico",
-    value: "eduardortegon2398@gmail.com",
-  },
-  {
-    icon: MapPin,
-    title: "Ubicación",
-    value: "Bogotá, Colombia",
-  },
+import { Mail, Phone, MapPin, MessageCircle, ArrowUpRight } from "lucide-react";
+const channels = [
+  { Icon: Mail, label: "Correo electrónico", value: "eduardortegon2398@gmail.com", href: "mailto:eduardortegon2398@gmail.com" },
+  { Icon: Phone, label: "Teléfono", value: "+57 333 725 5586", href: "tel:+573337255586" },
+  { Icon: MapPin, label: "Desde Colombia", value: "Bogotá · Conectados con tu negocio" },
 ];
-
-const ContactInfo = () => {
-  return (
-    <div className="space-y-4 lg:col-span-2 text-[var(--color-primary-text)]">
-      <div>
-        <h2 className="text-xl font-bold">Hablemos</h2>
-
-        <p className="mt-3 ">
-          Puedes comunicarte con nosotros a través de cualquiera de estos
-          canales.
-        </p>
-      </div>
-
-      <div className="space-y-3">
-        {CONTACT_INFO.map((item) => (
-          <ContactCard
-            key={item.title}
-            icon={item.icon}
-            title={item.title}
-            value={item.value}
-          />
-        ))}
-      </div>
-
-      <a
-        href={`https://wa.me/${PHONE}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="
-          inline-flex items-center gap-3 rounded-2xl
-          bg-[var(--color-primary)] px-6 py-4 font-bold text-[var(--color-text)]
-          transition hover:brightness-110
-        "
-      >
-        <MessageCircle size={20} />
-        Hablar por WhatsApp
-      </a>
-    </div>
-  );
-};
-
-export default ContactInfo;
+export default function ContactInfo() {
+  return <div className="inquiry-channels"><h2>También nos encuentras aquí</h2>{channels.map(({ Icon, label, value, href }) => {
+    const content = <><span className="inquiry-channel-icon"><Icon size={18} /></span><div><small>{label}</small><strong>{value}</strong></div>{href && <ArrowUpRight size={15} />}</>;
+    return href ? <a key={label} className="inquiry-channel" href={href}>{content}</a> : <div key={label} className="inquiry-channel">{content}</div>;
+  })}<a className="inquiry-whatsapp" href="https://wa.me/573337255586" target="_blank" rel="noopener noreferrer"><MessageCircle size={19} />Prefiero hablar por WhatsApp<ArrowUpRight size={16} /></a></div>;
+}

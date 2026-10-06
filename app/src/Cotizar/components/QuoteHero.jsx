@@ -1,26 +1,11 @@
-import React from "react";
-
-const QuoteHero = () => {
-  return (
-    <section className="px-6 pt-32 pb-20">
-      <div className="mx-auto max-w-7xl">
-        <div className="max-w-4xl">
-          <span className="inline-flex rounded-full border border-[var(--color-accent)]/30 bg-[var(--color-primary)]/10 px-4 py-1 text-sm font-medium text-[var(--color-accent)]">
-            Solicita una cotización
-          </span>
-
-          <h1 className="mt-6 text-4xl font-extrabold tracking-tight md:text-6xl">
-            Cuéntanos qué necesitas.
-          </h1>
-
-          <p className="mt-6 text-lg text-[var(--color-text-muted)]">
-            Diseñamos soluciones tecnológicas adaptadas a cada negocio. Cuanto
-            más detalle nos brindes, más precisa será nuestra propuesta.
-          </p>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-export default QuoteHero;
+import { MessageCircle, ArrowUpRight } from "lucide-react";
+import { InquiryHeading } from "../../components/InquiryLayout";
+import { PHONE } from "../constants";
+const steps = [
+  ["Nos cuentas tu idea", "El objetivo, el servicio que buscas y lo que tu negocio necesita."],
+  ["Definimos el alcance", "Revisamos contigo los detalles y las prioridades del proyecto."],
+  ["Preparamos una propuesta", "Una solución con alcance, tiempos y presupuesto para evaluar."],
+];
+export default function QuoteHero() {
+  return <><InquiryHeading eyebrow="Tu próximo proyecto · Cotización" title={<>De una buena idea<br /><em>a un plan concreto.</em></>}>Cada negocio es diferente. Cuéntanos qué quieres construir y encontremos una solución que tenga sentido para ti.</InquiryHeading><div className="inquiry-services"><span>Desarrollo web</span><span>Automatización</span><span>Inteligencia artificial</span></div><div className="inquiry-process"><h2>Así empezamos</h2><ol>{steps.map(([title, description], index) => <li key={title}><span>{index + 1}</span><div><strong>{title}</strong><p>{description}</p></div></li>)}</ol></div><a className="inquiry-whatsapp" href={`https://wa.me/${PHONE}`} target="_blank" rel="noopener noreferrer"><MessageCircle size={19} />¿Lo hablamos por WhatsApp?<ArrowUpRight size={16} /></a></>;
+}
