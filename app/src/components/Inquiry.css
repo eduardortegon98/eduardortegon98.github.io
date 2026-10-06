@@ -50,3 +50,7 @@
 @media(max-height:450px){.inquiry-card-heading{display:none}.inquiry-heading{display:none}.inquiry-shell{padding-top:10px;gap:10px}.inquiry-card{max-height:calc(100dvh - 100px)}.inquiry-step-progress{margin-bottom:8px}.inquiry-note{display:none}.inquiry-sidebar{display:none}.inquiry-shell{grid-template-columns:1fr}.inquiry-fields{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .inquiry-card{max-height:var(--inquiry-available-height,calc(100dvh - 128px))}
 .inquiry-group legend:focus{outline:none}
+/* Center the form within the viewport space below the header/introduction. */
+.inquiry-shell{padding-top:16px;padding-bottom:16px}
+.inquiry-main{height:var(--inquiry-available-height,auto);display:flex;align-items:center}
+.inquiry-card{width:100%}
