@@ -372,9 +372,10 @@ const ChipCenter = React.forwardRef(function ChipCenter(_, ref) {
 
       <img
         src={imgStack}
-        alt="Chip"
+        alt="Robot de Ortegón: inteligencia artificial y tecnología"
         draggable={false}
         className="
+          relative z-10
           block
           mx-auto
           w-full
@@ -385,11 +386,7 @@ const ChipCenter = React.forwardRef(function ChipCenter(_, ref) {
         "
       />
 
-      <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-        <div className="absolute h-[96%] w-[96%] rounded-full border border-[var(--color-accent)]" />
-        <div className="absolute h-[78%] w-[78%] rounded-full border border-[var(--color-accent)]" />
-        <div className="absolute h-[60%] w-[60%] rounded-full border border-[var(--color-accent)]" />
-      </div>
+
     </div>
   );
 });

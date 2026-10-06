@@ -207,7 +207,7 @@ function WalkieModal({
           exit="exit"
         >
           <motion.button
-            className="absolute inset-0 bg-[var(--color-bg-secondary)] backdrop-blur-sm"
+            className="absolute inset-0 bg-[var(--color-text)]/10"
             onClick={onClose}
             aria-label="Cerrar modal"
             type="button"
