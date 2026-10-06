@@ -1,61 +1,31 @@
 @import "tailwindcss";
 
 :root {
-  /* Dark */
-  --color-bg: #0f0f10;
-  --color-bg-secondary: #d1d5db;
-
-  --color-surface: #1a1b1d;
-
-  --color-text: #ffffff;
-  --color-text-muted: rgba(255, 255, 255, 0.7);
-
-  --color-primary: #c0fdb8;
-  --color-primary-hover: #a9f79f;
-  --color-primary-text: #000000;
-
-  --color-border: rgba(255, 255, 255, 0.1);
-  --color-border-strong: rgba(255, 255, 255, 0.2);
-  --color-disabled: rgba(255, 255, 255, 0.05);
-  --color-text-on-secondary: #111827;
-}
-
-[data-theme="light"] {
+  color-scheme: light;
   --color-bg: #ffffff;
-  --color-bg-secondary: #d1d5db;
-
-  --color-surface: #f3f4f6;
-
-  --color-text: #111827;
-  --color-text-muted: rgba(17, 24, 39, 0.7);
-
-  --color-primary: #c0fdb9;
-  --color-primary-hover: #a9f79f;
-  --color-primary-text: #000000;
-
-  --color-border: rgba(0, 0, 0, 0.1);
-  --color-border-strong: rgba(0, 0, 0, 0.2);
-  --color-disabled: rgba(0, 0, 0, 0.05);
+  --color-bg-secondary: #f3f8f3;
+  --color-surface: #ffffff;
+  --color-text: #203a2b;
+  --color-text-muted: #587060;
+  --color-primary: #bce8c4;
+  --color-primary-soft: #e7f4e9;
+  --color-primary-hover: #a8dbb2;
+  --color-primary-text: #203a2b;
+  --color-accent: #2f6b45;
+  --color-border: #d6e5d9;
+  --color-border-strong: #b5cebc;
+  --color-disabled: #edf3ee;
+  --color-text-on-secondary: #203a2b;
 }
-
-[data-theme="corporate"] {
-  --color-bg: #474b4e;
-  --color-bg-secondary: #d1d5db;
-
-  --color-surface: #5a5f63;
-
-  --color-text: #ffffff;
-  --color-text-muted: rgba(255, 255, 255, 0.7);
-
-  --color-primary: #c0fdb9;
-  --color-primary-hover: #a9f79f;
-  --color-primary-text: #000000;
-
-  --color-border: rgba(255, 255, 255, 0.1);
-  --color-border-strong: rgba(255, 255, 255, 0.2);
-  --color-disabled: rgba(255, 255, 255, 0.05);
-}
-
+html { background: var(--color-bg); scroll-padding-top: 90px; }
+body { margin: 0; background: var(--color-bg); color: var(--color-text); font-family: Inter, ui-sans-serif, system-ui, -apple-system, sans-serif; -webkit-font-smoothing: antialiased; }
+::selection { background: var(--color-primary); color: var(--color-text); }
+button, a, input, textarea, select { -webkit-tap-highlight-color: transparent; }
+button:not(:disabled), a { cursor: pointer; }
+input, textarea, select { color-scheme: light; }
+input::placeholder, textarea::placeholder { color: var(--color-text-muted); opacity: .8; }
+:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; }
+section { scroll-margin-top: 90px; }
 /* Permite animar un valor angular */
 @property --angle {
   syntax: "<angle>";
@@ -103,4 +73,7 @@
   to {
     --angle: 360deg;
   }
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-float, .animated-border::before { animation: none; }
 }

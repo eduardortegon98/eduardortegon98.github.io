@@ -6,7 +6,7 @@ const FeedBack = () => {
     <section
       className="
         w-full
-        bg-[var(--color-bg-secondary)]
+        bg-[var(--color-bg)]
         px-6 py-24
         md:px-12
       "
@@ -17,7 +17,7 @@ const FeedBack = () => {
             className="
               mb-4 text-sm uppercase
               tracking-[0.3em]
-              text-[var(--color-primary)]
+              text-[var(--color-accent)]
             "
           >
             Feedback
@@ -26,7 +26,7 @@ const FeedBack = () => {
           <h2
             className="
               mb-4 text-4xl font-extrabold
-              text-[var(--color-primary)]
+              text-[var(--color-accent)]
               md:text-5xl
             "
           >

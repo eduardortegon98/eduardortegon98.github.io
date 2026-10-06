@@ -8,7 +8,7 @@ const LoginHeader = () => {
         Iniciar sesión
       </h1>
 
-      <p className="mt-3 text-white/70">
+      <p className="mt-3 text-[var(--color-text-muted)]">
         Accede a tu panel de administración.
       </p>
     </div>

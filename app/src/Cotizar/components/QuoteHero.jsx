@@ -5,7 +5,7 @@ const QuoteHero = () => {
     <section className="px-6 pt-32 pb-20">
       <div className="mx-auto max-w-7xl">
         <div className="max-w-4xl">
-          <span className="inline-flex rounded-full border border-[#C0FDB9]/30 bg-[#C0FDB9]/10 px-4 py-1 text-sm font-medium text-[#C0FDB9]">
+          <span className="inline-flex rounded-full border border-[var(--color-accent)]/30 bg-[var(--color-primary)]/10 px-4 py-1 text-sm font-medium text-[var(--color-accent)]">
             Solicita una cotización
           </span>
 
@@ -13,7 +13,7 @@ const QuoteHero = () => {
             Cuéntanos qué necesitas.
           </h1>
 
-          <p className="mt-6 text-lg text-[var(--color-surface)]">
+          <p className="mt-6 text-lg text-[var(--color-text-muted)]">
             Diseñamos soluciones tecnológicas adaptadas a cada negocio. Cuanto
             más detalle nos brindes, más precisa será nuestra propuesta.
           </p>

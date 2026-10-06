@@ -14,7 +14,7 @@ import {
 } from "../constants";
 
 const inputClass =
-  "w-full rounded-2xl border border-white/10 bg-black/40 px-4 py-3 text-white placeholder:text-white/40 outline-none transition focus:border-[#C0FDB9]";
+  "w-full rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg-secondary)] px-4 py-3 text-[var(--color-text)] placeholder:text-[var(--color-text-muted)] outline-none transition focus:border-[var(--color-accent)]";
 
 const selectClass = `${inputClass} appearance-none pr-12 cursor-pointer`;
 
@@ -22,7 +22,7 @@ const QuoteForm = () => {
   const { submit, pending, status } = useSubmission("quote", "Tu solicitud quedó guardada. Te contactaremos para preparar la propuesta.");
   return (
     <section className="px-6 py-24 justify-center items-center">
-      <div className="text-black mx-auto  rounded-3xl border border-white bg-[var(--color-text)]/15 p-8 backdrop-blur-xl md:p-10">
+      <div className="text-[var(--color-text)] mx-auto  rounded-3xl border border-[var(--color-border)] bg-[var(--color-surface)] p-8 backdrop-blur-xl md:p-10">
         {/* Encabezado */}
         <div>
           <h2 className="text-3xl font-bold">
@@ -61,7 +61,7 @@ const QuoteForm = () => {
                 <option
                   value=""
                   disabled
-                  className="bg-[#111] text-white"
+                  className="bg-[var(--color-surface)] text-[var(--color-text)]"
                 >
                   Selecciona una opción
                 </option>
@@ -70,7 +70,7 @@ const QuoteForm = () => {
                   <option
                     key={service}
                     value={service}
-                    className="bg-[#111] text-white"
+                    className="bg-[var(--color-surface)] text-[var(--color-text)]"
                   >
                     {service}
                   </option>
@@ -83,7 +83,7 @@ const QuoteForm = () => {
                   pointer-events-none
                   absolute right-4 top-1/2
                   -translate-y-1/2
-                  text-white/50
+                  text-[var(--color-text-muted)]
                 "
               />
             </div>
@@ -100,7 +100,7 @@ const QuoteForm = () => {
                 <option
                   value=""
                   disabled
-                  className="bg-[#111] text-white"
+                  className="bg-[var(--color-surface)] text-[var(--color-text)]"
                 >
                   Selecciona un rango
                 </option>
@@ -109,7 +109,7 @@ const QuoteForm = () => {
                   <option
                     key={budget}
                     value={budget}
-                    className="bg-[#111] text-white"
+                    className="bg-[var(--color-surface)] text-[var(--color-text)]"
                   >
                     {budget}
                   </option>
@@ -122,7 +122,7 @@ const QuoteForm = () => {
                   pointer-events-none
                   absolute right-4 top-1/2
                   -translate-y-1/2
-                  text-white/50
+                  text-[var(--color-text-muted)]
                 "
               />
             </div>
@@ -137,8 +137,8 @@ const QuoteForm = () => {
               type="submit" disabled={pending}
               className="
                 inline-flex w-full items-center justify-center gap-2
-                rounded-2xl bg-[#C0FDB9]
-                px-6 py-4 font-bold text-black
+                rounded-2xl bg-[var(--color-primary)]
+                px-6 py-4 font-bold text-[var(--color-text)]
                 transition hover:brightness-110
               "
             >
@@ -150,7 +150,7 @@ const QuoteForm = () => {
         </form>
 
         {/* WhatsApp */}
-        <div className="mt-8 rounded-2xl border border-[#C0FDB9]/20 bg-[#C0FDB9]/5 p-5">
+        <div className="mt-8 rounded-2xl border border-[var(--color-accent)]/20 bg-[var(--color-primary)]/5 p-5">
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>
               <h3 className="font-bold">
@@ -168,8 +168,8 @@ const QuoteForm = () => {
               rel="noopener noreferrer"
               className="
                 inline-flex items-center justify-center gap-2
-                rounded-xl bg-[#C0FDB9]
-                px-5 py-3 font-semibold text-black
+                rounded-xl bg-[var(--color-primary)]
+                px-5 py-3 font-semibold text-[var(--color-text)]
                 transition hover:brightness-110
               "
             >

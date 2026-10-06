@@ -18,7 +18,7 @@ const InputField = ({
           className="
             absolute left-4 top-1/2
             -translate-y-1/2
-            text-white/40
+            text-[var(--color-text-muted)]
           "
         />
 
@@ -26,11 +26,11 @@ const InputField = ({
           type={type}
           placeholder={placeholder}
           className="
-            w-full rounded-2xl border border-white/10
-            bg-black/40 py-3 pl-12 pr-4
-            text-white placeholder:text-white/40
+            w-full rounded-2xl border border-[var(--color-border)]
+            bg-[var(--color-bg-secondary)] py-3 pl-12 pr-4
+            text-[var(--color-text)] placeholder:text-[var(--color-text-muted)]
             outline-none transition
-            focus:border-[#C0FDB9]
+            focus:border-[var(--color-accent)]
           "
         />
       </div>

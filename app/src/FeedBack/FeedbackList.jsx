@@ -4,8 +4,8 @@ import { requireSupabase } from "../lib/supabase";
 
 const FeedbackCard = ({ item }) => {
   return (
-    <div className="bg-[#2e3337]/90 border border-white/10 rounded-3xl p-6 shadow-lg">
-      <div className="flex items-center gap-2 mb-4 text-[#c8ffb0]">
+    <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-3xl p-6 shadow-[0_8px_24px_rgba(32,58,43,0.06)]">
+      <div className="flex items-center gap-2 mb-4 text-[var(--color-accent)]">
         {Array.from({ length: 5 }, (_, i) => (
           <Star
             key={i}
@@ -17,10 +17,10 @@ const FeedbackCard = ({ item }) => {
       </div>
 
       <div className="flex items-start gap-3">
-        <MessageSquareQuote className="text-[#8df0c8] mt-1" size={26} />
+        <MessageSquareQuote className="text-[var(--color-accent)] mt-1" size={26} />
         <div>
           <p className="text-gray-200 leading-relaxed">{item.message}</p>
-          <span className="block mt-4 text-sm text-[#c8ffb0] font-semibold">
+          <span className="block mt-4 text-sm text-[var(--color-accent)] font-semibold">
             — {item.name}
           </span>
         </div>
@@ -64,7 +64,7 @@ const FeedbackList = () => {
   if (loadingFeedback) {
     return (
       <div className="grid gap-6">
-        <div className="bg-[#2e3337]/90 border border-white/10 rounded-3xl p-6 text-gray-300">
+        <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-3xl p-6 text-[var(--color-text-muted)]">
           Cargando testimonios...
         </div>
       </div>
@@ -74,7 +74,7 @@ const FeedbackList = () => {
   if (feedbackList.length === 0) {
     return (
       <div className="grid gap-6">
-        <div className="bg-[#2e3337]/90 border border-white/10 rounded-3xl p-6 text-gray-300">
+        <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-3xl p-6 text-[var(--color-text-muted)]">
           Aún no hay testimonios aprobados.
         </div>
       </div>

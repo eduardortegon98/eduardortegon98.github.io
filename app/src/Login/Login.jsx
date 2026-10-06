@@ -10,10 +10,8 @@ function Login() {
       className="
     relative
     overflow-hidden
-    rounded-2xl
-    bg-gray-300
-    shadow-[0_10px_30px_rgba(0,0,0,0.08),0_30px_60px_rgba(0,0,0,0.12)]
-    text-white
+    bg-[var(--color-bg-secondary)]
+    text-[var(--color-text)]
   "
     >
       <Header />
@@ -24,15 +22,15 @@ function Login() {
           <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-br from-white/20 via-white/5 to-white/20" />
 
           {/* Card */}
-          <div className="relative overflow-hidden rounded-2xl bg-[#3F4346] shadow-2xl">
+          <div className="relative overflow-hidden rounded-2xl bg-[var(--color-surface)] shadow-[0_14px_40px_rgba(32,58,43,0.08)]">
             {/* Barra superior */}
-            <div className="flex items-center gap-2 border-b border-white/10 px-6 py-4">
-              <div className="h-2.5 w-2.5 rounded-full bg-white/30" />
-              <div className="h-2.5 w-2.5 rounded-full bg-white/20" />
-              <div className="h-2.5 w-2.5 rounded-full bg-white/10" />
+            <div className="flex items-center gap-2 border-b border-[var(--color-border)] px-6 py-4">
+              <div className="h-2.5 w-2.5 rounded-full bg-[var(--color-primary)]" />
+              <div className="h-2.5 w-2.5 rounded-full bg-[var(--color-primary)]" />
+              <div className="h-2.5 w-2.5 rounded-full bg-[var(--color-primary)]" />
 
-              <span className="ml-3 text-xs uppercase tracking-[0.3em] text-white/50">
-                Authentication
+              <span className="ml-3 text-xs uppercase tracking-[0.3em] text-[var(--color-text-muted)]">
+                Acceso a tu cuenta
               </span>
             </div>
 

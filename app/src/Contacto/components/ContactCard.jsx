@@ -2,9 +2,9 @@ import React from "react";
 
 const ContactCard = ({ icon: Icon, title, value }) => {
   return (
-    <div className="flex items-start gap-4 rounded-2xl border border-white bg-[var(--color-text)]/15 p-5">
-      <div className="rounded-xl bg-[#C0FDB9]/10 p-3">
-        <Icon size={22} className="text-[#C0FDB9]" />
+    <div className="flex items-start gap-4 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5">
+      <div className="rounded-xl bg-[var(--color-primary)]/10 p-3">
+        <Icon size={22} className="text-[var(--color-accent)]" />
       </div>
 
       <div>

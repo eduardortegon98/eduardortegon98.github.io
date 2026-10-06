@@ -108,7 +108,7 @@ export default function Quotes() {
     overflow-hidden
     bg-[var(--color-bg-secondary)]
     border-[10px]
-    border-[#248f26]
+    border-[var(--color-accent)]
     px-4 py-16
     sm:min-h-[80svh] sm:px-6 sm:py-20
     lg:min-h-screen lg:px-8
@@ -120,7 +120,7 @@ export default function Quotes() {
         <div
           className="
     italianno-regular
-    text-[var(--color-surface)]
+    text-[var(--color-text-muted)]
     drop-shadow-[0_4px_12px_rgba(0,0,0,0.18)]
   "
         >

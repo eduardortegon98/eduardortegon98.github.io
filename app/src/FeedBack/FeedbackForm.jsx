@@ -54,17 +54,17 @@ const FeedbackForm = () => {
 
   return (
     <div className="relative">
-      <div className="relative bg-[#2e3337]/95 border border-white/10 rounded-3xl p-8 md:p-10 shadow-lg">
-        <h3 className="text-2xl md:text-3xl font-bold text-white mb-3">
+      <div className="relative bg-[var(--color-surface)] border border-[var(--color-border)] rounded-3xl p-8 md:p-10 shadow-[0_8px_24px_rgba(32,58,43,0.06)]">
+        <h3 className="text-2xl md:text-3xl font-bold text-[var(--color-text)] mb-3">
           Déjanos tu opinión
         </h3>
-        <p className="text-gray-300 mb-8">
+        <p className="text-[var(--color-text-muted)] mb-8">
           Tu feedback es muy importante para nosotros.
         </p>
 
         <form className="space-y-5" onSubmit={handleSubmit}>
           <div>
-            <label className="block text-sm text-gray-300 mb-2">Nombre</label>
+            <label className="block text-sm text-[var(--color-text-muted)] mb-2">Nombre</label>
             <input
               type="text"
               name="name" maxLength={120}
@@ -72,12 +72,12 @@ const FeedbackForm = () => {
               onChange={handleChange}
               placeholder="Tu nombre"
               required
-              className="w-full rounded-2xl bg-[#3a4045] border border-white/10 px-4 py-3 text-white placeholder:text-gray-400 outline-none focus:border-[#8df0c8] focus:ring-2 focus:ring-[#8df0c8]/20 transition"
+              className="w-full rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)] px-4 py-3 text-[var(--color-text)] placeholder:text-[var(--color-text-muted)] outline-none focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent)]/20 transition"
             />
           </div>
 
           <div>
-            <label className="block text-sm text-gray-300 mb-2">
+            <label className="block text-sm text-[var(--color-text-muted)] mb-2">
               Correo electrónico
             </label>
             <input
@@ -86,12 +86,12 @@ const FeedbackForm = () => {
               value={formData.email}
               onChange={handleChange}
               placeholder="tucorreo@ejemplo.com"
-              className="w-full rounded-2xl bg-[#3a4045] border border-white/10 px-4 py-3 text-white placeholder:text-gray-400 outline-none focus:border-[#8df0c8] focus:ring-2 focus:ring-[#8df0c8]/20 transition"
+              className="w-full rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)] px-4 py-3 text-[var(--color-text)] placeholder:text-[var(--color-text-muted)] outline-none focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent)]/20 transition"
             />
           </div>
 
           <div>
-            <label className="block text-sm text-gray-300 mb-2">
+            <label className="block text-sm text-[var(--color-text-muted)] mb-2">
               Calificación
             </label>
 
@@ -106,7 +106,7 @@ const FeedbackForm = () => {
                 >
                   <Star
                     size={24}
-                    className="text-[#c8ffb0]"
+                    className="text-[var(--color-accent)]"
                     fill={value <= formData.rating ? "currentColor" : "none"}
                     strokeWidth={1.8}
                   />
@@ -116,7 +116,7 @@ const FeedbackForm = () => {
           </div>
 
           <div>
-            <label className="block text-sm text-gray-300 mb-2">
+            <label className="block text-sm text-[var(--color-text-muted)] mb-2">
               Tu experiencia
             </label>
             <textarea
@@ -126,7 +126,7 @@ const FeedbackForm = () => {
               onChange={handleChange}
               placeholder="Cuéntanos qué te pareció nuestro servicio..."
               required
-              className="w-full rounded-2xl bg-[#3a4045] border border-white/10 px-4 py-3 text-white placeholder:text-gray-400 outline-none resize-none focus:border-[#8df0c8] focus:ring-2 focus:ring-[#8df0c8]/20 transition"
+              className="w-full rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)] px-4 py-3 text-[var(--color-text)] placeholder:text-[var(--color-text-muted)] outline-none resize-none focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent)]/20 transition"
             />
           </div>
 
@@ -141,7 +141,7 @@ const FeedbackForm = () => {
           <button
             type="submit"
             disabled={loading}
-            className="inline-flex items-center gap-2 bg-[#c8ffb0] text-[#1f2529] font-semibold px-6 py-3 rounded-full hover:scale-[1.02] transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed"
+            className="inline-flex items-center gap-2 bg-[var(--color-primary)] text-[var(--color-text)] font-semibold px-6 py-3 rounded-full hover:scale-[1.02] transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {loading ? "Enviando..." : "Enviar feedback"}
             <Send size={18} />

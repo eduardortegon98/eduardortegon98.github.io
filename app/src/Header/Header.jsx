@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Moon, Sun } from "lucide-react";
 
-import { useTheme } from "../context/ThemeContext";
+
+
 import Logo from "../../public/Soluciones_Tecnologicas_Ortegon.png";
 
 const navItems = [
@@ -11,7 +11,7 @@ const navItems = [
 ];
 
 const Header = () => {
-  const { theme, setTheme } = useTheme();
+
 
   const { pathname } = useLocation();
 
@@ -35,21 +35,18 @@ const Header = () => {
     setOpen(false);
   }, [pathname]);
 
-  const toggleTheme = () => {
-    setTheme((prev) => (prev === "dark" ? "corporate" : "dark"));
-  };
 
   return (
     <header className="sticky top-0 z-50">
       {/* Glow */}
-      <div className="pointer-events-none absolute inset-x-0 -top-10 h-24 bg-gradient-to-r from-cyan-400/15 via-sky-400/15 to-blue-500/15 blur-3xl" />
+      <div className="pointer-events-none absolute inset-x-0 -top-10 h-24 bg-gradient-to-r from-[var(--color-primary-soft)] via-[var(--color-primary-soft)] to-[var(--color-primary-soft)] blur-3xl" />
 
       {/* Barra principal */}
       <div
         className="
           border-b border-[var(--color-border)]
           bg-[var(--color-bg)]
-          shadow-lg backdrop-blur-xl
+          shadow-[0_2px_16px_rgba(32,58,43,0.04)] backdrop-blur-xl
         "
       >
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
@@ -74,7 +71,7 @@ const Header = () => {
                   Soluciones Tecnológicas Ortegón
                 </p>
 
-                <p className="text-sm text-[var(--color-primary)]">
+                <p className="text-sm text-[var(--color-accent)]">
                   Ingeniería, software e IA para tu negocio.
                 </p>
               </div>
@@ -93,8 +90,8 @@ const Header = () => {
                       className={[
                         "relative px-3 py-2 font-medium transition-all duration-200",
                         isActive
-                          ? "text-[var(--color-primary)] underline decoration-[var(--color-primary)] underline-offset-4"
-                          : "text-[var(--color-text-muted)] hover:text-[var(--color-primary)]",
+                          ? "text-[var(--color-accent)] underline decoration-[var(--color-primary)] underline-offset-4"
+                          : "text-[var(--color-text-muted)] hover:text-[var(--color-accent)]",
                       ].join(" ")}
                     >
                       {item.label}
@@ -109,8 +106,8 @@ const Header = () => {
                   rounded-full
                   bg-[var(--color-primary)]
                   px-5 py-2.5
-                  text-sm font-bold text-black
-                  shadow-lg transition
+                  text-sm font-bold text-[var(--color-text)]
+                  shadow-[0_8px_24px_rgba(32,58,43,0.06)] transition
                   hover:bg-[var(--color-primary-hover)]
                   focus:outline-none
                   focus-visible:ring-2
@@ -120,29 +117,14 @@ const Header = () => {
                 Cotizar
               </Link>
 
-              <button
-                onClick={toggleTheme}
-                className="
-                  inline-flex items-center gap-2
-                  rounded-xl
-                  bg-[var(--color-primary)]
-                  px-4 py-2
-                  text-sm font-semibold text-black
-                  transition
-                  hover:bg-[var(--color-primary-hover)]
-                "
-              >
-                {theme === "dark" ? (
-                  <Sun size={18} />
-                ) : (
-                  <Moon size={18} />
-                )}
-              </button>
+
             </div>
 
             {/* Mobile Toggle */}
             <button
               type="button"
+              aria-label={open ? "Cerrar menú" : "Abrir menú"}
+              aria-expanded={open}
               onClick={() => setOpen((prev) => !prev)}
               className="
                 text-2xl
@@ -177,8 +159,8 @@ const Header = () => {
                     className={[
                       "block rounded-lg px-3 py-2 text-sm font-semibold transition",
                       isActive
-                        ? "bg-[var(--color-primary)]/20 text-[var(--color-primary)]"
-                        : "text-[var(--color-text-muted)] hover:bg-white/10 hover:text-[var(--color-text)]",
+                        ? "bg-[var(--color-primary)]/20 text-[var(--color-accent)]"
+                        : "text-[var(--color-text-muted)] hover:bg-[var(--color-surface)] hover:text-[var(--color-text)]",
                     ].join(" ")}
                   >
                     {item.label}
@@ -192,7 +174,7 @@ const Header = () => {
                   mt-2 block rounded-lg
                   bg-[var(--color-primary)]
                   px-4 py-3 text-center
-                  text-sm font-bold text-black
+                  text-sm font-bold text-[var(--color-text)]
                   transition
                   hover:bg-[var(--color-primary-hover)]
                 "
@@ -200,24 +182,7 @@ const Header = () => {
                 Cotizar
               </Link>
 
-              <button
-                onClick={() => {
-                  toggleTheme();
-                  setOpen(false);
-                }}
-                className="
-                  mt-2 rounded-lg
-                  bg-[var(--color-primary)]
-                  px-4 py-3
-                  text-sm font-bold text-black
-                  transition
-                  hover:bg-[var(--color-primary-hover)]
-                "
-              >
-                {theme === "dark"
-                  ? "Modo corporativo"
-                  : "Modo oscuro"}
-              </button>
+
             </nav>
           </div>
         )}

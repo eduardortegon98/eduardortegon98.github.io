@@ -36,23 +36,23 @@ const Footer = () => {
   };
 
   return (
-    <footer className="relative overflow-hidden border-t border-white/10 bg-[#0b0d12]">
+    <footer className="relative overflow-hidden border-t border-[var(--color-border)] bg-[var(--color-surface)]">
       {/* glow suave abajo */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-[#C0FDB9]/20 blur-3xl sm:h-24" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-[var(--color-primary)]/20 blur-3xl sm:h-24" />
 
       <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-7 lg:px-8">
         <div className="flex flex-col gap-5 sm:gap-6 md:flex-row md:items-center md:justify-between">
           {/* Brand */}
           <div className="text-center md:text-left">
-            <p className="text-base font-extrabold tracking-tight text-white sm:text-lg">
+            <p className="text-base font-extrabold tracking-tight text-[var(--color-text)] sm:text-lg">
               Soluciones Tecnológicas{" "}
-              <span className="text-white/85">Ortegón</span>
+              <span className="text-[var(--color-text-muted)]">Ortegón</span>
             </p>
-            <p className="mt-1 text-sm text-white/60">© {year}</p>
+            <p className="mt-1 text-sm text-[var(--color-text-muted)]">© {year}</p>
           </div>
 
           {/* Neon pill */}
-          <div className="flex flex-wrap items-center justify-center gap-2 rounded-2xl bg-[#C0FDB9]/12 px-3 py-3 ring-1 ring-[#C0FDB9]/25 sm:rounded-full sm:px-4 sm:py-2">
+          <div className="flex flex-wrap items-center justify-center gap-2 rounded-2xl bg-[var(--color-primary)]/12 px-3 py-3 ring-1 ring-[var(--color-accent)]/25 sm:rounded-full sm:px-4 sm:py-2">
             {socials.map(({ label, href, Icon }) => (
               <a
                 key={label}
@@ -63,12 +63,12 @@ const Footer = () => {
                 title={label}
                 className="
                   group inline-flex h-10 w-10 items-center justify-center rounded-full
-                  bg-black/30 ring-1 ring-white/10 transition hover:bg-black/45
-                  focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C0FDB9]/60
+                  bg-[var(--color-bg-secondary)] ring-1 ring-[var(--color-border)] transition hover:bg-[var(--color-bg-secondary)]
+                  focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]/60
                   sm:h-10 sm:w-10
                 "
               >
-                <Icon className="text-[17px] text-white/80 transition group-hover:text-white sm:text-[18px]" />
+                <Icon className="text-[17px] text-[var(--color-text-muted)] transition group-hover:text-[var(--color-text)] sm:text-[18px]" />
               </a>
             ))}
 
@@ -76,10 +76,10 @@ const Footer = () => {
               onClick={scrollToTop}
               className="
                 inline-flex items-center gap-2 rounded-full
-                bg-[#C0FDB9]/90 px-4 py-2 text-sm font-extrabold text-black
-                transition hover:bg-[#C0FDB9]
+                bg-[var(--color-primary)]/90 px-4 py-2 text-sm font-extrabold text-[var(--color-text)]
+                transition hover:bg-[var(--color-primary)]
                 shadow-[0_16px_50px_-30px_rgba(192,253,185,0.95)]
-                focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40
+                focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-border)]
                 sm:ml-1
               "
             >

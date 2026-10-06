@@ -7,7 +7,7 @@ export default function Challenge({ onToken, reset }) {
     let alive = true, widget;
     const render = () => {
       if (!alive || !window.turnstile || !container.current) return;
-      widget = window.turnstile.render(container.current, { sitekey, action: "ortegon_chat", theme: "dark",
+      widget = window.turnstile.render(container.current, { sitekey, action: "ortegon_chat", theme: "light",
         callback: token => onToken(token), "expired-callback": () => onToken(""), "error-callback": () => onToken("") });
     };
     let script = document.querySelector('script[data-ortegon-turnstile]');

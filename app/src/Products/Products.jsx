@@ -59,7 +59,7 @@ const Products = () => {
         `
         : `
           bg-[var(--color-primary)]
-          text-black
+          text-[var(--color-text)]
           animate-pulse
           hover:scale-110
           hover:bg-[var(--color-primary-hover)]
@@ -164,8 +164,8 @@ const Products = () => {
       rounded-full
       bg-[var(--color-primary)]
       p-4
-      text-black
-      shadow-lg
+      text-[var(--color-text)]
+      shadow-[0_8px_24px_rgba(32,58,43,0.06)]
       transition-all duration-300
       hover:scale-110
       hover:bg-[var(--color-primary-hover)]

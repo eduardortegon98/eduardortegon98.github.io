@@ -57,10 +57,10 @@ const Background = () => (
 
 const SectionHeader = () => (
   <div className="text-center">
-    <h2 className="mt-3 text-3xl sm:text-5xl font-extrabold tracking-tight text-[#C0FDB9]">
+    <h2 className="mt-3 text-3xl sm:text-5xl font-extrabold tracking-tight text-[var(--color-accent)]">
       Nuevos Proyectos
     </h2>
-    <p className="mx-auto mt-3 max-w-2xl text-[var(--color-surface)]">
+    <p className="mx-auto mt-3 max-w-2xl text-[var(--color-text-muted)]">
       Para ingresar a los proyectos haz click en el icono superior derecho de
       cada celular.{" "}
     </p>

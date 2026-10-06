@@ -3,10 +3,10 @@ import React from "react";
 const LoginOptions = () => {
   return (
     <div className="flex items-center justify-between text-sm">
-      <label className="flex items-center gap-2 text-white/70">
+      <label className="flex items-center gap-2 text-[var(--color-text-muted)]">
         <input
           type="checkbox"
-          className="rounded border-white/20 bg-black"
+          className="rounded border-[var(--color-border)] bg-[var(--color-bg-secondary)]"
         />
 
         Recordarme
@@ -14,7 +14,7 @@ const LoginOptions = () => {
 
       <button
         type="button"
-        className="text-[#C0FDB9] hover:underline"
+        className="text-[var(--color-accent)] hover:underline"
       >
         ¿Olvidaste tu contraseña?
       </button>

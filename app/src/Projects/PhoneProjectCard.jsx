@@ -47,11 +47,11 @@ const KeyButton = memo(function KeyButton({
 
   const className = [
     "relative rounded-xl border px-3 py-3 text-[11px] font-extrabold tracking-wide transition-colors",
-    "focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-200/50",
+    "focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]",
     isSelected
-      ? "border-cyan-200/40 bg-cyan-400/10"
-      : "border-white/10 bg-white/5 hover:border-cyan-200/20 hover:bg-white/10",
-    !isReal ? "opacity-30 cursor-not-allowed text-white/40" : "text-white/85",
+      ? "border-[var(--color-accent)] bg-[var(--color-primary-soft)]"
+      : "border-[var(--color-border)] bg-[var(--color-surface)] hover:border-[var(--color-accent)] hover:bg-[var(--color-surface)]",
+    !isReal ? "opacity-30 cursor-not-allowed text-[var(--color-text-muted)]" : "text-[var(--color-text-muted)]",
   ].join(" ");
 
   if (!isReal) {
@@ -64,7 +64,7 @@ const KeyButton = memo(function KeyButton({
         title="Empty"
       >
         <span className="block text-center leading-tight">{label}</span>
-        <span className="mt-1 block text-center text-[9px] font-black tracking-widest text-white/40">
+        <span className="mt-1 block text-center text-[9px] font-black tracking-widest text-[var(--color-text-muted)]">
           —
         </span>
       </button>
@@ -80,7 +80,7 @@ const KeyButton = memo(function KeyButton({
       aria-label={`Seleccionar documentación de ${label}`}
     >
       <span className="block text-center leading-tight">{label}</span>
-      <span className="mt-1 block text-center text-[9px] font-black tracking-widest text-white/45">
+      <span className="mt-1 block text-center text-[9px] font-black tracking-widest text-[var(--color-text-muted)]">
         {official ? "OFFICIAL" : "SEARCH"}
       </span>
     </button>
@@ -121,43 +121,43 @@ const PhoneProjectCard = memo(function PhoneProjectCard({ p }) {
 
   return (
     <article className="relative mx-auto select-none" style={{ width: PHONE_W, height: PHONE_H }}>
-      <div className="absolute inset-4 -z-10 rounded-[2.5rem] bg-black/25 blur-xl" />
+      <div className="absolute inset-4 -z-10 rounded-[2.5rem] bg-[var(--color-bg-secondary)] blur-xl" />
 
       <div
         className="
           relative h-full w-full rounded-[2.5rem] p-[10px]
-          border border-white/10
-          bg-gradient-to-br from-[#bfc7cb] via-[#6a7479] to-[#2d3337]
-          shadow-2xl
+          border border-[var(--color-border)]
+          bg-gradient-to-br from-[var(--color-surface)] via-[var(--color-surface)] to-[var(--color-surface)]
+          shadow-[0_14px_40px_rgba(32,58,43,0.08)]
         "
       >
-        <div className="relative flex h-full flex-col overflow-hidden rounded-[2rem] border border-white/10 bg-[#101214]">
+        <div className="relative flex h-full flex-col overflow-hidden rounded-[2rem] border border-[var(--color-border)] bg-[var(--color-surface)]">
           <div className="pointer-events-none absolute left-1/2 top-3 z-10 -translate-x-1/2">
-            <div className="h-1.5 w-20 rounded-full bg-black/50" />
+            <div className="h-1.5 w-20 rounded-full bg-[var(--color-bg-secondary)]" />
           </div>
 
           <div className="relative flex-1 overflow-hidden px-5 pb-4 pt-10">
             <div className="pointer-events-none absolute inset-0">
-              <div className="absolute -top-16 -left-12 h-44 w-44 rounded-full bg-cyan-400/10 blur-xl" />
-              <div className="absolute -bottom-16 -right-12 h-44 w-44 rounded-full bg-blue-500/10 blur-xl" />
+              <div className="absolute -top-16 -left-12 h-44 w-44 rounded-full bg-[var(--color-primary-soft)] blur-xl" />
+              <div className="absolute -bottom-16 -right-12 h-44 w-44 rounded-full bg-[var(--color-primary-soft)] blur-xl" />
             </div>
 
             <div className="relative">
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
                   <div className="flex items-center gap-2">
-                    <h3 className="truncate text-white font-extrabold tracking-tight">
+                    <h3 className="truncate text-[var(--color-text)] font-extrabold tracking-tight">
                       {p.title}
                     </h3>
 
                     {p.status ? (
-                      <span className="shrink-0 rounded-full bg-[#C0FDB9] px-2 py-0.5 text-[10px] font-black tracking-widest text-black">
+                      <span className="shrink-0 rounded-full bg-[var(--color-primary)] px-2 py-0.5 text-[10px] font-black tracking-widest text-[var(--color-text)]">
                         {p.status.toUpperCase()}
                       </span>
                     ) : null}
                   </div>
 
-                  <p className="mt-2 line-clamp-3 text-sm font-medium leading-relaxed text-white/75">
+                  <p className="mt-2 line-clamp-3 text-sm font-medium leading-relaxed text-[var(--color-text-muted)]">
                     {p.description}
                   </p>
                 </div>
@@ -169,7 +169,7 @@ const PhoneProjectCard = memo(function PhoneProjectCard({ p }) {
                       target="_blank"
                       rel="noreferrer"
                       aria-label="GitHub"
-                      className="grid size-9 place-items-center rounded-lg border border-white/10 bg-white/5 text-white/85 transition-colors hover:bg-white/10"
+                      className="grid size-9 place-items-center rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-muted)] transition-colors hover:bg-[var(--color-surface)]"
                     >
                       <Github className="size-4" />
                     </a>
@@ -181,7 +181,7 @@ const PhoneProjectCard = memo(function PhoneProjectCard({ p }) {
                       target="_blank"
                       rel="noreferrer"
                       aria-label="Open project"
-                      className="grid size-9 place-items-center rounded-lg border border-white/10 bg-white/5 text-white/85 transition-colors hover:bg-white/10"
+                      className="grid size-9 place-items-center rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-muted)] transition-colors hover:bg-[var(--color-surface)]"
                     >
                       <ExternalLink className="size-4" />
                     </a>
@@ -189,14 +189,14 @@ const PhoneProjectCard = memo(function PhoneProjectCard({ p }) {
                 </div>
               </div>
 
-              <div className="mt-4 h-px w-full bg-white/10" />
+              <div className="mt-4 h-px w-full bg-[var(--color-surface)]" />
 
               <div className="mt-3">
                 {selectedItem ? (
-                  <div className="flex items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/5 p-3">
+                  <div className="flex items-center justify-between gap-3 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-3">
                     <div className="min-w-0">
                       <div className="flex items-center gap-2">
-                        <span className="text-[11px] font-black tracking-widest text-white/70">
+                        <span className="text-[11px] font-black tracking-widest text-[var(--color-text-muted)]">
                           SELECTED
                         </span>
 
@@ -204,8 +204,8 @@ const PhoneProjectCard = memo(function PhoneProjectCard({ p }) {
                           className={[
                             "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-black tracking-widest",
                             selectedItem.official
-                              ? "bg-[#C0FDB9] text-black"
-                              : "border border-white/10 bg-white/10 text-white/80",
+                              ? "bg-[var(--color-primary)] text-[var(--color-text)]"
+                              : "border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-muted)]",
                           ].join(" ")}
                         >
                           {selectedItem.official ? (
@@ -222,11 +222,11 @@ const PhoneProjectCard = memo(function PhoneProjectCard({ p }) {
                         </span>
                       </div>
 
-                      <div className="mt-1 truncate text-[13px] font-extrabold text-white">
+                      <div className="mt-1 truncate text-[13px] font-extrabold text-[var(--color-text)]">
                         {selectedItem.label}
                       </div>
 
-                      <div className="mt-1 truncate text-[11px] text-white/55">
+                      <div className="mt-1 truncate text-[11px] text-[var(--color-text-muted)]">
                         {selectedItem.link}
                       </div>
                     </div>
@@ -236,9 +236,9 @@ const PhoneProjectCard = memo(function PhoneProjectCard({ p }) {
                       target="_blank"
                       rel="noreferrer"
                       className="
-                        shrink-0 rounded-lg border border-cyan-200/20 bg-cyan-400/10
-                        px-3 py-2 text-[11px] font-black text-white transition-colors
-                        hover:bg-cyan-400/15
+                        shrink-0 rounded-lg border border-[var(--color-accent)] bg-[var(--color-primary-soft)]
+                        px-3 py-2 text-[11px] font-black text-[var(--color-text)] transition-colors
+                        hover:bg-[var(--color-primary-soft)]
                       "
                       aria-label="Open selected documentation"
                     >
@@ -246,11 +246,11 @@ const PhoneProjectCard = memo(function PhoneProjectCard({ p }) {
                     </a>
                   </div>
                 ) : (
-                  <div className="rounded-xl border border-white/10 bg-white/5 p-3">
-                    <div className="text-[11px] font-black tracking-widest text-white/70">
+                  <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-3">
+                    <div className="text-[11px] font-black tracking-widest text-[var(--color-text-muted)]">
                       TIP
                     </div>
-                    <div className="mt-1 text-[12px] text-white/60">
+                    <div className="mt-1 text-[12px] text-[var(--color-text-muted)]">
                       Toca una tech abajo para ver y abrir su documentación.
                     </div>
                   </div>
@@ -259,7 +259,7 @@ const PhoneProjectCard = memo(function PhoneProjectCard({ p }) {
             </div>
           </div>
 
-          <div className="shrink-0 border-t border-white/10 bg-gradient-to-b from-[#252a2d] to-[#171a1c] p-5 pt-4">
+          <div className="shrink-0 border-t border-[var(--color-border)] bg-gradient-to-b from-[var(--color-surface)] to-[var(--color-surface)] p-5 pt-4">
             <div className="grid grid-cols-3 gap-3">
               {keys.map((item) => (
                 <KeyButton
@@ -272,7 +272,7 @@ const PhoneProjectCard = memo(function PhoneProjectCard({ p }) {
             </div>
 
             <div className="mt-4 flex justify-center">
-              <div className="h-1.5 w-16 rounded-full bg-black/40" />
+              <div className="h-1.5 w-16 rounded-full bg-[var(--color-bg-secondary)]" />
             </div>
           </div>
         </div>

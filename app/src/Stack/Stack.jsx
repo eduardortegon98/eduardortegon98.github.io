@@ -111,17 +111,17 @@ const StackCard = React.forwardRef(function StackCard(
   const FrontContent = ({ invisible = false }) => (
     <div
       className={`
-        rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-md
+        rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] backdrop-blur-md
         px-4 py-4 sm:px-5 sm:py-5 lg:px-6
         shadow-[0_0_60px_rgba(0,0,0,0.35)]
         ${invisible ? "invisible" : ""}
       `}
     >
       <div className="flex items-center justify-between gap-3">
-        <div className="text-[10px] sm:text-[11px] font-semibold tracking-[0.22em] sm:tracking-[0.24em] text-black">
+        <div className="text-[10px] sm:text-[11px] font-semibold tracking-[0.22em] sm:tracking-[0.24em] text-[var(--color-text)]">
           {title}
         </div>
-        <div className="h-px w-10 sm:w-16 bg-gradient-to-r from-transparent via-cyan-300/30 to-transparent" />
+        <div className="h-px w-10 sm:w-16 bg-gradient-to-r from-transparent via-[var(--color-primary-soft)] to-transparent" />
       </div>
 
       <div className="mt-4 space-y-3">
@@ -129,21 +129,21 @@ const StackCard = React.forwardRef(function StackCard(
           <div
             key={idx}
             className="
-              flex items-center gap-3 rounded-xl border border-cyan-300/10 bg-black/30
+              flex items-center gap-3 rounded-xl border border-[var(--color-accent)] bg-[var(--color-bg)]
               px-3 py-3 sm:px-4
             "
           >
             <div
               className="
-                grid size-9 shrink-0 place-items-center rounded-xl border border-cyan-300/15
-                bg-cyan-400/10 text-cyan-100 shadow-[0_0_18px_rgba(34,211,238,0.10)]
+                grid size-9 shrink-0 place-items-center rounded-xl border border-[var(--color-accent)]
+                bg-[var(--color-primary-soft)] text-[var(--color-accent)] shadow-[0_0_18px_rgba(47,107,69,0.10)]
                 sm:size-10
               "
             >
               <Icon className="size-5 sm:size-6" />
             </div>
 
-            <div className="text-sm sm:text-base font-medium text-white/90">
+            <div className="text-sm sm:text-base font-medium text-[var(--color-text-muted)]">
               {label}
             </div>
           </div>
@@ -167,14 +167,14 @@ const StackCard = React.forwardRef(function StackCard(
         {/* FRONT */}
         <div
           className="
-            absolute inset-0 rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-md
+            absolute inset-0 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] backdrop-blur-md
             px-4 py-4 sm:px-5 sm:py-5 lg:px-6
             shadow-[0_0_60px_rgba(0,0,0,0.35)]
-            transition will-change-transform group-hover:border-cyan-200/25
+            transition will-change-transform group-hover:border-[var(--color-accent)]
             [backface-visibility:hidden]
           "
         >
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-200/20 to-transparent" />
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[var(--color-primary-soft)] to-transparent" />
 
           <div
             className={[
@@ -183,16 +183,16 @@ const StackCard = React.forwardRef(function StackCard(
             ].join(" ")}
           >
             <div className="relative size-4">
-              <div className="absolute inset-0 rounded-full bg-cyan-200/70 blur-[6px] opacity-0 transition group-hover:opacity-100" />
-              <div className="absolute inset-0 rounded-full bg-cyan-200/40 blur-[10px] opacity-60" />
+              <div className="absolute inset-0 rounded-full bg-[var(--color-primary-soft)] blur-[6px] opacity-0 transition group-hover:opacity-100" />
+              <div className="absolute inset-0 rounded-full bg-[var(--color-primary-soft)] blur-[10px] opacity-60" />
             </div>
           </div>
 
           <div className="flex items-center justify-between gap-3">
-            <div className="text-xs font-semibold uppercase tracking-widest text-black] font-mono">
+            <div className="text-xs font-semibold uppercase tracking-widest text-[var(--color-text)] font-mono">
               {title}
             </div>
-            <div className="h-px w-10 sm:w-16 bg-gradient-to-r from-transparent via-cyan-300/30 to-transparent" />
+            <div className="h-px w-10 sm:w-16 bg-gradient-to-r from-transparent via-[var(--color-primary-soft)] to-transparent" />
           </div>
 
           <div className="mt-4 space-y-3">
@@ -200,22 +200,22 @@ const StackCard = React.forwardRef(function StackCard(
               <div
                 key={idx}
                 className="
-                  flex items-center gap-3 rounded-xl border border-cyan-300/10 bg-black/30
+                  flex items-center gap-3 rounded-xl border border-[var(--color-accent)] bg-[var(--color-bg)]
                   px-3 py-3 sm:px-4
-                  transition group-hover:border-cyan-200/15
+                  transition group-hover:border-[var(--color-accent)]
                 "
               >
                 <div
                   className="
-                    grid size-9 shrink-0 place-items-center rounded-xl border border-cyan-300/15
-                    bg-cyan-400/10 text-cyan-100 shadow-[0_0_18px_rgba(34,211,238,0.10)]
+                    grid size-9 shrink-0 place-items-center rounded-xl border border-[var(--color-accent)]
+                    bg-[var(--color-primary-soft)] text-[var(--color-accent)] shadow-[0_0_18px_rgba(47,107,69,0.10)]
                     sm:size-10
                   "
                 >
                   <Icon className="size-5 sm:size-6" />
                 </div>
 
-                <div className="text-sm sm:text-base font-medium text-white/90">
+                <div className="text-sm sm:text-base font-medium text-[var(--color-text-muted)]">
                   {label}
                 </div>
               </div>
@@ -226,10 +226,10 @@ const StackCard = React.forwardRef(function StackCard(
         {/* BACK */}
         <div
           className="
-    absolute inset-0 rounded-2xl border border-cyan-300/20
-    bg-gradient-to-br from-[#111818]/95 via-[#172323]/95 to-[#0b1111]/95
+    absolute inset-0 rounded-2xl border border-[var(--color-accent)]
+    bg-gradient-to-br from-[var(--color-surface)] via-[var(--color-surface)] to-[var(--color-surface)]
     px-4 py-4 sm:px-5 sm:py-5 lg:px-6
-    shadow-[0_0_70px_rgba(34,211,238,0.18)]
+    shadow-[0_0_70px_rgba(47,107,69,0.18)]
     [transform:rotateY(180deg)] [backface-visibility:hidden]
     overflow-y-auto overflow-x-hidden
     [&::-webkit-scrollbar]:hidden
@@ -238,17 +238,17 @@ const StackCard = React.forwardRef(function StackCard(
   "
         >
           <div className="flex items-center justify-between gap-3">
-            <div className="text-[10px] sm:text-[11px] font-semibold tracking-[0.22em] sm:tracking-[0.24em] text-cyan-100/70">
+            <div className="text-[10px] sm:text-[11px] font-semibold tracking-[0.22em] sm:tracking-[0.24em] text-[var(--color-accent)]">
               {title}
             </div>
-            <div className="h-px w-10 sm:w-16 bg-gradient-to-r from-transparent via-cyan-300/30 to-transparent" />
+            <div className="h-px w-10 sm:w-16 bg-gradient-to-r from-transparent via-[var(--color-primary-soft)] to-transparent" />
           </div>
 
-          <h3 className="mt-3 text-sm sm:text-base font-extrabold text-[#C0FDB9]">
+          <h3 className="mt-3 text-sm sm:text-base font-extrabold text-[var(--color-accent)]">
             {items[0]?.label}
           </h3>
 
-          <p className="mt-2 text-[11px] sm:text-xs leading-relaxed text-white/70">
+          <p className="mt-2 text-[11px] sm:text-xs leading-relaxed text-[var(--color-text-muted)]">
             {description}
           </p>
 
@@ -257,8 +257,8 @@ const StackCard = React.forwardRef(function StackCard(
               <div
                 key={idx}
                 className="
-          rounded-lg border border-white/10 bg-white/[0.04]
-          px-3 py-1.5 text-[11px] sm:text-xs leading-snug text-white/80
+          rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)]
+          px-3 py-1.5 text-[11px] sm:text-xs leading-snug text-[var(--color-text-muted)]
         "
               >
                 ✦ {detail}
@@ -366,9 +366,9 @@ const ChipCenter = React.forwardRef(function ChipCenter(_, ref) {
         max-w-[700px]
       "
     >
-      <div className="pointer-events-none absolute -inset-16 rounded-full bg-cyan-400/10 blur-3xl" />
+      <div className="pointer-events-none absolute -inset-16 rounded-full bg-[var(--color-primary-soft)] blur-3xl" />
 
-      <div className="pointer-events-none absolute -inset-16 translate-x-10 rounded-full bg-blue-500/10 blur-3xl" />
+      <div className="pointer-events-none absolute -inset-16 translate-x-10 rounded-full bg-[var(--color-primary-soft)] blur-3xl" />
 
       <img
         src={imgStack}
@@ -381,14 +381,14 @@ const ChipCenter = React.forwardRef(function ChipCenter(_, ref) {
           max-w-[650px]
           h-auto
           object-contain
-          drop-shadow-[0_0_50px_rgba(34,211,238,0.20)]
+          drop-shadow-[0_0_50px_rgba(47,107,69,0.20)]
         "
       />
 
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-        <div className="absolute h-[96%] w-[96%] rounded-full border border-cyan-300/10" />
-        <div className="absolute h-[78%] w-[78%] rounded-full border border-cyan-300/10" />
-        <div className="absolute h-[60%] w-[60%] rounded-full border border-cyan-300/10" />
+        <div className="absolute h-[96%] w-[96%] rounded-full border border-[var(--color-accent)]" />
+        <div className="absolute h-[78%] w-[78%] rounded-full border border-[var(--color-accent)]" />
+        <div className="absolute h-[60%] w-[60%] rounded-full border border-[var(--color-accent)]" />
       </div>
     </div>
   );
@@ -425,20 +425,20 @@ const Stack = () => {
     <section
       className="
     relative w-full overflow-hidden
-    bg-[var(--color-bg-secondary)]
+    bg-[var(--color-bg)]
     py-16 sm:py-20 lg:min-h-screen lg:py-24
   "
       id="stack"
     >
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute -top-28 left-6 h-52 w-52 rounded-full bg-[#C0FDB9]/10 blur-3xl sm:left-10 sm:h-72 sm:w-72" />
+        <div className="absolute -top-28 left-6 h-52 w-52 rounded-full bg-[var(--color-primary)]/10 blur-3xl sm:left-10 sm:h-72 sm:w-72" />
 
-        <div className="absolute -bottom-32 right-6 h-56 w-56 rounded-full bg-[#C0FDB9]/5 blur-3xl sm:right-10 sm:h-80 sm:w-80" />
+        <div className="absolute -bottom-32 right-6 h-56 w-56 rounded-full bg-[var(--color-primary)]/5 blur-3xl sm:right-10 sm:h-80 sm:w-80" />
       </div>
 
       <div className="relative mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
         <div className="text-center">
-          <h2 className="mt-3 font-extrabold tracking-tight text-[#C0FDB9] text-[clamp(1.9rem,5vw,3.4rem)]">
+          <h2 className="mt-3 font-extrabold tracking-tight text-[var(--color-accent)] text-[clamp(1.9rem,5vw,3.4rem)]">
             Nuestras Tecnologías
           </h2>
 
@@ -459,9 +459,9 @@ const Stack = () => {
             >
               <defs>
                 <linearGradient id="wire" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0" stopColor="rgba(34,211,238,0.08)" />
-                  <stop offset="0.5" stopColor="rgba(34,211,238,0.85)" />
-                  <stop offset="1" stopColor="rgba(34,211,238,0.08)" />
+                  <stop offset="0" stopColor="rgba(47,107,69,0.08)" />
+                  <stop offset="0.5" stopColor="rgba(47,107,69,0.85)" />
+                  <stop offset="1" stopColor="rgba(47,107,69,0.08)" />
                 </linearGradient>
 
                 <filter id="softGlow">
@@ -536,8 +536,8 @@ const Stack = () => {
       rounded-full
       bg-[var(--color-primary)]
       p-4
-      text-black
-      shadow-lg
+      text-[var(--color-text)]
+      shadow-[0_8px_24px_rgba(32,58,43,0.06)]
       transition-all duration-300
       hover:scale-110
       hover:bg-[var(--color-primary-hover)]

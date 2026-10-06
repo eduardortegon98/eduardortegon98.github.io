@@ -6,7 +6,7 @@ import Header from "../Header/Header";
 
 const Cotizar = () => {
   return (
-    <div className="min-h-screen bg-[var(--color-bg-secondary)] text-black w-full overflow-x-hidden">
+    <div className="min-h-screen bg-[var(--color-bg-secondary)] text-[var(--color-text)] w-full overflow-x-hidden">
       <Header />
 
       {/* Contenedor principal responsivo */}

@@ -52,7 +52,7 @@ const ContactInfo = () => {
         rel="noopener noreferrer"
         className="
           inline-flex items-center gap-3 rounded-2xl
-          bg-[#C0FDB9] px-6 py-4 font-bold text-black
+          bg-[var(--color-primary)] px-6 py-4 font-bold text-[var(--color-text)]
           transition hover:brightness-110
         "
       >

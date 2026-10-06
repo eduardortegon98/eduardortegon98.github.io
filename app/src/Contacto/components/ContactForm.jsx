@@ -4,12 +4,12 @@ import React from "react";
 import { ArrowRight } from "lucide-react";
 
 const inputClass =
-  "w-full rounded-2xl border border-white/10 bg-black/40 px-4 py-3 text-white placeholder:text-white/40 outline-none transition focus:border-[#C0FDB9]";
+  "w-full rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg-secondary)] px-4 py-3 text-[var(--color-text)] placeholder:text-[var(--color-text-muted)] outline-none transition focus:border-[var(--color-accent)]";
 
 const ContactForm = () => {
   const { submit, pending, status } = useSubmission("contact", "Tu mensaje quedó guardado. Nos pondremos en contacto contigo.");
   return (
-    <div className="rounded-3xl border border-white bg-[var(--color-text)]/15 text-black p-8 backdrop-blur-xl lg:col-span-3">
+    <div className="rounded-3xl border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text)] p-8 backdrop-blur-xl lg:col-span-3">
       <h2 className="text-2xl font-bold">
         Envíanos un mensaje
       </h2>
@@ -74,8 +74,8 @@ const ContactForm = () => {
           type="submit" disabled={pending}
           className="
             inline-flex w-full items-center justify-center gap-2
-            rounded-2xl bg-[#C0FDB9]
-            px-6 py-4 font-bold text-black
+            rounded-2xl bg-[var(--color-primary)]
+            px-6 py-4 font-bold text-[var(--color-text)]
             transition hover:brightness-110
           "
         >
