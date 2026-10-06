@@ -1,8 +1,9 @@
+import Access from "../Portal/Access";
 import { Localized } from "../i18n/Language";
 import { useEffect, useRef, useState } from "react";
-import { Link, Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { ArrowLeft, CheckCheck, LogOut, MessageCircle, Search, Send, Inbox as InboxIcon } from "lucide-react";
-import { supabase, isPasswordRecovery } from "../lib/supabase";
+import { supabase } from "../lib/supabase";
 import "./Inbox.css";
 import { LanguageSwitch } from "../i18n/Language";
 const channels = ["WhatsApp", "Instagram", "Facebook"];
@@ -13,19 +14,7 @@ const seed = [
   { id: 4, name: "Diego Torres", company: "Consultoría Torres", channel: "WhatsApp", unread: false, status: "Resuelto", time: "Ayer", messages: [{ text: "Gracias por la información. Ya tengo lo necesario para empezar.", own: false, time: "Ayer" }] },
 ];
 export default function Inbox() {
-  const [session, setSession] = useState(undefined);
-  const [authError, setAuthError] = useState("");
-  useEffect(() => {
-    if (!supabase) { setSession(null); return; }
-    let active = true;
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, value) => { if (active) setSession(value); });
-    supabase.auth.getSession().then(({ data, error }) => { if (active) { if (error) setAuthError("No pudimos comprobar tu sesión. Vuelve a iniciar sesión."); setSession(data.session); } }).catch(() => { if (active) { setAuthError("No pudimos comprobar tu sesión."); setSession(null); } });
-    return () => { active = false; subscription.unsubscribe(); };
-  }, []);
-  if (authError) return <Localized as="div" className="inbox-loading" role="alert">{authError}<Localized as={Link} to="/login">Volver al login</Localized></Localized>;
-  if (session === undefined) return <Localized as="div" className="inbox-loading" role="status">Cargando tu espacio de trabajo…</Localized>;
-  if (!session || isPasswordRecovery()) return <Navigate to="/login" replace />;
-  return <Workspace key={session.user.id} user={session.user} />;
+  return <Access admin>{({ user }) => <Workspace key={user.id} user={user} />}</Access>;
 }
 function Workspace({ user }) {
   const [conversations, setConversations] = useState(seed);
@@ -46,7 +35,7 @@ function Workspace({ user }) {
   }
   async function logout() { setSigningOut(true); try { const { error } = await supabase.auth.signOut(); if (error) throw error; } catch { setNotice("No pudimos cerrar sesión. Inténtalo nuevamente."); } finally { setSigningOut(false); } }
   return <Localized as="div" className="inbox-app">
-    <Localized as="aside" className="inbox-nav"><Localized as={Link} className="inbox-brand" to="/"><Localized as="span">O.</Localized><Localized as="div">Ortegón<Localized as="small">Centro de mensajes</Localized></Localized></Localized><Localized as="p" className="inbox-nav-label">ESPACIO DE TRABAJO</Localized><Localized as="div" className="inbox-nav-active"><InboxIcon size={18} /> Bandeja unificada</Localized><Localized as="p" className="inbox-nav-label">CANALES</Localized><Localized as="nav" aria-label="Filtrar por red social">{["Todos", ...channels].map(name => <Localized as="button" key={name} aria-pressed={channel === name} className={channel === name ? "active" : ""} onClick={() => { setChannel(name); setMobileOpen(false); }}><Localized as="span" className={`channel-dot ${name.toLowerCase()}`} />{name}<Localized as="b">{conversations.filter(c => (name === "Todos" || c.channel === name) && c.unread).length}</Localized></Localized>)}</Localized><Localized as="div" className="inbox-demo-note"><Localized as="strong">Tu próxima conexión</Localized><Localized as="p">Los tres canales están en modo demo. La integración con Meta llegará en la siguiente etapa.</Localized></Localized><Localized as="div" className="inbox-account"><Localized as="span" title={user.email}>{user.email}</Localized><Localized as="button" onClick={logout} disabled={signingOut}><LogOut size={16} />{signingOut ? "Saliendo…" : "Cerrar sesión"}</Localized></Localized></Localized>
+    <Localized as="aside" className="inbox-nav"><Localized as={Link} className="inbox-brand" to="/"><Localized as="span">O.</Localized><Localized as="div">Ortegón<Localized as="small">Centro de mensajes</Localized></Localized></Localized><Localized as={Link} to="/panel">Volver al dashboard</Localized><Localized as="p" className="inbox-nav-label">ESPACIO DE TRABAJO</Localized><Localized as="div" className="inbox-nav-active"><InboxIcon size={18} /> Bandeja unificada</Localized><Localized as="p" className="inbox-nav-label">CANALES</Localized><Localized as="nav" aria-label="Filtrar por red social">{["Todos", ...channels].map(name => <Localized as="button" key={name} aria-pressed={channel === name} className={channel === name ? "active" : ""} onClick={() => { setChannel(name); setMobileOpen(false); }}><Localized as="span" className={`channel-dot ${name.toLowerCase()}`} />{name}<Localized as="b">{conversations.filter(c => (name === "Todos" || c.channel === name) && c.unread).length}</Localized></Localized>)}</Localized><Localized as="div" className="inbox-demo-note"><Localized as="strong">Tu próxima conexión</Localized><Localized as="p">Los tres canales están en modo demo. La integración con Meta llegará en la siguiente etapa.</Localized></Localized><Localized as="div" className="inbox-account"><Localized as="span" title={user.email}>{user.email}</Localized><Localized as="button" onClick={logout} disabled={signingOut}><LogOut size={16} />{signingOut ? "Saliendo…" : "Cerrar sesión"}</Localized></Localized></Localized>
     <Localized as="main" className="inbox-workspace"><Localized as="header" className="inbox-top"><Localized as="div"><Localized as="p">MENOS PESTAÑAS. MÁS CONVERSACIONES.</Localized><Localized as="h1">Tu bandeja, en un solo lugar.</Localized></Localized><LanguageSwitch /><Localized as="span" className="inbox-demo-badge">Demo · Sin conexiones reales</Localized></Localized>
     <Localized as="section" className={`inbox-grid ${mobileOpen ? "conversation-open" : ""}`} aria-label="Gestión de conversaciones">
       <Localized as="aside" className="inbox-list"><Localized as="div" className="inbox-list-heading"><Localized as="h2">Conversaciones <Localized as="span">{visible.length}</Localized></Localized><Localized as="p">{conversations.filter(c => c.unread).length} pendientes de lectura</Localized><Localized as="label" className="inbox-search"><Search size={17} /><Localized as="input" aria-label="Buscar conversaciones" value={query} onChange={e => setQuery(e.target.value)} placeholder="Buscar nombre o mensaje" /></Localized><Localized as="select" aria-label="Filtrar por estado" value={filter} onChange={e => setFilter(e.target.value)}>{["Todos", "Sin leer", "Pendiente", "En curso", "Resuelto"].map(s => <Localized as="option" key={s}>{s}</Localized>)}</Localized></Localized><Localized as="div" className="inbox-conversations">{visible.length ? visible.map(c => <Localized as="button" key={c.id} className={`inbox-conversation ${selected === c.id ? "selected" : ""}`} onClick={() => open(c)} aria-pressed={selected === c.id}><Localized as="span" className="inbox-avatar">{c.name.split(" ").map(n => n[0]).join("")}</Localized><Localized as="div"><Localized as="div" className="inbox-conversation-title"><Localized as="strong">{c.name}</Localized><Localized as="small">{c.time}</Localized></Localized><Localized as="p" translate="no">{c.messages.at(-1).text}</Localized><Localized as="span" className={`channel-tag ${c.channel.toLowerCase()}`}>{c.channel}</Localized>{c.unread && <Localized as="i" aria-label="Sin leer" />}</Localized></Localized>) : <Localized as="div" className="inbox-empty"><Search /><Localized as="h3">No hay coincidencias</Localized><Localized as="p">Prueba otro nombre, canal o estado.</Localized><Localized as="button" onClick={() => { setChannel("Todos"); setFilter("Todos"); setQuery(""); }}>Limpiar filtros</Localized></Localized>}</Localized></Localized>
