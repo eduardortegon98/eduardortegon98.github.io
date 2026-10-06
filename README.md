@@ -40,7 +40,7 @@ La propuesta abarca desarrollo web, automatización de procesos, asistentes con 
 - **Sitio y portafolio:** presentación de servicios, proyectos destacados y tecnologías, con animaciones y carga diferida de secciones.
 - **Contacto y cotización:** formularios con validación y estados de envío, preparados para guardar solicitudes en Supabase.
 - **Opiniones:** envío de testimonios y publicación de los aprobados, sin exponer correos.
-- **Autenticación:** inicio y cierre de sesión, recuperación de contraseña y registro desde el chatbot cuando se activa.
+- **Autenticación:** inicio y cierre de sesión, recuperación de contraseña y registro desde la página de acceso y desde el chatbot cuando se activa.
 - **WhatsApp directo:** conversación con Eduard en **+57 333 725 5586**, con un mensaje preparado que el visitante confirma en WhatsApp.
 - **CI/CD:** compilación y publicación automática en GitHub Pages con cada push a `main`.
 - **Chatbot de empresa:** interfaz conversacional y backend preparado para OpenAI, con solicitudes de agente, CAPTCHA y controles de consumo.
@@ -104,7 +104,7 @@ npm run dev
 
 En Windows puedes copiar `.env.example` manualmente. Completa en `app/.env.local` la URL del proyecto y la clave **pública** de Supabase.
 
-Para habilitar los formularios, ejecuta [`schema.sql`](./app/supabase/schema.sql) y sigue [la configuración de Supabase](./app/supabase/SETUP.md). Para activar la IA y sus alertas, sigue [CHATBOT.md](./app/docs/CHATBOT.md), que incluye el esquema adicional `chat.sql`.
+Para habilitar los formularios, ejecuta [`schema.sql`](./app/supabase/schema.sql) y sigue [la configuración de Supabase](./app/supabase/SETUP.md). Para configurar registro, confirmación de correo y recuperación, consulta [AUTH.md](./app/docs/AUTH.md). Para activar la IA y sus alertas, sigue [CHATBOT.md](./app/docs/CHATBOT.md), que incluye el esquema adicional `chat.sql`.
 
 **Nunca pongas claves de OpenAI, `service_role` ni tokens de WhatsApp en variables `VITE_*`: se incluyen en el frontend.**
 

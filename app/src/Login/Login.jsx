@@ -1,6 +1,5 @@
 import React from "react";
 
-import LoginHeader from "./components/LoginHeader";
 import LoginForm from "./components/LoginForm";
 import Header from "../Header/Header";
 
@@ -16,7 +15,7 @@ function Login() {
     >
       <Header />
 
-      <main className="flex min-h-[calc(100vh-5rem)] items-center justify-center px-6">
+      <main className="flex min-h-[calc(100vh-5rem)] items-center justify-center px-6 py-10">
         <div className="relative w-full max-w-lg">
           {/* Borde exterior */}
           <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-br from-white/20 via-white/5 to-white/20" />
@@ -35,11 +34,7 @@ function Login() {
             </div>
 
             <div className="p-8 md:p-10">
-              <LoginHeader />
-
-              <div className="mt-8">
-                <LoginForm />
-              </div>
+              <LoginForm />
             </div>
           </div>
         </div>
