@@ -1,11 +1,11 @@
-import { ArrowUpRight, ClipboardList } from "lucide-react";
+import { ClipboardList } from "lucide-react";
 import useSubmission from "../../hooks/useSubmission";
-import FormStatus, { Honeypot } from "../../components/FormStatus";
-import { InquirySection, InquiryField, InquirySelect, InquiryNote } from "../../components/InquiryLayout";
+import { Honeypot } from "../../components/FormStatus";
+import { InquirySection, InquiryField, InquirySelect, InquiryStepForm } from "../../components/InquiryLayout";
 import { SERVICE_OPTIONS, BUDGET_OPTIONS } from "../constants";
 export default function QuoteForm() {
   const { submit, pending, status } = useSubmission("quote", "Tu solicitud quedó guardada. Te contactaremos para preparar la propuesta.");
-  return <section className="inquiry-card" aria-labelledby="quote-form-title"><header className="inquiry-card-heading"><span className="inquiry-card-icon"><ClipboardList size={21} /></span><div><h2 id="quote-form-title">Cuéntanos sobre tu proyecto</h2><p>Los detalles nos ayudan a preparar una propuesta a tu medida.</p></div></header><form className="inquiry-form" onSubmit={submit} aria-busy={pending}><Honeypot /><fieldset disabled={pending}>
+  return <section className="inquiry-card" aria-labelledby="quote-form-title"><header className="inquiry-card-heading"><span className="inquiry-card-icon"><ClipboardList size={21} /></span><div><h2 id="quote-form-title">Cuéntanos sobre tu proyecto</h2><p>Los detalles nos ayudan a preparar una propuesta a tu medida.</p></div></header><InquiryStepForm pending={pending} submit={submit} status={status} submitLabel="Solicitar mi cotización" pendingLabel="Enviando tu solicitud..." note="Enviar esta solicitud no te compromete a contratar." honeypot={<Honeypot />}>
     <InquirySection number="01" title="Tus datos de contacto">
       <InquiryField id="quote-name" label="Tu nombre o empresa" wide><input id="quote-name" name="name" required maxLength={120} autoComplete="organization" placeholder="¿Para quién construiremos la solución?" /></InquiryField>
       <InquiryField id="quote-email" label="Correo electrónico"><input id="quote-email" name="email" type="email" required maxLength={254} autoComplete="email" placeholder="tu@empresa.com" /></InquiryField>
@@ -16,6 +16,5 @@ export default function QuoteForm() {
       <InquiryField id="quote-budget" label="Presupuesto estimado"><InquirySelect id="quote-budget" name="budget" options={BUDGET_OPTIONS} placeholder="Elige un rango" /></InquiryField>
       <InquiryField id="quote-message" label="¿Qué te gustaría lograr?" wide hint="Incluye el objetivo, las funciones que imaginas y si tienes una fecha en mente."><textarea id="quote-message" name="message" required maxLength={5000} rows={4} placeholder="Necesitamos una solución que nos ayude a..." /></InquiryField>
     </InquirySection>
-    <div className="inquiry-form-bottom"><button type="submit" disabled={pending} className="inquiry-submit">{pending ? "Enviando tu solicitud..." : "Solicitar mi cotización"}<ArrowUpRight size={17} /></button><InquiryNote>Enviar esta solicitud no te compromete a contratar.</InquiryNote></div>
-  </fieldset><div className="inquiry-status"><FormStatus status={status} /></div></form></section>;
+    </InquiryStepForm></section>;
 }
