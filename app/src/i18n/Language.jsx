@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, Children, isValidElement } from "react";
+import { createContext, useContext, useEffect, useState, Children, isValidElement, Fragment, cloneElement } from "react";
 import en from "./en.json";
 import "./language.css";
 const LanguageContext = createContext({ language: "es", setLanguage: () => {} });
@@ -39,7 +39,13 @@ export function Localized({ as: Element = "span", children, translate: enabled, 
   const translatedProps = { ...props };
   for (const key of ["placeholder", "title", "alt", "aria-label"]) if (typeof props[key] === "string") translatedProps[key] = text(props[key]);
   if (Element === "option" && props.value === undefined && typeof children === "string") translatedProps.value = children;
-  const content = Children.map(children, child => isValidElement(child) ? child : text(child));
+  const localizeChildren = nodes => Children.map(nodes, child => {
+    if (!isValidElement(child)) return text(child);
+    // Fragments have no DOM element of their own to translate their text.
+    if (child.type === Fragment) return cloneElement(child, {}, localizeChildren(child.props.children));
+    return child;
+  });
+  const content = localizeChildren(children);
   const element = <Element {...translatedProps} translate={enabled}>{content}</Element>;
   return active === inherited ? element : <TranslateContext.Provider value={active}>{element}</TranslateContext.Provider>;
 }
