@@ -1,3 +1,5 @@
+import "./ChatAppearance.css";
+import robotAvatar from "../assets/ortegon-robot-hero.webp";
 import { Localized, useLanguage, translate } from "../i18n/Language";
 import React, { useEffect, useMemo, useState, useCallback } from "react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -230,9 +232,9 @@ function WalkieModal({
                 animate="animate"
                 exit="exit"
                 className={cx(
-                  "relative overflow-hidden rounded-3xl",
+                  "ortegon-chat-panel relative overflow-hidden rounded-3xl",
                   "bg-[var(--color-surface)] backdrop-blur-xl ring-1 ring-[var(--color-border)]",
-                  "shadow-[0_40px_120px_-70px_rgba(192,253,185,0.95)]",
+                  "shadow-[0_20px_60px_rgba(32,58,43,0.15)]",
                   "max-h-[calc(100svh-2rem)] sm:max-h-[calc(100svh-3rem)] flex flex-col",
                 )}
               >
@@ -428,7 +430,7 @@ const Walkie = () => {
         onClick={openChat}
         className={cx(
           `
-    fixed bottom-6 right-6 z-50
+    ortegon-chat-launcher fixed bottom-6 right-6 z-50
     group inline-flex items-center justify-center
     h-14 w-14 rounded-full
     bg-[var(--color-primary)]/90 text-[var(--color-text)]
@@ -445,7 +447,7 @@ const Walkie = () => {
       >
         <Localized as="span" className="relative flex h-10 w-10 items-center justify-center rounded-full bg-[var(--color-bg-secondary)]">
           <Localized as="span" className="absolute -inset-2 rounded-full bg-[var(--color-bg-secondary)] opacity-0 transition group-hover:opacity-100" />
-          <Bot />
+          <img src={robotAvatar} alt="" loading="lazy" decoding="async" />
         </Localized>
       </Localized>
 

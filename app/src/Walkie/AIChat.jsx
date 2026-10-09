@@ -1,3 +1,5 @@
+import "./ChatAppearance.css";
+import robotAvatar from "../assets/ortegon-robot-hero.webp";
 import { Localized } from "../i18n/Language";
 import { useEffect, useRef, useState } from "react";
 import { Bot, X } from "lucide-react";
@@ -87,9 +89,9 @@ export default function AIChat() {
     });
   }
   return <>
-    <Localized as="button" type="button" onClick={() => setOpen(true)} aria-label="Abrir asistente de la empresa" className="fixed bottom-6 right-6 z-50 rounded-full bg-[var(--color-primary)] p-4 text-[var(--color-text)] shadow-xl"><Bot /></Localized>
-    {open && <Localized as="section" role="dialog" aria-modal="false" aria-label="Asistente de Soluciones Ortegón" className="fixed bottom-4 right-4 left-4 z-[60] flex max-h-[90svh] flex-col overflow-hidden rounded-3xl border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text)] shadow-[0_14px_40px_rgba(32,58,43,0.08)] sm:left-auto sm:w-[420px]">
-      <Localized as="header" className="flex items-center justify-between border-b border-[var(--color-border)] p-4"><Localized as="div"><Localized as="h2" className="font-bold">Asistente Ortegón</Localized><Localized as="p" className="text-xs text-[var(--color-text-muted)]">IA para consultas sobre nuestros servicios</Localized></Localized><Localized as="button" type="button" onClick={() => setOpen(false)} aria-label="Cerrar asistente"><X /></Localized></Localized>
+    <Localized as="button" type="button" onClick={() => setOpen(true)} aria-label="Abrir asistente de la empresa" className="ortegon-chat-launcher fixed bottom-6 right-6 z-50 rounded-full bg-[var(--color-primary)] p-4 text-[var(--color-text)] shadow-xl"><img src={robotAvatar} alt="" loading="lazy" decoding="async" /></Localized>
+    {open && <Localized as="section" role="dialog" aria-modal="false" aria-label="Asistente de Soluciones Ortegón" className="ortegon-chat-panel fixed bottom-4 right-4 left-4 z-[60] flex max-h-[90svh] flex-col overflow-hidden rounded-3xl border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text)] shadow-[0_14px_40px_rgba(32,58,43,0.08)] sm:left-auto sm:w-[420px]">
+      <Localized as="header" className="flex items-center justify-between border-b border-[var(--color-border)] p-4"><Localized as="div"><img className="chat-header-avatar" src={robotAvatar} alt="" loading="lazy" decoding="async"/><Localized as="h2" className="font-bold">Asistente Ortegón</Localized><Localized as="p" className="text-xs text-[var(--color-text-muted)]">IA para consultas sobre nuestros servicios</Localized></Localized><Localized as="button" type="button" onClick={() => setOpen(false)} aria-label="Cerrar asistente"><X /></Localized></Localized>
       <Localized as="div" className="space-y-3 overflow-y-auto p-4">
         <Localized as="p" className="rounded-xl bg-[var(--color-surface)] p-3 text-sm">Hola, ¿qué necesitas para tu negocio? Puedes consultar nuestros servicios o solicitar atención de Eduard.</Localized>
         <Localized as="p" className="text-xs text-[var(--color-text-muted)]">Guardamos las consultas para continuar la conversación y controlar el uso. No compartas información sensible. La IA puede equivocarse.</Localized>
