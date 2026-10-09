@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { submitForm } from "../lib/submissions";
+import { trackLead } from "../lib/analytics";
 export default function useSubmission(kind, successMessage) {
   const lock = useRef(false);
   const [pending, setPending] = useState(false);
@@ -16,6 +17,7 @@ export default function useSubmission(kind, successMessage) {
     lock.current = true; setPending(true); setStatus(null);
     try {
       await submitForm(kind, payload);
+      trackLead(kind);
       form.reset(); setStatus({ success: true, message: successMessage });
     } catch (error) {
       setStatus({ success: false, message: error.message });

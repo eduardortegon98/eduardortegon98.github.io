@@ -7,12 +7,13 @@ import { LanguageProvider } from "./i18n/Language";
 import App from "./App.jsx";
 import "./App.css";
 import { ThemeProvider } from "./context/ThemeContext.jsx";
+import Analytics from "./components/Analytics";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
       <ThemeProvider>
-        <LanguageProvider><App /></LanguageProvider>
+        <LanguageProvider><App /><Analytics /></LanguageProvider>
       </ThemeProvider>
     </BrowserRouter>
   </StrictMode>,
