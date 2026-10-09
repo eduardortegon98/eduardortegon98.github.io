@@ -5,6 +5,7 @@ import Access from './Access';
 import { supabase } from '../lib/supabase';
 import { Localized as L, LanguageSwitch, useLanguage } from '../i18n/Language';
 import './Portal.css';
+import { BarChart3 } from 'lucide-react';
 const sources = [
   { table: 'contact_requests', label: 'Contacto', icon: MessageSquare, columns: 'id,created_at,name,email,subject,message' },
   { table: 'quote_requests', label: 'Cotizaciones', icon: FileText, columns: 'id,created_at,name,email,phone,service,budget,message' },
@@ -56,6 +57,7 @@ function Dashboard({ user, role }) {
   return <div className="portal-app">
     <aside className="portal-nav"><Link to="/" className="portal-brand">O. <span>Ortegón</span></Link><L as="p" className="portal-eyebrow">ESPACIO DE TRABAJO</L><L as="div" className="portal-nav-current"><LayoutDashboard size={18} />{admin ? 'Dashboard' : 'Portal de cliente'}</L>{admin && <L as={Link} to="/panel/mensajes" className="portal-nav-link"><MessageSquare size={18} />Bandeja demo</L>}<div className="portal-account"><span>{user.email}</span><L as="small">{admin ? 'Súper admin' : 'Cliente'}</L><L as="button" disabled={logoutPending} onClick={logout}><LogOut size={16} />{logoutPending ? 'Saliendo…' : 'Cerrar sesión'}</L></div></aside>
     <main className="portal-main"><header className="portal-header"><div><L as="p" className="portal-eyebrow">{admin ? 'CENTRO DE CLIENTES' : 'TU CUENTA'}</L><L as="h1">{admin ? 'Cada oportunidad, en orden.' : 'Bienvenido a tu portal.'}</L><L as="p">{admin ? 'Información real recibida desde los formularios de tu página.' : 'Tu cuenta de cliente está activa. Las funciones del portal se habilitarán en una próxima etapa.'}</L></div><LanguageSwitch /></header>
+    {admin && <Link to="/panel/analitica" className="portal-nav-link"><BarChart3 size={18} />{language === 'en' ? 'Website analytics' : 'Analítica de la web'}<ArrowRight size={16} /></Link>}
     {!admin ? <section className="portal-welcome"><Users size={36} /><L as="h2">Portal de cliente</L><L as="p">Este espacio no tiene acceso a los leads ni a los datos de otros clientes.</L><L as={Link} to="/cotizar">Solicitar cotización <ArrowRight size={16} /></L><L as={Link} to="/contacto">Contactar</L>{error && <L as="p" role="alert">{error}</L>}</section> : <>
       <section className="portal-metrics" aria-label={language === 'en' ? 'Total records by source' : 'Total de registros por origen'}>{sources.map((s, i) => { const Icon = s.icon; return <button key={s.table} onClick={() => switchSource(i)} aria-pressed={source === i}><Icon size={22} /><L>{s.label}</L><strong>{counts ? counts[i] : '—'}</strong><L as="small">Registros recibidos</L></button>; })}</section>
       <section className="portal-records"><div className="portal-toolbar"><div className="portal-tabs" role="group" aria-label={language === 'en' ? 'Record source' : 'Origen de los registros'}>{sources.map((s, i) => <L as="button" key={s.table} aria-pressed={source === i} className={source === i ? 'active' : ''} onClick={() => switchSource(i)}>{s.label}</L>)}</div><L as="button" className="portal-refresh" onClick={() => setRevision(n => n + 1)} disabled={loading}><RefreshCw size={16} />Actualizar</L></div>
@@ -66,3 +68,4 @@ function Dashboard({ user, role }) {
       {selected && <section className="portal-detail" aria-labelledby="lead-detail-title"><div><h2 ref={detailHeading} tabIndex={-1} id="lead-detail-title">{selected.name}</h2><L as="button" onClick={() => setSelected(null)}>Cerrar detalle</L></div><dl><L as="dt">Correo electrónico</L><dd>{selected.email || '—'}</dd><L as="dt">Fecha</L><dd>{date(selected.created_at)}</dd>{[['phone', 'Teléfono'], ['subject', 'Asunto'], ['service', 'Servicio'], ['budget', 'Presupuesto'], ['rating', 'Calificación']].filter(([key]) => selected[key]).map(([key, label]) => <div key={key}><L as="dt">{label}</L><dd>{selected[key]}</dd></div>)}</dl><L as="h3">Mensaje</L><p className="portal-message">{selected.message}</p></section>}
     </>}</main></div>;
 }
+
