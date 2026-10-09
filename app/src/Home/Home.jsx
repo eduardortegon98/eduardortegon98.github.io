@@ -2,6 +2,7 @@ import { Localized } from "../i18n/Language";
 // src/Home/Home.jsx
 
 import { Suspense, lazy, memo } from "react";
+import "./Premium.css";
 import useInViewOnce from "../hooks/useInViewOnce";
 
 const Header = lazy(() => import("../Header/Header.jsx"));
@@ -31,7 +32,7 @@ const DeferredSection = memo(function DeferredSection({
 
 function Home() {
   return (
-    <>
+    <Localized as="div" className="premium-site">
       <Suspense fallback={null}>
         <Header />
         <Hero />
@@ -61,7 +62,7 @@ function Home() {
         <Footer />
         <Walkie />
       </Suspense>
-    </>
+    </Localized>
   );
 }
 

@@ -1,95 +1,12 @@
-import { Localized } from "../i18n/Language";
-import React from "react";
-import PhoneProjectCard from "./PhoneProjectCard";
-
-const PROJECTS = [
-  {
-    title: "Blurealty.AI",
-    description: "El primer sitio web inmobiliario impulsado por IA",
-    tags: ["React", "Tailwind", "Vite", "Zoho", "Firebase", "AI"],
-    href: "https://blurealty.ai/",
-    status: "Beta",
-    // github: "https://github.com/...",
-  },
-  {
-    title: "5IG Solutions",
-    description: "Landing Page para una empresa de soluciones tecnológicas.",
-    tags: ["React", "Node.js", "Tailwind", "CSS", "Azure"],
-    href: "https://5igsolutions.com/",
-    status: "Done",
-  },
-  {
-    title: "enSEÑArte LSC",
-    description: "Plataforma aprendizaje de lengua de señas Colombiana",
-    tags: ["React", "Node", "Tailwind", "Firebase", "Docker"],
-    href: "https://www.linkedin.com/feed/update/urn:li:activity:7346741868321288192/",
-    status: "Beta",
-  },
+import { ArrowUpRight, Globe, Layers, Hand } from "lucide-react";
+import { Localized, useLanguage } from "../i18n/Language";
+const projects = [
+ { name: "Blurealty.AI", category: ["Inmobiliaria · Plataforma web", "Real estate · Web platform"], description: ["Una experiencia digital que conecta la búsqueda inmobiliaria con herramientas de inteligencia artificial.", "A digital experience connecting real estate search with artificial intelligence tools."], tags: ["React", "Zoho", "Firebase"], href: "https://blurealty.ai/", Icon: Globe, status: ["Beta", "Beta"] },
+ { name: "5IG Solutions", category: ["Servicios · Presencia digital", "Services · Digital presence"], description: ["Una presentación web para comunicar servicios tecnológicos y facilitar el contacto con nuevos clientes.", "A web presence to communicate technology services and help new customers get in touch."], tags: ["React", "Node.js", "Azure"], href: "https://5igsolutions.com/", Icon: Layers, status: ["Publicado", "Published"] },
+ { name: "enSEÑArte LSC", category: ["Educación · Lengua de señas", "Education · Sign language"], description: ["Tecnología aplicada al aprendizaje de la lengua de señas colombiana, con una plataforma web como punto de encuentro.", "Technology applied to Colombian Sign Language learning, with a web platform as the meeting point."], tags: ["React", "Firebase", "Docker"], href: "https://www.linkedin.com/feed/update/urn:li:activity:7346741868321288192/", Icon: Hand, status: ["Beta", "Beta"] },
 ];
-
-const Background = () => (
-  <Localized as="div" className="pointer-events-none absolute inset-0">
-    <Localized as="div"
-      className="
-      absolute -top-28 left-10
-      h-72 w-72 rounded-full
-      bg-[var(--color-primary)]/10
-      blur-3xl
-    "
-    />
-
-    <Localized as="div"
-      className="
-      absolute -bottom-32 right-10
-      h-80 w-80 rounded-full
-      bg-[var(--color-primary)]/5
-      blur-3xl
-    "
-    />
-
-    <Localized as="div"
-      className="
-      absolute inset-0
-      bg-[var(--color-bg-secondary)]
-    "
-    />
-  </Localized>
-);
-
-const SectionHeader = () => (
-  <Localized as="div" className="text-center">
-    <Localized as="h2" className="mt-3 text-3xl sm:text-5xl font-extrabold tracking-tight text-[var(--color-accent)]">
-      Nuevos Proyectos
-    </Localized>
-    <Localized as="p" className="mx-auto mt-3 max-w-2xl text-[var(--color-text-muted)]">
-      Para ingresar a los proyectos haz click en el icono superior derecho de
-      cada celular.{" "}
-    </Localized>
-  </Localized>
-);
-
-const ProjectsGrid = ({ projects }) => (
-  <Localized as="div" className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 place-items-center">
-    {projects.map((p) => (
-      <PhoneProjectCard key={p.title} p={p} />
-    ))}
-  </Localized>
-);
-
-const Projects = () => {
-  return (
-    <Localized as="section"
-      id="projects"
-      className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-white"
-    >
-      <Background />
-
-      <Localized as="div" className="relative w-full max-w-7xl px-6 py-16">
-        <SectionHeader />
-        <ProjectsGrid projects={PROJECTS} />
-      </Localized>
-    </Localized>
-  );
-};
-
-export default Projects;
+const docs = { React: "https://react.dev/", Zoho: "https://www.zoho.com/developer/", Firebase: "https://firebase.google.com/docs", "Node.js": "https://nodejs.org/en/docs", Azure: "https://learn.microsoft.com/azure/", Docker: "https://docs.docker.com/" };
+export default function Projects() {
+ const { language } = useLanguage(); const n = language === "en" ? 1 : 0;
+ return <Localized as="section" id="projects" className="editorial-section selected-projects"><Localized as="div" className="editorial-container"><Localized as="div" className="editorial-heading"><Localized as="div"><Localized as="p" className="editorial-kicker">{n ? "03 / SELECTED WORK" : "03 / PROYECTOS SELECCIONADOS"}</Localized><Localized as="h2">{n ? "Ideas that became\nreal projects." : "Ideas que se convirtieron\nen proyectos reales."}</Localized></Localized><Localized as="p">{n ? "Different industries. Different challenges. A shared approach: useful, carefully built technology." : "Sectores distintos. Retos diferentes. Una misma forma de trabajar: tecnología útil, construida con cuidado."}</Localized></Localized><Localized as="div" className="selected-project-grid">{projects.map(({ name, category, description, tags, href, Icon, status }, index) => <Localized as="article" className="selected-project-card" key={name}><Localized as="a" className={`project-cover project-cover-${index}`} href={href} target="_blank" rel="noopener noreferrer" aria-label={`${n ? "Open project" : "Abrir proyecto"}: ${name}`}><Localized as="span" className="project-status">{status[n]}</Localized><Icon className="project-symbol" size={64} strokeWidth={1}/><Localized as="strong">{name}</Localized><Localized as="span" className="project-open"><ArrowUpRight size={20}/></Localized></Localized><Localized as="div" className="project-editorial-copy"><Localized as="p" className="project-category">{category[n]}</Localized><Localized as="h3">{name}</Localized><Localized as="p">{description[n]}</Localized><Localized as="div" className="project-tech-links">{tags.map(tag => <Localized as="a" key={tag} href={docs[tag]} target="_blank" rel="noopener noreferrer" title={`${n ? "Documentation" : "Documentación"}: ${tag}`}>{tag}<ArrowUpRight size={11}/></Localized>)}</Localized><Localized as="a" className="editorial-link" href={href} target="_blank" rel="noopener noreferrer">{index === 2 ? (n ? "Explore the project" : "Conocer el proyecto") : (n ? "Visit website" : "Visitar sitio")}<ArrowUpRight size={16}/></Localized></Localized></Localized>)}</Localized></Localized></Localized>;
+}
