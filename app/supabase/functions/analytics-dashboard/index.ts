@@ -1,4 +1,4 @@
-// Deploy with JWT verification enabled. Google credentials stay in Edge secrets.
+// Deploy with --no-verify-jwt: the handler verifies the session with Supabase Auth. Google credentials stay in Edge secrets.
 const cache = new Map<number, { expires: number; data: unknown }>();
 let token: { value: string; expires: number } | undefined;
 const encoder = new TextEncoder();
@@ -7,8 +7,9 @@ const encode = (value: unknown) => base64url(encoder.encode(JSON.stringify(value
 
 async function googleToken() {
   if (token && token.expires > Date.now() + 60000) return token.value;
-  const account = JSON.parse(Deno.env.get('GOOGLE_SERVICE_ACCOUNT_JSON') || '{}');
-  if (!account.client_email || !account.private_key) throw new Error('configuration');
+  let account;
+  try { account = JSON.parse(Deno.env.get('GOOGLE_SERVICE_ACCOUNT_JSON') || '{}'); } catch { throw new Error('google_credentials_invalid'); }
+  if (!account.client_email || !account.private_key) throw new Error('google_credentials_missing');
   const pem = account.private_key.replace(/-----[^-]+-----/g, '').replace(/\s/g, '');
   const key = await crypto.subtle.importKey('pkcs8', Uint8Array.from(atob(pem), c => c.charCodeAt(0)), { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' }, false, ['sign']);
   const now = Math.floor(Date.now() / 1000);
@@ -27,12 +28,16 @@ async function googleToken() {
 
 async function report(method: string, body: unknown, accessToken: string) {
   const property = Deno.env.get('GA_PROPERTY_ID') || '';
-  if (!/^\d+$/.test(property)) throw new Error('configuration');
+  if (!/^\d+$/.test(property)) throw new Error('property_id_invalid');
   const response = await fetch(`https://analyticsdata.googleapis.com/v1beta/properties/${property}:${method}`, {
     method: 'POST', signal: AbortSignal.timeout(20000),
     headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' }, body: JSON.stringify(body),
   });
-  if (!response.ok) throw new Error('google_report');
+  if (!response.ok) {
+    let reason = '';
+    try { const body = await response.json(); reason = body.error?.details?.find((detail: { reason?: string }) => detail.reason)?.reason || ''; } catch {}
+    throw new Error(reason === 'SERVICE_DISABLED' ? 'google_api_disabled' : response.status === 403 ? 'google_permission_denied' : response.status === 404 ? 'property_not_found' : response.status === 429 ? 'google_quota' : 'google_report');
+  }
   return response.json();
 }
 type Row = { dimensionValues?: { value: string }[]; metricValues?: { value: string }[] };
@@ -67,7 +72,7 @@ Deno.serve(async request => {
     if (text.length > 1000) return json(400, { error: 'invalid_request' });
     let body;
     try { body = JSON.parse(text); } catch { return json(400, { error: 'invalid_request' }); }
-    const days = body.days;
+    const days = body?.days;
     if (![7, 30, 90].includes(days)) return json(400, { error: 'invalid_range' });
     const cached = cache.get(days);
     if (cached && cached.expires > Date.now()) return json(200, cached.data);
@@ -87,7 +92,8 @@ Deno.serve(async request => {
     ]);
     const rawDaily = new Map((daily.rows || []).map((row: Row) => [row.dimensionValues?.[0]?.value, row]));
     // Fill quiet dates so the chart does not jump across missing days (Bogotá).
-    const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Bogota', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
+    const dateParts = Object.fromEntries(new Intl.DateTimeFormat('en', { timeZone: 'America/Bogota', year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(new Date()).map(part => [part.type, part.value]));
+    const today = `${dateParts.year}-${dateParts.month}-${dateParts.day}`;
     const timeline = Array.from({ length: days }, (_, i) => {
       const date = new Date(today + 'T12:00:00Z'); date.setUTCDate(date.getUTCDate() - days + 1 + i);
       const iso = date.toISOString().slice(0, 10);
@@ -97,8 +103,11 @@ Deno.serve(async request => {
     const data = { days, updatedAt: new Date().toISOString(), summary: Object.fromEntries(metricNames.map((name, i) => [name, numberAt(summary.rows?.[0], i)])), daily: timeline, sources: ranked(sources), pages: ranked(pages), devices: ranked(devices), leads: numberAt(leads.rows?.[0], 0), realtime: { activeUsers: numberAt(realtime.rows?.[0], 0) } };
     cache.set(days, { expires: Date.now() + 60000, data });
     return json(200, data);
-  } catch {
-    // Never return credentials, tokens or raw upstream responses.
-    return json(503, { error: 'analytics_unavailable' });
+  } catch (failure) {
+    // Return only allowlisted diagnostic codes, never upstream messages or secrets.
+    const codes = ['configuration', 'google_credentials_invalid', 'google_credentials_missing', 'property_id_invalid', 'google_auth', 'google_api_disabled', 'google_permission_denied', 'property_not_found', 'google_quota', 'google_report'];
+    const code = failure instanceof Error && codes.includes(failure.message) ? failure.message : 'analytics_unavailable';
+    console.error('analytics-dashboard failure', { code });
+    return json(503, { error: code });
   }
 });

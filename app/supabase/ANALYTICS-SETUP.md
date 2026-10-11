@@ -23,13 +23,16 @@ report or cached result. No Google credential is sent to the browser.
 From `app`, link the existing Supabase project, then run:
 
 ```sh
-supabase functions deploy analytics-dashboard --project-ref gocnygelxokbnuxlfrtg
+supabase functions deploy analytics-dashboard --no-verify-jwt --project-ref gocnygelxokbnuxlfrtg
 ```
 
-Keep platform JWT verification enabled (the default). The function also verifies
-the JWT with Supabase Auth and checks the role on every request. If the platform
-rejects your project's signing-key type, diagnose that configuration before
-changing verification settings.
+In the dashboard editor, turn OFF **Verify JWT with legacy secret** and save.
+The handler still verifies the session through Supabase Auth and checks the
+server-controlled super_admin role before accessing Google or cached reports.
+Legacy gateway validation can reject sessions signed with newer signing keys.
+
+After changing the function source in GitHub, deploy it again in Supabase.
+GitHub Pages deploys the frontend only, not this Edge Function.
 
 Supabase provides `SUPABASE_URL` and `SUPABASE_ANON_KEY` in Edge Functions. This
 function does not need the service-role key. Google API access is read-only.

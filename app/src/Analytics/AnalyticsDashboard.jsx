@@ -25,13 +25,32 @@ function AnalyticsReport() {
     (async () => {
       try {
         const { data, error } = await supabase.functions.invoke('analytics-dashboard', { body: { days }, signal: controller.signal });
-        if (error || !data?.summary || !Array.isArray(data.daily)) throw new Error('unavailable');
+        if (error) {
+          let code = error.context?.status === 401 ? 'unauthorized' : error.context?.status === 403 ? 'forbidden' : error.context?.status === 404 ? 'function_missing' : 'analytics_unavailable';
+          try { const response = await error.context?.json(); if (response?.error) code = response.error; } catch {}
+          throw new Error(code);
+        }
+        if (!data?.summary || !Array.isArray(data.daily)) throw new Error(data?.error || 'analytics_unavailable');
         if (active) setState({ data });
-      } catch { if (active) setState({ error: true }); }
+      } catch (failure) { if (active) setState({ error: failure.message }); }
       finally { clearTimeout(timeout); }
     })();
     return () => { active = false; clearTimeout(timeout); controller.abort(); };
   }, [days, revision]);
+  const diagnostics = {
+    unauthorized: t('La sesión fue rechazada. Cierra sesión y vuelve a entrar; revisa también el filtro JWT legacy de la función.', 'Session rejected. Sign in again and check the function legacy JWT filter.'),
+    forbidden: t('Tu cuenta no tiene permiso de súper administrador.', 'Your account needs super administrator access.'),
+    function_missing: t('No se encontró la función analytics-dashboard en Supabase.', 'Supabase analytics-dashboard function was not found.'),
+    configuration: t('Falta configuración de Supabase en la función.', 'Supabase function configuration is missing.'),
+    google_credentials_missing: t('Falta GOOGLE_SERVICE_ACCOUNT_JSON o no contiene client_email y private_key.', 'GOOGLE_SERVICE_ACCOUNT_JSON is missing or lacks client_email and private_key.'),
+    google_credentials_invalid: t('GOOGLE_SERVICE_ACCOUNT_JSON no contiene un JSON válido.', 'GOOGLE_SERVICE_ACCOUNT_JSON is not valid JSON.'),
+    property_id_invalid: t('GA_PROPERTY_ID debe contener únicamente el ID numérico de la propiedad.', 'GA_PROPERTY_ID must contain the numeric property ID.'),
+    google_auth: t('Google rechazó la clave de la cuenta de servicio.', 'Google rejected the service account key.'),
+    google_api_disabled: t('Habilita Google Analytics Data API en el proyecto de la cuenta de servicio.', 'Enable Google Analytics Data API in the service account project.'),
+    google_permission_denied: t('Agrega el correo de la cuenta de servicio como Lector en la propiedad de Google Analytics y verifica GA_PROPERTY_ID.', 'Grant the service account Viewer access to the Analytics property and verify GA_PROPERTY_ID.'),
+    property_not_found: t('Google no encontró la propiedad. Revisa GA_PROPERTY_ID.', 'Google could not find the property. Check GA_PROPERTY_ID.'),
+    google_quota: t('Google alcanzó el límite de consultas. Inténtalo más tarde.', 'Google query quota reached. Try again later.'),
+  };
   const data = state.data;
   const format = value => value == null ? '—' : new Intl.NumberFormat(en ? 'en-US' : 'es-CO').format(value);
   const metrics = [
@@ -46,7 +65,7 @@ function AnalyticsReport() {
     <main className="traffic-main">
       <header className="traffic-header"><div><p className="traffic-eyebrow">{t('PULSO DE TU WEB', 'YOUR WEBSITE AT A GLANCE')}</p><h1>{t('De las visitas a las oportunidades.', 'From visits to opportunities.')}</h1><p>{t('Conoce cómo llega la gente y qué explora en Soluciones Ortegón.', 'Understand how people arrive and what they explore at Soluciones Ortegón.')}</p></div><LanguageSwitch /></header>
       <div className="traffic-toolbar"><div className="traffic-range" role="group" aria-label={t('Periodo del informe', 'Report period')}>{[7, 30, 90].map(n => <button key={n} aria-pressed={days === n} onClick={() => setDays(n)}>{n} {t('días', 'days')}</button>)}</div><button className="traffic-refresh" disabled={state.loading} onClick={() => setRevision(n => n + 1)}><RefreshCw size={16} />{t('Actualizar', 'Refresh')}</button><a href="https://analytics.google.com/" target="_blank" rel="noreferrer">Google Analytics <ArrowUpRight size={16} /></a></div>
-      {state.error && <section className="traffic-connection" role="status"><Activity size={26} /><div><h2>{t('Conexión de informes pendiente', 'Reports connection pending')}</h2><p>{t('No pudimos consultar Google Analytics. La conexión de lectura debe estar configurada y disponible para mostrar cifras reales.', 'We could not query Google Analytics. The read connection must be configured and available to show real figures.')}</p><a href="https://analytics.google.com/" target="_blank" rel="noreferrer">{t('Consultar en Google Analytics', 'View in Google Analytics')} <ArrowUpRight size={16} /></a></div></section>}
+      {state.error && <section className="traffic-connection" role="status"><Activity size={26} /><div><h2>{t('Conexión de informes pendiente', 'Reports connection pending')}</h2><p>{t('No pudimos consultar Google Analytics. La conexión de lectura debe estar configurada y disponible para mostrar cifras reales.', 'We could not query Google Analytics. The read connection must be configured and available to show real figures.')}</p>{diagnostics[state.error] && <p role="alert">{diagnostics[state.error]}</p>}<a href="https://analytics.google.com/" target="_blank" rel="noreferrer">{t('Consultar en Google Analytics', 'View in Google Analytics')} <ArrowUpRight size={16} /></a></div></section>}
       {state.loading && <p role="status" className="traffic-loading">{t('Consultando informes…', 'Loading reports…')}</p>}
       <section className="traffic-metrics" aria-label={t('Resumen del tráfico', 'Traffic summary')}>{metrics.map(([Icon, label, value, note]) => <article key={label}><Icon size={20} /><span>{label}</span><strong>{format(value)}</strong><small>{note}</small></article>)}</section>
       <div className="traffic-primary"><section className="traffic-card"><div className="traffic-card-heading"><div><p className="traffic-eyebrow">{t('EVOLUCIÓN DIARIA', 'DAILY TREND')}</p><h2>{t('El ritmo de las visitas', 'The pace of visits')}</h2></div><span className="traffic-legend"><i />{t('Sesiones', 'Sessions')}</span></div>{data?.daily.length ? <Trend rows={data.daily} label={t('Sesiones diarias', 'Daily sessions')} formatDate={dateLabel} /> : <Empty loading={state.loading} en={en} />}</section>
