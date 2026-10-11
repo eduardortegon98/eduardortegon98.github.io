@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Activity, ArrowLeft, ArrowUpRight, BarChart3, Eye, Users, MousePointer2, MessageSquare, RefreshCw, ShieldCheck, Radio } from 'lucide-react';
+import { Activity, ArrowLeft, ArrowUpRight, BarChart3, Eye, Users, MousePointer2, MessageSquare, RefreshCw, ShieldCheck, Radio, Globe2, Linkedin, Search, Share2, Mail, ExternalLink } from 'lucide-react';
 import Access from '../Portal/Access';
 import { supabase } from '../lib/supabase';
 import { LanguageSwitch, useLanguage } from '../i18n/Language';
@@ -70,13 +70,25 @@ function AnalyticsReport() {
       <section className="traffic-metrics" aria-label={t('Resumen del tráfico', 'Traffic summary')}>{metrics.map(([Icon, label, value, note]) => <article key={label}><Icon size={20} /><span>{label}</span><strong>{format(value)}</strong><small>{note}</small></article>)}</section>
       <div className="traffic-primary"><section className="traffic-card"><div className="traffic-card-heading"><div><p className="traffic-eyebrow">{t('EVOLUCIÓN DIARIA', 'DAILY TREND')}</p><h2>{t('El ritmo de las visitas', 'The pace of visits')}</h2></div><span className="traffic-legend"><i />{t('Sesiones', 'Sessions')}</span></div>{data?.daily.length ? <Trend rows={data.daily} label={t('Sesiones diarias', 'Daily sessions')} formatDate={dateLabel} /> : <Empty loading={state.loading} en={en} />}</section>
       <section className="traffic-card traffic-live"><Radio size={22} /><p className="traffic-eyebrow">{t('ÚLTIMOS 30 MINUTOS', 'LAST 30 MINUTES')}</p><h2>{t('Ahora en tu web', 'On your website now')}</h2><strong>{format(data?.realtime?.activeUsers)}</strong><p>{t('Visitantes activos', 'Active visitors')}</p><small>{t('Actualiza para consultar de nuevo. Google puede aplicar demoras y umbrales de privacidad.', 'Refresh to check again. Google may apply delays and privacy thresholds.')}</small></section></div>
-      <div className="traffic-breakdowns"><Breakdown title={t('¿De dónde llegan?', 'Where do they come from?')} subtitle={t('Origen / medio · sesiones', 'Source / medium · sessions')} rows={data?.sources} loading={state.loading} en={en} /><Breakdown title={t('¿Qué páginas exploran?', 'Which pages do they explore?')} subtitle={t('Página · vistas', 'Page · views')} rows={data?.pages} loading={state.loading} en={en} /><Breakdown title={t('¿En qué dispositivo?', 'On which device?')} subtitle={t('Dispositivo · sesiones', 'Device · sessions')} rows={data?.devices} loading={state.loading} en={en} /></div>
+      <section className="traffic-acquisition traffic-card"><div className="traffic-card-heading"><div><p className="traffic-eyebrow">{t('ADQUISICIÓN DE VISITANTES', 'VISITOR ACQUISITION')}</p><h2>{t('¿De dónde llegan?', 'Where do they come from?')}</h2><p className="traffic-subtitle">{t('Canales reales registrados por Google Analytics · sesiones', 'Actual channels recorded by Google Analytics · sessions')}</p></div><Globe2 size={26}/></div><Sources rows={data?.sources} loading={state.loading} en={en}/><p className="traffic-acquisition-note">{t('El porcentaje corresponde a los orígenes mostrados (hasta 10). Usa enlaces UTM para distinguir tus campañas. Las visitas directas no tienen un origen identificado.', 'Percentages cover the sources shown (up to 10). Use UTM links to distinguish campaigns. Direct visits have no identified referral source.')}</p></section><div className="traffic-breakdowns"><Breakdown title={t('¿Qué páginas exploran?', 'Which pages do they explore?')} subtitle={t('Página · vistas', 'Page · views')} rows={data?.pages} loading={state.loading} en={en} /><Breakdown title={t('¿En qué dispositivo?', 'On which device?')} subtitle={t('Dispositivo · sesiones', 'Device · sessions')} rows={data?.devices} loading={state.loading} en={en} /></div>
       <footer className="traffic-footnote"><ShieldCheck size={16} /><p>{t('Datos agregados de visitantes que aceptaron analítica. No incluye contenido de mensajes ni información personal de los formularios. Los informes históricos pueden tardar 24–48 horas.', 'Aggregate data from visitors who accepted analytics. No message contents or personal form information. Historical reports may take 24–48 hours.')}{data?.updatedAt && ` · ${t('Consulta', 'Fetched')}: ${new Intl.DateTimeFormat(en ? 'en-US' : 'es-CO', { timeStyle: 'short', timeZone: 'America/Bogota' }).format(new Date(data.updatedAt))} (Bogotá)`}</p></footer>
     </main>
   </div>;
 }
 
-function Empty({ loading, en }) { return <div className="traffic-empty"><BarChart3 size={30} /><p>{loading ? (en ? 'Loading…' : 'Cargando…') : (en ? 'No data available yet' : 'Aún no hay datos disponibles')}</p></div>; }
+function Sources({ rows, loading, en }) {
+  if (!rows?.length) return <Empty loading={loading} en={en}/>;
+  const total = rows.reduce((sum, row) => sum + row.value, 0);
+  return <ol className="traffic-sources">{rows.map((row, index) => {
+    const origin = row.label.split(' / ')[0];
+    const lower = origin.toLowerCase();
+    const [Icon, name] = lower.includes('linkedin') ? [Linkedin, 'LinkedIn'] : lower.includes('google') ? [Search, 'Google'] : lower.includes('instagram') ? [Share2, 'Instagram'] : lower.includes('facebook') || lower === 'fb' ? [Share2, 'Facebook'] : lower.includes('whatsapp') ? [MessageSquare, 'WhatsApp'] : lower === '(direct)' ? [ExternalLink, en ? 'Direct visits' : 'Visitas directas'] : lower.includes('email') ? [Mail, en ? 'Email' : 'Correo'] : [Globe2, origin];
+    const percent = total ? row.value / total * 100 : 0;
+    return <li key={row.label + index}><span className="traffic-source-rank">{String(index + 1).padStart(2, '0')}</span><span className="traffic-source-icon"><Icon size={20}/></span><div className="traffic-source-name"><strong>{name}</strong><span title={row.label}>{row.label}</span></div><div className="traffic-source-bar"><progress value={row.value} max={Math.max(total, 1)} aria-label={row.label}/></div><div className="traffic-source-value"><strong>{new Intl.NumberFormat(en ? 'en-US' : 'es-CO').format(row.value)}</strong><span>{percent.toFixed(1)}%</span></div></li>;
+  })}</ol>;
+}
+
+function Empty({ loading, en }) { return <div className="traffic-empty"><BarChart3 size={30} /><p>{loading ? (en ? 'Loading…' : 'Cargando…') : (en ? 'No data available yet' : 'Todavía no hay visitas registradas en este periodo')}</p></div>; }
 function Breakdown({ title, subtitle, rows, loading, en }) {
   const total = (rows || []).reduce((sum, row) => sum + row.value, 0);
   return <section className="traffic-card"><h2>{title}</h2><p className="traffic-subtitle">{subtitle}</p>{rows?.length ? <ul className="traffic-ranking">{rows.map((row, i) => <li key={row.label + i}><div><span title={row.label}>{row.label}</span><strong>{new Intl.NumberFormat(en ? 'en-US' : 'es-CO').format(row.value)}</strong></div><progress value={row.value} max={Math.max(total, 1)} aria-label={row.label} /></li>)}</ul> : <Empty loading={loading} en={en} />}</section>;
