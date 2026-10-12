@@ -19,3 +19,15 @@
 .arturito-heading .arturito-slogan{font-size:13px;font-weight:500;color:#395f46;margin-top:6px;line-height:1.6}
 .arturito-signature{display:block;font-size:10px;color:#8a9d8f;margin-top:4px;line-height:1.6}
 .arturito-heading .arturito-mark{background:#ecf7ef;color:#22a15b}
+
+.arturito-telemetry-status{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:600;color:#9b782e;background:#fff7e4;border:1px solid #efdfb8;border-radius:20px;padding:5px 9px}
+.arturito-telemetry-status i{width:6px;height:6px;border-radius:50%;background:#c49b4d}
+.arturito-level.humidity{--gauge-color:#9780bc;--gauge-soft:#f5f1fa;border-color:#e6dff0}
+.arturito-level.pulse{--gauge-color:#b5808c;--gauge-soft:#fbf2f4;border-color:#efdfe4}
+.arturito-pulse-reading{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;min-height:172px;color:#bf929e}
+.arturito-pulse-reading strong{font-size:29px;color:#946b77}
+.arturito-pulse-reading small{font-size:12px;color:#aa8894}
+@media(prefers-reduced-motion:no-preference){.arturito-telemetry-status i{animation:arturito-status-pulse 1.8s ease-in-out infinite}@keyframes arturito-status-pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 #c49b4d25}50%{opacity:.4;box-shadow:0 0 0 4px #c49b4d08}}}
+@media(max-width:1100px){.arturito-pulse-reading{min-height:147px}}
+@media(max-width:900px){.arturito-pulse-reading{min-height:172px}}
+@media(max-width:600px){.arturito-pulse-reading{min-height:140px}}

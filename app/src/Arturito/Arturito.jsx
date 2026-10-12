@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Navigate, useOutletContext } from 'react-router-dom';
-import { PawPrint, Utensils, Droplets, Clock3, Plus, Pencil, Trash2, Check, X, CalendarDays, WifiOff } from 'lucide-react';
+import { PawPrint, Utensils, Droplets, Clock3, Plus, Pencil, Trash2, Check, X, CalendarDays, WifiOff, HeartPulse, CloudDrizzle } from 'lucide-react';
 import { useLanguage } from '../i18n/Language';
 import './Arturito.css';
 const dayKeys = [1,2,3,4,5,6,0];
@@ -52,9 +52,11 @@ function BetaWorkspace({user}){
     <section className="arturito-demo-banner"><strong>{t('Vista previa del producto','Product preview')}</strong><span>{t('Los niveles son simulados. Las rutinas se guardan localmente; no ejecutan dispensaciones.','Levels are simulated. Routines are saved locally and do not dispense food.')}</span></section>
     <div className="arturito-columns">
       <div className="arturito-overview">
-        <section className="arturito-card"><header><h2>{t('Reservas del dispositivo','Device supplies')}</h2><span className="arturito-pill">{t('Datos demo','Demo data')}</span></header><div className="arturito-levels">
+        <section className="arturito-card"><header><h2>{t('Reservas del dispositivo','Device supplies')}</h2><span className="arturito-telemetry-status" title={t('Indicador de simulación: no hay lecturas de sensores reales.','Simulation indicator: no real sensor readings.')}><i aria-hidden="true"/>{t('Simulación','Simulation')}</span></header><div className="arturito-levels">
           <Level icon={Utensils} value={65} title={t('Alimento','Food')} description={t('Depósito de alimento seco','Dry food reservoir')} kind="food"/>
           <Level icon={Droplets} value={82} title={t('Agua','Water')} description={t('Depósito de agua','Water reservoir')} kind="water"/>
+          <Level icon={CloudDrizzle} value={55} title={t('Humedad','Humidity')} description={t('Humedad ambiental · Demo','Ambient humidity · Demo')} kind="humidity"/>
+          <article className="arturito-level pulse"><div className="arturito-level-heading"><HeartPulse size={19}/><strong>{t('Pulsaciones','Heart rate')}</strong></div><div className="arturito-pulse-reading"><HeartPulse size={38} aria-hidden="true"/><strong>— <small>bpm</small></strong></div><p>{t('Sin sensor de pulso conectado','No heart-rate sensor connected')}</p></article>
         </div></section>
         <section className="arturito-card arturito-next"><header><h2>{t('Próxima alimentación','Next feeding')}</h2><Clock3 size={18}/></header>{next?<><strong>{new Intl.DateTimeFormat(en?'en-US':'es-CO',{timeZone:'America/Bogota',hour:'2-digit',minute:'2-digit'}).format(next.at)}</strong><p>{new Intl.DateTimeFormat(en?'en-US':'es-CO',{timeZone:'America/Bogota',dateStyle:'medium'}).format(next.at)} · {next.routine.grams} g</p><span>{t('Programación de prueba · Hora de Bogotá','Preview schedule · Bogotá time')}</span></>:<div className="arturito-empty"><CalendarDays size={25}/><p>{t('Crea una rutina para ver la próxima alimentación.','Create a routine to preview the next feeding.')}</p></div>}</section>
         <div className="arturito-mini-stats"><div><span>{t('Rutinas activas','Active routines')}</span><strong>{active}</strong></div><div><span>{t('Programado para hoy','Scheduled today')}</span><strong>{todayGrams}<small> g</small></strong></div></div>
