@@ -113,3 +113,13 @@
 .admin-content .customizable-analytics .section-audience .world-audience svg{width:100%;max-height:none;min-height:0;margin:0 0 10px}
 .admin-content .customizable-analytics .section-audience .world-audience{padding-top:0}
 @media(max-width:760px){.section-audience .analytics-section-heading{flex-direction:row}.admin-content .customizable-analytics .section-audience .analytics-persistent-map{padding:6px 8px 12px}}
+
+/* Stable metric cells: decorations stay on the card, figures remain crisp. */
+.admin-content .customizable-analytics .section-summary .analytics-metric-button{grid-template-columns:28px minmax(0,1fr);grid-template-rows:auto auto;gap:5px 10px;align-content:center}
+.admin-content .customizable-analytics .section-summary .analytics-metric-button>svg{grid-column:1;grid-row:1/3;align-self:center}
+.admin-content .customizable-analytics .section-summary .analytics-metric-button>span{grid-column:2;grid-row:1}
+.admin-content .customizable-analytics .section-summary .analytics-metric-button>.analytics-metric-value{grid-column:2;grid-row:2;display:block;position:static;text-shadow:none;opacity:1;filter:none;mix-blend-mode:normal;font-variant-numeric:tabular-nums;letter-spacing:0;line-height:1.2;color:#245b42}
+.admin-content .customizable-analytics .section-summary .analytics-metric-button[data-metric=sessions]>.analytics-metric-value{color:#226a7b}
+.admin-content .customizable-analytics .section-summary .analytics-metric-button[data-metric=screenPageViews]>.analytics-metric-value{color:#714fa3}
+.admin-content .customizable-analytics .section-summary .analytics-metric-button[data-metric=leads]>.analytics-metric-value{color:#835b2b}
+.admin-content .customizable-analytics .section-summary .analytics-metric-button[data-metric=leads]{border-top-color:#d9ac69;background:linear-gradient(130deg,#fff,#fcf8ed)}
