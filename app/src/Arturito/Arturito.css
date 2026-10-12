@@ -61,7 +61,7 @@
 .arturito-columns{grid-template-columns:minmax(0,1.4fr) minmax(280px,1fr)}
 .arturito-planning-grid{grid-template-columns:minmax(0,1fr)}
 .arturito-manage-button{display:inline-flex;align-items:center;gap:7px;border:1px solid #d8e5dc;background:#edf5ef;color:#356548;border-radius:8px;padding:9px 11px;font:inherit;font-size:11px;cursor:pointer}
-.arturito-routine-dialog{width:min(620px,calc(100vw - 28px));max-height:calc(100dvh - 40px);padding:0;border:0;border-radius:16px;background:#fff;color:#294335;font-family:Inter,system-ui,sans-serif;overflow:auto;box-shadow:0 24px 80px #17352526}
+.arturito-routine-dialog{position:fixed;inset:0;margin:auto;height:fit-content;box-sizing:border-box;width:min(620px,calc(100vw - 28px));max-height:calc(100dvh - 40px);padding:0;border:0;border-radius:16px;background:#fff;color:#294335;font-family:Inter,system-ui,sans-serif;overflow:auto;box-shadow:0 24px 80px #17352526}
 .arturito-routine-dialog::backdrop{background:#18332430;backdrop-filter:blur(3px)}
 .arturito-routine-dialog .arturito-routines{border:0;box-shadow:none}
 @media(max-width:900px){.arturito-columns{grid-template-columns:1fr}}
