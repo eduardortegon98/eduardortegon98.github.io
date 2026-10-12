@@ -48,7 +48,7 @@ function BetaWorkspace({user}){
     setNotice(t('Rutina guardada en este navegador. No se enviará comida: el dispositivo no está conectado.','Routine saved in this browser. No food will be dispensed: the device is not connected.'));reset();
   }
   return <div className="arturito-beta">
-    <header className="arturito-heading"><div className="arturito-project"><span className="arturito-mark"><PawPrint size={25}/></span><div><h1>Arturito <span>Beta</span></h1><p>{t('Alimentación y cuidado, en un solo lugar.','Feeding and care, in one place.')}</p></div></div><span className="arturito-connection"><WifiOff size={14}/>{t('Demo · Sin dispositivo','Demo · No device')}</span></header>
+    <header className="arturito-heading"><div className="arturito-project"><span className="arturito-mark"><PawPrint size={25}/></span><div><h1>arturito<span className="arturito-brand-dot">.</span> <span className="arturito-beta-tag">Beta</span></h1><p className="arturito-slogan">{t('Un amigo para tu mejor amigo.','A friend for your best friend.')}</p><small className="arturito-signature">by Soluciones Tecnológicas Ortegón</small></div></div><span className="arturito-connection"><WifiOff size={14}/>{t('Demo · Sin dispositivo','Demo · No device')}</span></header>
     <section className="arturito-demo-banner"><strong>{t('Vista previa del producto','Product preview')}</strong><span>{t('Los niveles son simulados. Las rutinas se guardan localmente; no ejecutan dispensaciones.','Levels are simulated. Routines are saved locally and do not dispense food.')}</span></section>
     <div className="arturito-columns">
       <div className="arturito-overview">
