@@ -68,3 +68,21 @@
 .communications-summary{flex-wrap:wrap;align-items:center}
 @media(max-width:1000px){.admin-content .inbox-app .inbox-workspace{padding:16px}.admin-content .inbox-app .inbox-grid{height:clamp(520px,calc(100dvh - 210px),1000px)}}
 @media(max-width:760px){.admin-content .inbox-app .inbox-workspace{padding:12px}.admin-content .inbox-app .inbox-grid{height:clamp(520px,calc(100dvh - 235px),900px)}}
+
+/* Compact conversation metadata and an honest connection state. */
+.admin-content .inbox-app .inbox-thread-header{gap:14px;align-items:center}
+.admin-content .inbox-app .inbox-thread-header .communications-context{display:flex;align-items:center;gap:12px;padding:0 0 0 16px;margin-left:auto;border:0;border-left:1px solid #e0e7e2;background:transparent}
+.admin-content .inbox-app .inbox-thread-header .communications-context>div{background:#f7f9f7;border:1px solid #e5ebe7;border-radius:6px;padding:7px 10px;gap:4px}
+.admin-content .inbox-app .inbox-status{margin-left:0}
+.communications-live{display:inline-flex;align-items:center;gap:7px;font-size:11px;color:#6c7c72}
+.communications-live.offline i{background:#8b958e;box-shadow:0 0 0 3px #eef1ee}
+.admin-shell .admin-role-selector{display:flex;align-items:center;gap:7px}
+.admin-shell .admin-role-selector>span{display:none}
+.admin-shell .admin-role-selector>svg{color:#567562;flex-shrink:0}
+.admin-shell .admin-role-selector select{font-size:12px;max-width:110px;min-height:34px}
+@media(max-width:1360px){.admin-content .inbox-app .inbox-thread-header .communications-context{margin-left:0;padding-left:0;border-left:0}.admin-content .inbox-app .inbox-thread-header .communications-context>div{padding:6px 8px}}
+@media(max-width:760px){.admin-content .inbox-app .inbox-thread-header .communications-context{flex-basis:100%;gap:7px}.admin-content .inbox-app .inbox-thread-header .communications-context>div{flex:1}.admin-shell .admin-role-selector select{max-width:95px}}
+
+.admin-content .inbox-app .inbox-thread-header>div:not(.communications-context){display:flex;flex-wrap:wrap;align-items:center;gap:6px 9px}
+.admin-content .inbox-app .inbox-thread-header h2{margin:0}
+.admin-content .inbox-app .inbox-thread-header .communication-badge{margin:0}
