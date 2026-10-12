@@ -18,8 +18,6 @@ export default function AnalyticsDashboard() {
 
 function AnalyticsReport() {
   const { user } = useOutletContext();
-  const [filters, setFilters] = useState({ country: '', deviceCategory: '', sessionSourceMedium: '' });
-  const [draftFilters, setDraftFilters] = useState({ country: '', deviceCategory: '', sessionSourceMedium: '' });
   const { language } = useLanguage();
   const en = language === 'en';
   const t = (es, english) => en ? english : es;
@@ -45,20 +43,19 @@ function AnalyticsReport() {
     setState(previous => ({ ...previous, loading: true, error: undefined }));
     (async () => {
       try {
-        const { data, error } = await supabase.functions.invoke('analytics-dashboard', { body: { days, filters }, signal: controller.signal });
+        const { data, error } = await supabase.functions.invoke('analytics-dashboard', { body: { days }, signal: controller.signal });
         if (error) {
           let code = error.context?.status === 401 ? 'unauthorized' : error.context?.status === 403 ? 'forbidden' : error.context?.status === 404 ? 'function_missing' : 'analytics_unavailable';
           try { const response = await error.context?.json(); if (response?.error) code = response.error; } catch {}
           throw new Error(code);
         }
         if (!data?.summary || !Array.isArray(data.daily)) throw new Error(data?.error || 'analytics_unavailable');
-        if (Object.values(filters).some(Boolean) && (data.filterVersion !== 1 || JSON.stringify(data.appliedFilters) !== JSON.stringify(filters))) throw new Error('filters_not_supported');
         if (active) setState({ data });
       } catch (failure) { if (active) setState({ error: failure.message }); }
       finally { clearTimeout(timeout); }
     })();
     return () => { active = false; clearTimeout(timeout); controller.abort(); };
-  }, [days, revision, filters]);
+  }, [days, revision]);
   const diagnostics = {
     filters_not_supported: t('Actualiza la función analytics-dashboard en Supabase para activar los filtros. No se mostrarán cifras sin filtrar como si estuvieran filtradas.', 'Deploy the updated Supabase analytics-dashboard function to enable filters.'),
     unauthorized: t('La sesión fue rechazada. Cierra sesión y vuelve a entrar; revisa también el filtro JWT legacy de la función.', 'Session rejected. Sign in again and check the function legacy JWT filter.'),
@@ -92,11 +89,6 @@ function AnalyticsReport() {
       <div className="traffic-toolbar"><div className="traffic-range" role="group" aria-label={t('Periodo del informe', 'Report period')}>{[7, 30, 90].map(n => <button key={n} aria-pressed={days === n} onClick={() => setDays(n)}>{n} {t('días', 'days')}</button>)}</div><button className="traffic-refresh" disabled={state.loading} onClick={() => setRevision(n => n + 1)}><RefreshCw size={16} />{t('Actualizar', 'Refresh')}</button><a href="https://analytics.google.com/" target="_blank" rel="noreferrer">Google Analytics <ArrowUpRight size={16} /></a></div>
       {state.error && <section className="traffic-connection" role="status"><Activity size={26} /><div><h2>{t('Conexión de informes pendiente', 'Reports connection pending')}</h2><p>{t('No pudimos consultar Google Analytics. La conexión de lectura debe estar configurada y disponible para mostrar cifras reales.', 'We could not query Google Analytics. The read connection must be configured and available to show real figures.')}</p>{diagnostics[state.error] && <p role="alert">{diagnostics[state.error]}</p>}<a href="https://analytics.google.com/" target="_blank" rel="noreferrer">{t('Consultar en Google Analytics', 'View in Google Analytics')} <ArrowUpRight size={16} /></a></div></section>}
       {state.loading && <PortalLoading overlay/>}
-      <div className="analytics-filter-panel">
-        {[['country',t('País','Country'),data?.countries],['deviceCategory',t('Dispositivo','Device'),data?.devices],['sessionSourceMedium',t('Origen / medio','Source / medium'),data?.sources]].map(([key,label,rows]) => <label key={key}>{label}<select value={draftFilters[key]} onChange={event=>setDraftFilters(current=>({...current,[key]:event.target.value}))}><option value="">{t('Todos','All')}</option>{[...new Set([draftFilters[key],...(rows||[]).map(row=>row.label)].filter(Boolean))].map(value=><option key={value} value={value}>{value}</option>)}</select></label>)}
-        <button onClick={()=>setFilters({...draftFilters})}>{t('Aplicar filtros','Apply filters')}</button><button onClick={()=>{const cleared={country:'',deviceCategory:'',sessionSourceMedium:''};setDraftFilters(cleared);setFilters(cleared);}}>{t('Limpiar','Clear')}</button>
-      </div>
-      <p className="analytics-filter-note">{t('Filtros sobre informes del periodo elegido. El indicador de los últimos 30 minutos se consulta sin estos filtros. Las opciones se basan en los reportes disponibles.','Filters apply to the selected-period reports. The last-30-minutes indicator remains unfiltered. Options come from available reports.')}</p>
       <EditableBoard storageKey={'ortegon-analytics-layout-v1:'+user.id} en={en} widgets={[
         ...metrics.map(([Icon,label,value,note],index)=>{const key=['activeUsers','sessions','screenPageViews','leads'][index];return {id:key,title:label,className:'traffic-metrics',content:<button className="analytics-metric-button" aria-pressed={focus===key} aria-controls="analytics-focus-chart" onClick={()=>setRequestedFocus(key)}><Icon size={20}/><span>{label}</span><strong>{format(value)}</strong></button>};}),
         {id:'map',title:t('Mapa mundial','World map'),className:'wide',content:<section className="analytics-persistent-map traffic-card"><div className="traffic-card-heading"><h2>{t('Audiencia mundial', 'Worldwide audience')}</h2><Globe2 size={18}/></div><WorldAudience rows={data?.countries} status={data?.geographyStatus} en={en}/></section>},
