@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { GripVertical, Settings2, Check, ArrowUp, ArrowDown, RotateCcw, X } from 'lucide-react';
 import './EditableBoard.css';
-export default function EditableBoard({ widgets, storageKey, en }) {
+export default function EditableBoard({ widgets, storageKey, en, editing = false }) {
   const groups = [
     {id:'summary',title:en?'Overview':'Resumen',note:en?'Key figures for the selected period':'Cifras clave del periodo seleccionado',ids:['activeUsers','sessions','screenPageViews','leads']},
     {id:'audience',title:en?'Audience & trends':'Audiencia y tendencias',note:en?'Where visitors are and how traffic changes':'Dónde están los visitantes y cómo evoluciona el tráfico',ids:['map','detail']},
@@ -15,7 +15,7 @@ export default function EditableBoard({ widgets, storageKey, en }) {
     try { const saved = JSON.parse(localStorage.getItem(storageKey) || 'null'); if(saved && Array.isArray(saved.order) && Array.isArray(saved.hidden)) return {order:[...saved.order.filter(id => ids.includes(id)),...ids.filter(id => !saved.order.includes(id))],hidden:saved.hidden.filter(id => ids.includes(id))}; } catch {}
     return {order:ids,hidden:[]};
   });
-  const [editing, setEditing] = useState(false), [dragged, setDragged] = useState(null), [notice, setNotice] = useState('');
+  const [dragged, setDragged] = useState(null), [notice, setNotice] = useState('');
   const dragId = useRef(null);
   useEffect(() => {try {localStorage.setItem(storageKey,JSON.stringify(layout));}catch {setNotice(en ? 'Layout could not be saved in this browser.' : 'No pudimos guardar la distribución en este navegador.');}},[layout,storageKey,en]);
   function move(id, target) {
@@ -34,7 +34,7 @@ export default function EditableBoard({ widgets, storageKey, en }) {
   }
   const titles = Object.fromEntries(widgets.map(widget => [widget.id,widget.title]));
   return <section className="editable-dashboard">
-    <div className="editable-board-toolbar"><button className="compact-action" title={editing ? (en ? 'Finish editing' : 'Terminar edición') : (en ? 'Customize panel' : 'Personalizar panel')} aria-label={editing ? (en ? 'Finish editing' : 'Terminar edición') : (en ? 'Customize panel' : 'Personalizar panel')} onClick={() => setEditing(value => !value)} aria-expanded={editing} aria-controls="dashboard-personalization">{editing ? <Check size={17} aria-hidden="true"/> : <Settings2 size={17} aria-hidden="true"/>}</button></div>
+
     {editing && <div className="editable-board-settings" id="dashboard-personalization"><p>{en ? 'Move cards within each section. Uncheck a card to hide it.' : 'Reordena tarjetas dentro de cada sección. Desmarca una tarjeta para ocultarla.'}</p><ul>{layout.order.map((id,index) => <li key={id}><label><input type="checkbox" checked={!layout.hidden.includes(id)} onChange={event => setLayout(current => ({...current,hidden:event.target.checked?current.hidden.filter(key=>key!==id):[...current.hidden,id]}))}/>{titles[id]}</label><button aria-label={(en?'Move up: ':'Subir: ')+titles[id]} disabled={layout.order.filter(key=>groupFor(key)===groupFor(id)).indexOf(id)===0} onClick={()=>step(id,-1)}><ArrowUp size={14}/></button><button aria-label={(en?'Move down: ':'Bajar: ')+titles[id]} disabled={layout.order.filter(key=>groupFor(key)===groupFor(id)).at(-1)===id} onClick={()=>step(id,1)}><ArrowDown size={14}/></button></li>)}</ul><button className="compact-action" aria-label={en?'Restore layout':'Restaurar distribución'} title={en?'Restore layout':'Restaurar distribución'} onClick={()=>setLayout({order:ids,hidden:[]})}><RotateCcw size={17} aria-hidden="true"/></button></div>}
     {notice && <p role="status">{notice}</p>}
     <div className={'sectioned-board ' + (detailWidget?.content && !layout.hidden.includes('detail') ? 'has-detail-column' : '')}>{groups.map(group=>{
