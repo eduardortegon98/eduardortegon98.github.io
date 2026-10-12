@@ -87,3 +87,12 @@
 @media(max-width:1200px){.sectioned-board.has-detail-column{grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:"audience detail" "summary summary" "acquisition management";gap:14px}.sectioned-board.has-detail-column .section-summary .editable-board{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media(max-width:850px){.sectioned-board.has-detail-column{grid-template-columns:1fr;grid-template-areas:"summary" "audience" "detail" "acquisition" "management"}.sectioned-board.has-detail-column .section-summary .editable-board{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:400px){.sectioned-board.has-detail-column .section-summary .editable-board{grid-template-columns:1fr}}
+
+/* Business shortcuts lead the panel as a single horizontal row. */
+.sectioned-board{grid-template-areas:"management management" "audience summary" "audience acquisition"}
+.sectioned-board.has-detail-column{grid-template-areas:"management management management" "audience detail summary" "audience detail acquisition"}
+.admin-content .customizable-analytics .section-management .management-hub{grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.section-management .analytics-section-heading{padding-bottom:9px;margin-bottom:12px}
+@media(max-width:1200px){.sectioned-board.has-detail-column{grid-template-areas:"management management" "audience detail" "summary summary" "acquisition acquisition"}}
+@media(max-width:850px){.sectioned-board{grid-template-areas:"management" "summary" "audience" "acquisition"}.sectioned-board.has-detail-column{grid-template-areas:"management" "summary" "audience" "detail" "acquisition"}.admin-content .customizable-analytics .section-management .management-hub{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:400px){.admin-content .customizable-analytics .section-management .management-hub{grid-template-columns:repeat(2,minmax(0,1fr))}.section-management .management-card{padding:12px!important;gap:6px!important}}
