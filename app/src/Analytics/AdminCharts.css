@@ -1,0 +1,44 @@
+.admin-content .traffic-dashboard{font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+.admin-content .traffic-main,.admin-content .portal-main{max-width:none;padding:24px}
+.admin-content .traffic-toolbar{margin:0 0 20px}
+.admin-content .traffic-card{border-radius:10px;box-shadow:0 2px 8px #263e3005;padding:22px;border-color:#e0e6e2}
+.admin-content .traffic-card h2{font-size:15px;letter-spacing:-.015em;font-weight:650}
+.admin-content .traffic-eyebrow{font-size:10px;letter-spacing:.08em}
+.admin-content .traffic-metrics{gap:16px}
+.admin-content .traffic-metrics article{border-radius:10px;box-shadow:0 2px 8px #263e3005;padding:20px;border-top:3px solid #36816a;gap:10px}
+.admin-content .traffic-metrics article:nth-child(2){border-top-color:#5888c6}
+.admin-content .traffic-metrics article:nth-child(3){border-top-color:#ad83bf}
+.admin-content .traffic-metrics article:nth-child(4){border-top-color:#d99a4b}
+.admin-content .traffic-metrics article:nth-child(2) svg{background:#edf3fb;color:#5888c6}
+.admin-content .traffic-metrics article:nth-child(3) svg{background:#f4edf8;color:#9873a8}
+.admin-content .traffic-metrics article:nth-child(4) svg{background:#fcf4e8;color:#b88339}
+.admin-content .traffic-metrics strong{font-size:34px}
+.admin-content .traffic-primary{gap:20px;margin-bottom:20px;grid-template-columns:minmax(0,2.4fr) minmax(200px,1fr)}
+.admin-content .traffic-live{background:#fff;border-top:3px solid #36816a}
+.admin-content .traffic-live>strong{font-size:50px}
+.admin-content .traffic-chart{max-height:280px}
+.analytics-chart-grid,.analytics-detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-bottom:20px}
+.analytics-donut-layout{display:grid;grid-template-columns:180px minmax(0,1fr);gap:24px;align-items:center}
+.analytics-donut{position:relative;width:180px;height:180px}
+.analytics-donut svg{width:100%;height:100%}
+.analytics-donut>div{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none}
+.analytics-donut strong{font-size:28px;letter-spacing:-.04em;font-weight:700}
+.analytics-donut span{font-size:9px;color:#748679;margin-top:5px}
+.analytics-donut-legend{list-style:none;padding:0;margin:0;display:grid;gap:13px;max-height:260px;overflow-y:auto}
+.analytics-donut-legend li{display:grid;grid-template-columns:8px minmax(0,1fr) 42px;align-items:center;gap:8px;font-size:11px}
+.analytics-donut-legend i{width:8px;height:8px;border-radius:50%}
+.analytics-donut-legend span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#5f7467}
+.analytics-donut-legend strong{font-size:11px;text-align:right;color:#334e3f}
+.analytics-donut-legend small{grid-column:2/4;font-size:10px;color:#85968b;margin-top:-5px}
+.admin-content .traffic-acquisition{margin-bottom:0}
+.admin-content .traffic-sources li{grid-template-columns:20px 36px minmax(0,1fr) 65px;gap:10px;padding:13px 0}
+.admin-content .traffic-source-icon{width:36px;height:36px;border-radius:7px}
+.admin-content .traffic-source-bar{display:none}
+.admin-content .traffic-source-name strong{font-size:12px}
+.admin-content .traffic-source-value strong{font-size:15px}
+.admin-content .traffic-ranking progress::-webkit-progress-value{background:#5888c6}
+.admin-content .traffic-ranking progress::-moz-progress-bar{background:#5888c6}
+.admin-content .traffic-subtitle{font-size:11px;margin:8px 0 20px}
+@media(max-width:1200px){.analytics-donut-layout{grid-template-columns:1fr;gap:16px}.analytics-donut{margin:auto}.analytics-donut-legend{max-height:220px}}
+@media(max-width:760px){.admin-content .traffic-main,.admin-content .portal-main{padding:18px 14px}.analytics-chart-grid,.analytics-detail-grid,.admin-content .traffic-primary{grid-template-columns:1fr;gap:16px}.analytics-donut-layout{grid-template-columns:150px minmax(0,1fr);gap:14px}.analytics-donut{width:150px;height:150px}.analytics-donut strong{font-size:24px}.admin-content .traffic-card{padding:18px}.admin-content .traffic-metrics strong{font-size:28px}.admin-content .traffic-metrics article{padding:16px}.admin-content .traffic-sources li{grid-template-columns:30px minmax(0,1fr) 65px}.admin-content .traffic-source-rank{display:none}}
+@media(max-width:400px){.analytics-donut-layout{grid-template-columns:1fr}.analytics-donut{width:170px;height:170px}}

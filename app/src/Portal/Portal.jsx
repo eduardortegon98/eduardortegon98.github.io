@@ -50,7 +50,7 @@ function Dashboard({ user, role }) {
   function switchSource(index) { setSource(index); setPage(0); setSearch(''); setSelected(null); }
   const date = value => new Intl.DateTimeFormat(language === 'en' ? 'en-US' : 'es-CO', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(value));
   return <div className="portal-app">
-    <main className="portal-main"><header className="portal-header"><div><L as="p" className="portal-eyebrow">{admin ? 'CENTRO DE CLIENTES' : 'TU CUENTA'}</L><L as="h1">{admin ? 'Cada oportunidad, en orden.' : 'Bienvenido a tu portal.'}</L><L as="p">{admin ? 'Información real recibida desde los formularios de tu página.' : 'Tu cuenta de cliente está activa. Las funciones del portal se habilitarán en una próxima etapa.'}</L></div></header>
+    <main className="portal-main">
 
     {!admin ? <section className="portal-welcome"><Users size={36} /><L as="h2">Portal de cliente</L><L as="p">Este espacio no tiene acceso a los leads ni a los datos de otros clientes.</L><L as={Link} to="/cotizar">Solicitar cotización <ArrowRight size={16} /></L><L as={Link} to="/contacto">Contactar</L>{error && <L as="p" role="alert">{error}</L>}</section> : <>
       <section className="portal-metrics" aria-label={language === 'en' ? 'Total records by source' : 'Total de registros por origen'}>{sources.map((s, i) => { const Icon = s.icon; return <button key={s.table} onClick={() => switchSource(i)} aria-pressed={source === i}><Icon size={22} /><L>{s.label}</L><strong>{counts ? counts[i] : '—'}</strong><L as="small">Registros recibidos</L></button>; })}</section>
