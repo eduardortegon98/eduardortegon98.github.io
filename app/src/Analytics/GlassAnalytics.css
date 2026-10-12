@@ -1,0 +1,25 @@
+.admin-content .analytics-interactive{background:radial-gradient(ellipse at 7% 3%,#93ead326,transparent 48%),radial-gradient(ellipse at 90% 45%,#b89ffc22,transparent 50%),#f2f7f6;min-height:calc(100dvh - 74px)}
+.admin-content .analytics-interactive .traffic-main{gap:18px;padding:24px}
+.admin-content .analytics-interactive .analytics-focus-area,.admin-content .analytics-interactive .analytics-metric-button,.admin-content .analytics-interactive .analytics-report-tile,.admin-content .analytics-interactive .analytics-live-tile,.analytics-map-preview{background:#ffffffb8;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid #ffffff;box-shadow:inset 0 1px 0 #ffffff,0 7px 25px #25544309;border-radius:16px}
+.admin-content .analytics-interactive .analytics-metric-button{border-top:2px solid #43d9ae;background:linear-gradient(130deg,#ffffffd9,#f0fff780)}
+.admin-content .analytics-interactive .analytics-metric-button strong{color:#147653;text-shadow:0 0 18px #39e8a942;font-weight:750}
+.admin-content .analytics-interactive .analytics-metric-button:nth-child(2){border-top-color:#5ad9ef;background:linear-gradient(130deg,#ffffffd9,#eefdff80)}
+.admin-content .analytics-interactive .analytics-metric-button:nth-child(2) strong{color:#14798d;text-shadow:0 0 18px #42ddef42}
+.admin-content .analytics-interactive .analytics-metric-button:nth-child(3){border-top-color:#b296fa;background:linear-gradient(130deg,#ffffffd9,#f7f1ff80)}
+.admin-content .analytics-interactive .analytics-metric-button:nth-child(3) strong{color:#7951bb;text-shadow:0 0 18px #bb92fa42}
+.admin-content .analytics-interactive .analytics-metric-button:nth-child(4){border-top-color:#efb26a}.admin-content .analytics-interactive .analytics-metric-button:nth-child(4) strong{color:#996124;text-shadow:0 0 18px #ffd08342}
+.admin-content .analytics-interactive .analytics-metric-button[aria-pressed=true],.admin-content .analytics-interactive .analytics-report-tile[aria-pressed=true]{box-shadow:0 0 0 1px #67cfa4,0 6px 25px #42c88e18}
+.admin-content .analytics-interactive .analytics-trend-line{stroke:#218b75;filter:drop-shadow(0 3px 5px #40deb340)}
+.admin-content .analytics-interactive .analytics-trend-fill{fill:#96e6ca26}
+.admin-content .analytics-interactive .analytics-trend-tooltip rect{fill:#fffffff0;stroke:#77c8a8}
+.analytics-map-preview{font:inherit;text-align:left;padding:14px;cursor:pointer;color:#416857;min-width:0;width:100%}
+.analytics-map-preview>span{font-size:10px;display:flex;align-items:center;justify-content:space-between;gap:7px;margin-top:6px;color:#607c6b}
+.world-map-title{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:10px}.world-map-title>span{font-size:10px;letter-spacing:.09em;font-weight:700;color:#4f7664}.world-map-title small{font-size:10px;color:#748b7c}
+.world-audience svg{display:block;width:100%;height:auto}.world-audience svg path{cursor:pointer}.world-audience svg path.is-active{fill:#56d9ae;stroke:#2c9274;stroke-width:1.5}
+.world-audience.compact svg{pointer-events:none}.world-audience.compact .world-map-title small{display:none}
+.world-map-status{font-size:12px;color:#4f735e;line-height:1.7;margin:12px 0}
+.world-country-list{list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 24px;padding:0;margin:18px 0}.world-country-list li{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid #dce9e0;padding-bottom:7px;font-size:11px;color:#597460}.world-country-list strong{color:#217455}
+.world-map-note{font-size:10px;color:#718775;line-height:1.7;display:block}
+@media(prefers-reduced-motion:no-preference){.analytics-map-preview,.world-audience svg path{transition:transform .2s ease,fill .2s ease,stroke .2s ease,box-shadow .2s ease}.analytics-map-preview:hover{transform:translateY(-3px);box-shadow:0 9px 30px #38b78a18}.admin-content .analytics-interactive .analytics-metric-button:hover{box-shadow:0 8px 28px #42c88e22;transform:translateY(-4px)}}
+@supports not (backdrop-filter:blur(1px)){.admin-content .analytics-interactive .analytics-focus-area,.admin-content .analytics-interactive .analytics-metric-button,.admin-content .analytics-interactive .analytics-report-tile,.admin-content .analytics-interactive .analytics-live-tile,.analytics-map-preview{background:#fff}}
+@media(max-width:760px){.admin-content .analytics-interactive .traffic-main{padding:16px 14px}.analytics-map-preview{grid-column:1/-1}.world-country-list{grid-template-columns:1fr}.world-map-title{flex-wrap:wrap}}

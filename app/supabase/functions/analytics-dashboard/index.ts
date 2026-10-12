@@ -81,7 +81,7 @@ Deno.serve(async request => {
     const metricNames = ['activeUsers', 'sessions', 'screenPageViews'];
     const summaryQuery = { dateRanges, metrics: metricNames.map(name => ({ name })) };
     const rankingQuery = (dimension: string, metric: string) => ({ dateRanges, dimensions: [{ name: dimension }], metrics: [{ name: metric }], orderBys: [{ metric: { metricName: metric }, desc: true }], limit: 10 });
-    const [summary, daily, sources, pages, devices, leads, realtime] = await Promise.all([
+    const [summary, daily, sources, pages, devices, leads, realtime, geography] = await Promise.all([
       report('runReport', summaryQuery, accessToken),
       report('runReport', { ...summaryQuery, dimensions: [{ name: 'date' }], orderBys: [{ dimension: { dimensionName: 'date' } }], limit: 90 }, accessToken),
       report('runReport', rankingQuery('sessionSourceMedium', 'sessions'), accessToken),
@@ -89,6 +89,7 @@ Deno.serve(async request => {
       report('runReport', rankingQuery('deviceCategory', 'sessions'), accessToken),
       report('runReport', { dateRanges, metrics: [{ name: 'eventCount' }], dimensionFilter: { filter: { fieldName: 'eventName', stringFilter: { matchType: 'EXACT', value: 'generate_lead' } } } }, accessToken),
       report('runRealtimeReport', { metrics: [{ name: 'activeUsers' }] }, accessToken),
+      report('runReport', { ...rankingQuery('country', 'sessions'), limit: 250 }, accessToken).then(result => ({ rows: ranked(result), status: 'available' })).catch(() => ({ rows: [], status: 'unavailable' })),
     ]);
     const rawDaily = new Map((daily.rows || []).map((row: Row) => [row.dimensionValues?.[0]?.value, row]));
     // Fill quiet dates so the chart does not jump across missing days (Bogotá).
@@ -100,7 +101,7 @@ Deno.serve(async request => {
       const row = rawDaily.get(iso.replace(/-/g, '')) as Row | undefined;
       return { date: iso, activeUsers: numberAt(row, 0), sessions: numberAt(row, 1), screenPageViews: numberAt(row, 2) };
     });
-    const data = { days, updatedAt: new Date().toISOString(), summary: Object.fromEntries(metricNames.map((name, i) => [name, numberAt(summary.rows?.[0], i)])), daily: timeline, sources: ranked(sources), pages: ranked(pages), devices: ranked(devices), leads: numberAt(leads.rows?.[0], 0), realtime: { activeUsers: numberAt(realtime.rows?.[0], 0) } };
+    const data = { countries: geography.rows, geographyStatus: geography.status, days, updatedAt: new Date().toISOString(), summary: Object.fromEntries(metricNames.map((name, i) => [name, numberAt(summary.rows?.[0], i)])), daily: timeline, sources: ranked(sources), pages: ranked(pages), devices: ranked(devices), leads: numberAt(leads.rows?.[0], 0), realtime: { activeUsers: numberAt(realtime.rows?.[0], 0) } };
     cache.set(days, { expires: Date.now() + 60000, data });
     return json(200, data);
   } catch (failure) {
