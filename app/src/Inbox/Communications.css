@@ -86,3 +86,9 @@
 .admin-content .inbox-app .inbox-thread-header>div:not(.communications-context){display:flex;flex-wrap:wrap;align-items:center;gap:6px 9px}
 .admin-content .inbox-app .inbox-thread-header h2{margin:0}
 .admin-content .inbox-app .inbox-thread-header .communication-badge{margin:0}
+
+.admin-content .inbox-app .inbox-message-row{display:flex;align-items:flex-end;gap:10px;max-width:92%;align-self:flex-start;min-width:0}
+.admin-content .inbox-app .inbox-message-row.own{align-self:flex-end}
+.admin-content .inbox-app .inbox-message-avatar{width:32px;height:32px;flex:0 0 32px;display:grid;place-items:center;border:1px solid #dce5de;background:#eaf0ec;color:#45634f;border-radius:50%;font-size:10px;font-weight:700;letter-spacing:.02em}
+.admin-content .inbox-app .inbox-message-row .inbox-bubble{max-width:100%;min-width:0}
+@media(max-width:760px){.admin-content .inbox-app .inbox-message-row{max-width:100%;gap:8px}.admin-content .inbox-app .inbox-message-avatar{width:28px;height:28px;flex-basis:28px;font-size:9px}}
