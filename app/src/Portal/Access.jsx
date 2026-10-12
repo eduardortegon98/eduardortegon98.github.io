@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { supabase, isPasswordRecovery } from '../lib/supabase';
+import { readClientModules } from './moduleData';
 import PortalLoading from './PortalLoading';
 import { Localized } from '../i18n/Language';
 export default function Access({ admin = false, children }) {
@@ -17,7 +18,8 @@ export default function Access({ admin = false, children }) {
         if (error || !data.user) { if (active && current === version) setState({ user: null }); return; }
         const profile = await supabase.from('portal_profiles').select('role').eq('id', data.user.id).single();
         if (profile.error || !['client', 'super_admin'].includes(profile.data?.role)) throw new Error('profile');
-        const assignments = await supabase.from('portal_module_assignments').select('module').eq('user_id',data.user.id);
+        let assignments;
+        try { assignments={data:await readClientModules(data.user.id)}; } catch { assignments={error:true}; }
         // Missing migration or unavailable permissions fail closed for client modules.
         const modules = assignments.error ? [] : assignments.data.map(item=>item.module);
         if (active && current === version) setState({ user: data.user, role: profile.data.role, modules });

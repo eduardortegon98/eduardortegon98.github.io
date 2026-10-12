@@ -1,5 +1,7 @@
 import { Suspense, lazy, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
+import { portalModules } from "./Portal/modules.jsx";
+import ModuleRoute from "./Portal/ModuleRoute.jsx";
 import { useTheme } from "./context/ThemeContext.jsx";
 
 const PortalLayout = lazy(() => import("./Portal/PortalLayout.jsx"));
@@ -7,8 +9,6 @@ const PortalHome = lazy(() => import("./Portal/PortalHome.jsx"));
 const Account = lazy(() => import("./Portal/Account.jsx"));
 const AnalyticsDashboard = lazy(() => import("./Analytics/AnalyticsDashboard.jsx"));
 const Assignments = lazy(() => import("./Portal/Assignments.jsx"));
-const Arturito = lazy(() => import("./Arturito/Arturito.jsx"));
-const Inbox = lazy(() => import("./Inbox/Inbox.jsx"));
 const Home = lazy(() => import("./Home/Home.jsx"));
 const Login = lazy(() => import("./Login/Login.jsx"));
 const Contacto = lazy(() => import("./Contacto/Contacto.jsx"));
@@ -29,8 +29,7 @@ function App() {
           <Route index element={<PortalHome />} />
           <Route path="cuenta" element={<Account />} />
           <Route path="analitica" element={<AnalyticsDashboard />} />
-          <Route path="mensajes" element={<Inbox />} />
-          <Route path="arturito" element={<Arturito />} />
+          {portalModules.map(module=><Route key={module.id} path={module.path.replace('/panel/','')} element={<ModuleRoute id={module.id}/>}/>)}
           <Route path="asignaciones" element={<Assignments />} />
         </Route>
         <Route path="/login" element={<Login />} />
