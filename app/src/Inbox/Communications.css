@@ -92,3 +92,11 @@
 .admin-content .inbox-app .inbox-message-avatar{width:32px;height:32px;flex:0 0 32px;display:grid;place-items:center;border:1px solid #dce5de;background:#eaf0ec;color:#45634f;border-radius:50%;font-size:10px;font-weight:700;letter-spacing:.02em}
 .admin-content .inbox-app .inbox-message-row .inbox-bubble{max-width:100%;min-width:0}
 @media(max-width:760px){.admin-content .inbox-app .inbox-message-row{max-width:100%;gap:8px}.admin-content .inbox-app .inbox-message-avatar{width:28px;height:28px;flex-basis:28px;font-size:9px}}
+
+/* One compact contact heading, without duplicate metadata cards. */
+.admin-content .inbox-app .inbox-thread-header{display:flex;align-items:center;flex-wrap:nowrap;gap:12px;min-height:76px}
+.admin-content .inbox-app .inbox-thread-header>div:not(.communications-context){display:flex;align-items:center;flex-wrap:wrap;gap:7px 10px;flex:1;min-width:0}
+.admin-content .inbox-app .inbox-thread-header .inbox-status{margin-left:auto;display:flex;align-items:center;gap:8px;flex-shrink:0;max-width:none}
+.admin-content .inbox-app .inbox-thread-header .inbox-status select{min-height:34px}
+.communications-contact-number{font-size:11px;color:#6b7f71;overflow-wrap:anywhere}
+@media(max-width:760px){.admin-content .inbox-app .inbox-thread-header{flex-wrap:wrap;gap:10px}.admin-content .inbox-app .inbox-thread-header .inbox-status{margin-left:auto}.admin-content .inbox-app .inbox-thread-header>div:not(.communications-context){min-width:100px}}
