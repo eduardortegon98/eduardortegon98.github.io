@@ -3,7 +3,8 @@ import { Routes, Route } from "react-router-dom";
 import { useTheme } from "./context/ThemeContext.jsx";
 
 const PortalLayout = lazy(() => import("./Portal/PortalLayout.jsx"));
-const Portal = lazy(() => import("./Portal/Portal.jsx"));
+const PortalHome = lazy(() => import("./Portal/PortalHome.jsx"));
+const Account = lazy(() => import("./Portal/Account.jsx"));
 const AnalyticsDashboard = lazy(() => import("./Analytics/AnalyticsDashboard.jsx"));
 const Assignments = lazy(() => import("./Portal/Assignments.jsx"));
 const Arturito = lazy(() => import("./Arturito/Arturito.jsx"));
@@ -25,7 +26,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/panel" element={<PortalLayout />}>
-          <Route index element={<Portal />} />
+          <Route index element={<PortalHome />} />
+          <Route path="cuenta" element={<Account />} />
           <Route path="analitica" element={<AnalyticsDashboard />} />
           <Route path="mensajes" element={<Inbox />} />
           <Route path="arturito" element={<Arturito />} />
