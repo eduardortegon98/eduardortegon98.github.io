@@ -15,3 +15,6 @@
 .admin-content .analytics-interactive .traffic-footnote{grid-row:5}
 @media(min-width:761px) and (max-width:1250px){.admin-content .analytics-interactive .management-hub{grid-row:6}.admin-content .analytics-interactive .traffic-footnote{grid-row:7}}
 @media(max-width:760px){.admin-content .analytics-interactive .management-hub{grid-row:7}.admin-content .analytics-interactive .traffic-footnote{grid-row:8}}
+
+.portal-date-filters{display:flex;align-items:flex-end;flex-wrap:wrap;gap:12px;margin:0 0 18px}.portal-date-filters label{display:grid;gap:6px;font-size:11px;color:#687f70}.portal-date-filters input{border:1px solid #dce6df;border-radius:7px;padding:8px 10px;font:inherit;font-size:12px;background:#fff;color:#365a44}.portal-date-filters button{border:1px solid #dce6df;border-radius:7px;padding:8px 12px;background:white;color:#456b53;font:inherit;font-size:12px;min-height:35px}
+@media(max-width:500px){.portal-date-filters label{flex:1;min-width:120px}.portal-date-filters input{width:100%}}

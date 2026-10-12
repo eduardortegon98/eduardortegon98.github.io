@@ -26,7 +26,7 @@ function Workspace({ state }) {
     if (!realAdmin || !['super_admin', 'client'].includes(role)) return;
     setPreviewRole(role); setOpen(false); navigate('/panel');
   }
-  const title = pathname.startsWith('/panel/analitica') ? (en ? 'Website analytics' : 'Analítica de la web') : pathname.startsWith('/panel/mensajes') ? (en ? 'Messages' : 'Mensajes') : (en ? 'Dashboard' : 'Dashboard');
+  const title = pathname.startsWith('/panel/analitica') ? (en ? 'Website analytics' : 'Analítica de la web') : pathname.startsWith('/panel/mensajes') ? (en ? 'Messages' : 'Mensajes') : (admin ? (en ? 'Analytics' : 'Analítica') : (en ? 'My account' : 'Mi cuenta'));
   async function logout() {
     setPending(true); setError('');
     try { const { error } = await supabase.auth.signOut(); if (error) throw error; }
@@ -39,7 +39,7 @@ function Workspace({ state }) {
       <Link to="/panel" className="admin-logo" onClick={() => setOpen(false)}><span>O.</span><div>Ortegón<small>{en ? 'Management portal' : 'Portal de gestión'}</small></div></Link>
       <p className="admin-nav-label">{en ? 'WORKSPACE' : 'ESPACIO DE TRABAJO'}</p>
       <nav aria-label={en ? 'Portal navigation' : 'Navegación del portal'}>
-        <NavLink to="/panel" end onClick={() => setOpen(false)}><LayoutDashboard size={19}/><span>Dashboard</span></NavLink>
+        {!admin && <NavLink to="/panel" end onClick={() => setOpen(false)}><UserRound size={19}/><span>{en ? "My account" : "Mi cuenta"}</span></NavLink>}
         {admin && <><NavLink to="/panel/analitica" onClick={() => setOpen(false)}><BarChart3 size={19}/><span>{en ? 'Analytics' : 'Analítica'}</span></NavLink><NavLink to="/panel/mensajes" onClick={() => setOpen(false)}><MessagesSquare size={19}/><span>{en ? 'Messages' : 'Mensajes'}</span><small>Demo</small></NavLink></>}
       </nav>
       <div className="admin-sidebar-bottom"><Link to="/" className="admin-public-link"><ExternalLink size={17}/>{en ? 'View website' : 'Ver página web'}</Link><div className="admin-identity"><span className="admin-avatar">{state.user.email?.slice(0,1).toUpperCase() || 'O'}</span><div><strong>{realAdmin ? (en ? 'Administrator' : 'Administrador') : (en ? 'Client' : 'Cliente')}</strong><span>{state.user.email}</span></div></div><button className="admin-logout" onClick={logout} disabled={pending}><LogOut size={17}/>{pending ? (en ? 'Signing out…' : 'Saliendo…') : (en ? 'Sign out' : 'Cerrar sesión')}</button>{error && <p role="alert">{error}</p>}</div>
