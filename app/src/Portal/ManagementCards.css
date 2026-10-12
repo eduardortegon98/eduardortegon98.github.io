@@ -1,0 +1,17 @@
+.admin-content .analytics-interactive .management-hub{grid-column:1/-1;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:0}
+.management-card{display:grid;grid-template-columns:26px minmax(0,1fr) 18px;align-items:center;gap:8px;text-align:left;text-decoration:none;font:inherit;cursor:pointer;background:#ffffffb8;backdrop-filter:blur(12px);border:1px solid #dce9e1;border-radius:12px;padding:16px;color:#365a44;min-width:0}
+.management-card>svg:first-child{grid-column:1;grid-row:1;color:#53936e}.management-card>span{grid-column:2;grid-row:1;font-size:12px;font-weight:600}.management-card>svg:last-child{grid-column:3;grid-row:1;color:#7e9a87}.management-card>strong{grid-column:2;font-size:26px;font-weight:700;line-height:1.2}.management-card>small{grid-column:1/-1;font-size:10px;line-height:1.6;color:#6d8775}.management-card .management-demo{font-size:19px;color:#8b7135}
+.testimonial-dialog{position:fixed;inset:0;margin:auto;width:min(1000px,calc(100vw - 40px));max-height:calc(100dvh - 48px);overflow:auto;padding:0;border:1px solid #d7e5dc;border-radius:16px;background:#f8faf7;color:#2b4534;box-shadow:0 22px 80px #18372628}
+.testimonial-dialog::backdrop{background:#233d3040;backdrop-filter:blur(3px)}
+.testimonial-dialog>header{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;padding:22px 24px;background:#fff;border-bottom:1px solid #e0e8e2;position:sticky;top:0;z-index:2}
+.testimonial-dialog h2{margin:0;font-size:18px;font-weight:650}.testimonial-dialog header p{margin:7px 0 0;font-size:12px;line-height:1.7;color:#718778}
+.testimonial-dialog-close{display:grid;place-items:center;flex-shrink:0;width:32px;height:32px;border:0;border-radius:7px;color:#fff;background:#24573d;cursor:pointer}
+.admin-content .testimonial-dialog .portal-main{padding:20px;max-width:none}.testimonial-dialog .portal-pagination{margin-bottom:0}.testimonial-dialog .portal-detail{margin-top:16px}.testimonial-dialog button:focus-visible,.management-card:focus-visible{outline:3px solid #80b492;outline-offset:3px}
+@media(prefers-reduced-motion:no-preference){.management-card{transition:transform .2s ease,box-shadow .2s ease}.management-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px #39745516}.testimonial-dialog[open]{animation:management-dialog-in .25s ease both}@keyframes management-dialog-in{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}}
+@media(max-width:900px){.admin-content .analytics-interactive .management-hub{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){.testimonial-dialog{width:calc(100vw - 20px);max-height:calc(100dvh - 24px)}.testimonial-dialog>header{padding:18px 16px}.admin-content .testimonial-dialog .portal-main{padding:14px}.management-card{padding:13px}}
+
+.admin-content .analytics-interactive .management-hub{grid-row:4}
+.admin-content .analytics-interactive .traffic-footnote{grid-row:5}
+@media(min-width:761px) and (max-width:1250px){.admin-content .analytics-interactive .management-hub{grid-row:6}.admin-content .analytics-interactive .traffic-footnote{grid-row:7}}
+@media(max-width:760px){.admin-content .analytics-interactive .management-hub{grid-row:7}.admin-content .analytics-interactive .traffic-footnote{grid-row:8}}

@@ -7,6 +7,7 @@ import './AnalyticsDashboard.css';
 import './AdminCharts.css';
 import './GlassAnalytics.css';
 import WorldAudience from './WorldAudience';
+import ManagementCards from '../Portal/ManagementCards';
 
 export default function AnalyticsDashboard() {
   const { role } = useOutletContext();
@@ -96,6 +97,7 @@ function AnalyticsReport() {
         {[['sources',Globe2,t('Orígenes', 'Sources'),data?.sources?.[0]?.label],['devices',MousePointer2,t('Dispositivos', 'Devices'),data?.devices?.[0]?.label],['pages',Eye,t('Páginas', 'Pages'),data?.pages?.[0]?.label]].map(([key,Icon,label,leading]) => <button key={key} className="analytics-report-tile" aria-pressed={focus === key} aria-controls="analytics-focus-chart" onClick={() => setRequestedFocus(key)}><Icon size={20}/><div><strong>{label}</strong><span>{leading || t('Sin datos disponibles', 'No data available')}</span></div><ArrowUpRight size={16}/></button>)}
         <section className="analytics-live-tile"><Radio size={18}/><span>{t('Activos · últimos 30 min', 'Active · last 30 min')}</span><strong>{format(data?.realtime?.activeUsers)}</strong><small>{t('Actualiza para consultar de nuevo.', 'Refresh to query again.')}</small></section>
       </aside>
+      <ManagementCards/>
       <footer className="traffic-footnote"><ShieldCheck size={16} /><p>{t('Datos agregados de visitantes que aceptaron analítica. No incluye contenido de mensajes ni información personal de los formularios. Los informes históricos pueden tardar 24–48 horas.', 'Aggregate data from visitors who accepted analytics. No message contents or personal form information. Historical reports may take 24–48 hours.')}{data?.updatedAt && ` · ${t('Consulta', 'Fetched')}: ${new Intl.DateTimeFormat(en ? 'en-US' : 'es-CO', { timeStyle: 'short', timeZone: 'America/Bogota' }).format(new Date(data.updatedAt))} (Bogotá)`}</p></footer>
     </main>
   </div>;
