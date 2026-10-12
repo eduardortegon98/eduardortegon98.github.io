@@ -2,7 +2,7 @@ import "./ChatAppearance.css";
 import robotAvatar from "../assets/ortegon-robot-hero.webp";
 import { Localized } from "../i18n/Language";
 import { useEffect, useRef, useState } from "react";
-import { Bot, X } from "lucide-react";
+import { Bot, X, Send } from "lucide-react";
 import { supabase, requireSupabase } from "../lib/supabase";
 import Challenge from "./Challenge";
 
@@ -118,7 +118,7 @@ export default function AIChat() {
       <Localized as="footer" className="space-y-3 border-t border-[var(--color-border)] p-4">
         {!user && <Challenge onToken={setCaptcha} reset={challengeReset}/>}
         <Localized as="form" onSubmit={send} className="space-y-2"><Localized as="label" className="sr-only" htmlFor="ai-message">Mensaje al asistente</Localized><Localized as="textarea" id="ai-message" value={message} onChange={event => setMessage(event.target.value)} required maxLength={500} rows={2} placeholder="Cuéntanos sobre tu proyecto…" disabled={pending || loginRequired} className={field}/>
-          <Localized as="div" className="flex items-center justify-between"><Localized as="span" className="text-xs text-[var(--color-text-muted)]">{message.length}/500</Localized><Localized as="button" disabled={pending || loginRequired || !message.trim() || (!user && !captcha)} className={button}>Enviar</Localized></Localized>
+          <Localized as="div" className="flex items-center justify-between"><Localized as="span" className="text-xs text-[var(--color-text-muted)]">{message.length}/500</Localized><Localized as="button" disabled={pending || loginRequired || !message.trim() || (!user && !captcha)} className={button} aria-label="Enviar mensaje" title="Enviar mensaje"><Send size={18} aria-hidden="true"/></Localized></Localized>
         </Localized>
         <Localized as="div" className="flex flex-wrap gap-3 text-sm"><Localized as="button" type="button" disabled={pending} onClick={() => {setHandoff(value => !value); setAuthOpen(false);}}>Solicitar agente</Localized><Localized as="a" href={whatsapp} target="_blank" rel="noopener noreferrer" className="text-[var(--color-accent)]">WhatsApp directo</Localized>{!user && <Localized as="button" type="button" onClick={() => setAuthOpen(value => !value)}>Iniciar sesión</Localized>}</Localized>
       </Localized>

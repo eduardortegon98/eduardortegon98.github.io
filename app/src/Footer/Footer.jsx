@@ -1,5 +1,6 @@
-import { Localized } from "../i18n/Language";
+import { Localized, useLanguage } from "../i18n/Language";
 import React from "react";
+import { ArrowUp } from "lucide-react";
 import { FaFacebookF, FaInstagram, FaLinkedinIn } from "react-icons/fa";
 import { animate } from "framer-motion";
 
@@ -22,6 +23,7 @@ const socials = [
 ];
 
 const Footer = () => {
+  const { language } = useLanguage();
   const year = new Date().getFullYear();
 
   const scrollToTop = (e) => {
@@ -75,6 +77,8 @@ const Footer = () => {
 
             <Localized as="button"
               onClick={scrollToTop}
+              aria-label={language === "en" ? "Back to top" : "Volver arriba"}
+              title={language === "en" ? "Back to top" : "Volver arriba"}
               className="
                 inline-flex items-center gap-2 rounded-full
                 bg-[var(--color-primary)]/90 px-4 py-2 text-sm font-extrabold text-[var(--color-text)]
@@ -84,7 +88,7 @@ const Footer = () => {
                 sm:ml-1
               "
             >
-              Arriba <Localized as="span" className="-mt-px">↑</Localized>
+              <ArrowUp size={18} aria-hidden="true"/>
             </Localized>
           </Localized>
         </Localized>

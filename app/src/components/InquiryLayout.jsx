@@ -1,11 +1,12 @@
-import { Localized } from "../i18n/Language";
+import { Localized, useLanguage } from "../i18n/Language";
 import { Children, cloneElement, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { ArrowUpRight, Check, ChevronDown } from "lucide-react";
+import { ArrowUpRight, ArrowLeft, Home, Check, ChevronDown } from "lucide-react";
 import Header from "../Header/Header";
 import { Link } from "react-router-dom";
 import "./Inquiry.css";
 
 export function InquiryLayout({ sidebar, children }) {
+  const { language } = useLanguage();
   const main = useRef(null);
   useLayoutEffect(() => {
     const update = () => {
@@ -19,7 +20,7 @@ export function InquiryLayout({ sidebar, children }) {
     window.addEventListener("resize", update); update();
     return () => { observer.disconnect(); window.removeEventListener("resize", update); };
   }, []);
-  return <Localized as="div" className="inquiry-page"><Header /><Localized as="main" className="inquiry-shell"><Localized as="aside" className="inquiry-sidebar">{sidebar}<Localized as={Link} className="inquiry-home" to="/">Volver al inicio <ArrowUpRight size={14} /></Localized></Localized><Localized as="div" ref={main} className="inquiry-main">{children}</Localized></Localized><Localized as="footer" className="inquiry-footer">Soluciones Tecnológicas Ortegón<Localized as="span">Ingeniería con propósito.</Localized></Localized></Localized>;
+  return <Localized as="div" className="inquiry-page"><Header /><Localized as="main" className="inquiry-shell"><Localized as="aside" className="inquiry-sidebar">{sidebar}<Localized as={Link} className="inquiry-home compact-action" aria-label={language === "en" ? "Home" : "Inicio"} title={language === "en" ? "Home" : "Inicio"} to="/"><Home size={18} aria-hidden="true"/></Localized></Localized><Localized as="div" ref={main} className="inquiry-main">{children}</Localized></Localized><Localized as="footer" className="inquiry-footer">Soluciones Tecnológicas Ortegón<Localized as="span">Ingeniería con propósito.</Localized></Localized></Localized>;
 }
 export function InquiryHeading({ eyebrow, title, children }) {
   return <Localized as="div" className="inquiry-heading"><Localized as="p" className="inquiry-eyebrow"><Localized as="span" />{eyebrow}</Localized><Localized as="h1">{title}</Localized><Localized as="p" className="inquiry-intro">{children}</Localized></Localized>;
@@ -38,6 +39,7 @@ export function InquiryNote({ children }) {
 }
 
 export function InquiryStepForm({ pending, submit, status, children, submitLabel, pendingLabel, note, honeypot }) {
+  const { language } = useLanguage();
   const [compact, setCompact] = useState(false);
   const [step, setStep] = useState(0);
   const form = useRef(null);
@@ -72,7 +74,7 @@ export function InquiryStepForm({ pending, submit, status, children, submitLabel
     {compact && <Localized as="div" className="inquiry-step-progress" aria-live="polite"><Localized as="strong">Paso {step + 1} de {groups.length}</Localized><Localized as="div" aria-hidden="true">{groups.map((_, index) => <Localized as="i" key={index} className={index <= step ? "is-active" : ""} />)}</Localized></Localized>}
     <Localized as="fieldset" disabled={pending} className="inquiry-form-fields">{groups.map((group, index) => cloneElement(group, { hidden: compact && index !== step }))}</Localized>
     <Localized as="div" className="inquiry-form-bottom">
-      <Localized as="div" className="inquiry-form-actions">{compact && step > 0 && <Localized as="button" type="button" className="inquiry-back" disabled={pending} onClick={() => setStep(value => value - 1)}>Atrás</Localized>}
+      <Localized as="div" className="inquiry-form-actions">{compact && step > 0 && <Localized as="button" type="button" className="inquiry-back compact-action" aria-label={language === "en" ? "Previous step" : "Paso anterior"} title={language === "en" ? "Previous step" : "Paso anterior"} disabled={pending} onClick={() => setStep(value => value - 1)}><ArrowLeft size={18} aria-hidden="true"/></Localized>}
       {compact && step < groups.length - 1 ? <Localized as="button" type="button" className="inquiry-submit" onClick={next} disabled={pending}>Continuar <ArrowUpRight size={17} /></Localized> : <Localized as="button" type="submit" disabled={pending} className="inquiry-submit">{pending ? pendingLabel : submitLabel}<ArrowUpRight size={17} /></Localized>}</Localized>
       <InquiryNote>{note}</InquiryNote>
       {status && <Localized as="div" className="inquiry-status" role={status.success ? "status" : "alert"}>{status.message}</Localized>}

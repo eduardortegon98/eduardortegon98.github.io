@@ -38,7 +38,7 @@ export default function Hero() {
             <Localized as="div" className="hero-label hero-label--bottom"><Localized as="span" className="hero-label-icon"><Code2 size={18} /></Localized><Localized as="div"><Localized as="strong">Creado para tu negocio</Localized><Localized as="span">Soluciones a tu medida</Localized></Localized></Localized>
             <Localized as="span" className="hero-dot hero-dot--one" aria-hidden="true" /><Localized as="span" className="hero-dot hero-dot--two" aria-hidden="true" />
           </Localized>
-          {!reduced && <Localized as="button" type="button" className="hero-motion-control" onClick={() => { setPaused(value => !value); visual.current?.style.setProperty("--tilt", "0deg"); }} aria-label={paused ? "Reanudar animación" : "Pausar animación"} aria-pressed={paused}>{paused ? <Play size={12} /> : <Pause size={12} />}{paused ? "Reanudar movimiento" : "Pausar movimiento"}</Localized>}
+          {!reduced && <Localized as="button" type="button" className="hero-motion-control" onClick={() => { setPaused(value => !value); visual.current?.style.setProperty("--tilt", "0deg"); }} aria-label={paused ? "Reanudar animación" : "Pausar animación"} title={paused ? "Reanudar animación" : "Pausar animación"} aria-pressed={paused}>{paused ? <Play size={12} /> : <Pause size={12} />}</Localized>}
         </Localized>
       </Localized>
       <Localized as="div" className="hero-bottom"><Localized as="span">TECNOLOGÍA CON UN PROPÓSITO: TU NEGOCIO.</Localized><Localized as="button" type="button" onClick={explore}>Conoce lo que podemos crear <ArrowDown size={15} /></Localized></Localized>

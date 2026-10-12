@@ -6,6 +6,7 @@ import "./index.css";
 import { LanguageProvider } from "./i18n/Language";
 import App from "./App.jsx";
 import "./App.css";
+import "./components/CompactActions.css";
 import { ThemeProvider } from "./context/ThemeContext.jsx";
 import Analytics from "./components/Analytics";
 
