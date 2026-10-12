@@ -2,6 +2,7 @@ import { Suspense, lazy, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import { useTheme } from "./context/ThemeContext.jsx";
 
+const PortalLayout = lazy(() => import("./Portal/PortalLayout.jsx"));
 const Portal = lazy(() => import("./Portal/Portal.jsx"));
 const AnalyticsDashboard = lazy(() => import("./Analytics/AnalyticsDashboard.jsx"));
 const Inbox = lazy(() => import("./Inbox/Inbox.jsx"));
@@ -21,9 +22,11 @@ function App() {
     <Suspense fallback={null}>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/panel" element={<Portal />} />
-        <Route path="/panel/analitica" element={<AnalyticsDashboard />} />
-        <Route path="/panel/mensajes" element={<Inbox />} />
+        <Route path="/panel" element={<PortalLayout />}>
+          <Route index element={<Portal />} />
+          <Route path="analitica" element={<AnalyticsDashboard />} />
+          <Route path="mensajes" element={<Inbox />} />
+        </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/contacto" element={<Contacto />} />
         <Route path="/cotizar" element={<Cotizar />} />

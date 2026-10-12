@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Activity, ArrowLeft, ArrowUpRight, BarChart3, Eye, Users, MousePointer2, MessageSquare, RefreshCw, ShieldCheck, Radio, Globe2, Linkedin, Search, Share2, Mail, ExternalLink } from 'lucide-react';
-import Access from '../Portal/Access';
+import { Navigate, useOutletContext } from 'react-router-dom';
+import { Activity, ArrowUpRight, BarChart3, Eye, Users, MousePointer2, MessageSquare, RefreshCw, ShieldCheck, Radio, Globe2, Linkedin, Search, Share2, Mail, ExternalLink } from 'lucide-react';
 import { supabase } from '../lib/supabase';
-import { LanguageSwitch, useLanguage } from '../i18n/Language';
+import { useLanguage } from '../i18n/Language';
 import './AnalyticsDashboard.css';
 
 export default function AnalyticsDashboard() {
-  return <Access admin>{() => <AnalyticsReport />}</Access>;
+  const { role } = useOutletContext();
+  return role === 'super_admin' ? <AnalyticsReport /> : <Navigate to="/panel" replace />;
 }
 
 function AnalyticsReport() {
@@ -61,9 +61,8 @@ function AnalyticsReport() {
   ];
   const dateLabel = value => new Intl.DateTimeFormat(en ? 'en-US' : 'es-CO', { day: 'numeric', month: 'short', timeZone: 'UTC' }).format(new Date(value + 'T12:00:00Z'));
   return <div className="traffic-dashboard">
-    <aside className="traffic-sidebar"><Link to="/" className="traffic-brand">O<span>Ortegón</span></Link><span className="traffic-eyebrow">{t('ESPACIO DE TRABAJO', 'WORKSPACE')}</span><Link to="/panel"><ArrowLeft size={18} />{t('Panel de clientes', 'Client dashboard')}</Link><div className="traffic-nav-active"><BarChart3 size={18} />{t('Analítica', 'Analytics')}</div><div className="traffic-security"><ShieldCheck size={18} /><p>{t('Solo súper administrador', 'Super administrator only')}</p><small>Google Analytics 4</small></div></aside>
     <main className="traffic-main">
-      <header className="traffic-header"><div><p className="traffic-eyebrow">{t('PULSO DE TU WEB', 'YOUR WEBSITE AT A GLANCE')}</p><h1>{t('De las visitas a las oportunidades.', 'From visits to opportunities.')}</h1><p>{t('Conoce cómo llega la gente y qué explora en Soluciones Ortegón.', 'Understand how people arrive and what they explore at Soluciones Ortegón.')}</p></div><LanguageSwitch /></header>
+      <header className="traffic-header"><div><p className="traffic-eyebrow">{t('PULSO DE TU WEB', 'YOUR WEBSITE AT A GLANCE')}</p><h1>{t('De las visitas a las oportunidades.', 'From visits to opportunities.')}</h1><p>{t('Conoce cómo llega la gente y qué explora en Soluciones Ortegón.', 'Understand how people arrive and what they explore at Soluciones Ortegón.')}</p></div></header>
       <div className="traffic-toolbar"><div className="traffic-range" role="group" aria-label={t('Periodo del informe', 'Report period')}>{[7, 30, 90].map(n => <button key={n} aria-pressed={days === n} onClick={() => setDays(n)}>{n} {t('días', 'days')}</button>)}</div><button className="traffic-refresh" disabled={state.loading} onClick={() => setRevision(n => n + 1)}><RefreshCw size={16} />{t('Actualizar', 'Refresh')}</button><a href="https://analytics.google.com/" target="_blank" rel="noreferrer">Google Analytics <ArrowUpRight size={16} /></a></div>
       {state.error && <section className="traffic-connection" role="status"><Activity size={26} /><div><h2>{t('Conexión de informes pendiente', 'Reports connection pending')}</h2><p>{t('No pudimos consultar Google Analytics. La conexión de lectura debe estar configurada y disponible para mostrar cifras reales.', 'We could not query Google Analytics. The read connection must be configured and available to show real figures.')}</p>{diagnostics[state.error] && <p role="alert">{diagnostics[state.error]}</p>}<a href="https://analytics.google.com/" target="_blank" rel="noreferrer">{t('Consultar en Google Analytics', 'View in Google Analytics')} <ArrowUpRight size={16} /></a></div></section>}
       {state.loading && <p role="status" className="traffic-loading">{t('Consultando informes…', 'Loading reports…')}</p>}
