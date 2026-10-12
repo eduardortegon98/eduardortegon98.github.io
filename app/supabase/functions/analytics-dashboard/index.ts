@@ -1,5 +1,5 @@
 // Deploy with --no-verify-jwt: the handler verifies the session with Supabase Auth. Google credentials stay in Edge secrets.
-const cache = new Map<number, { expires: number; data: unknown }>();
+const cache = new Map<string, { expires: number; data: unknown }>();
 let token: { value: string; expires: number } | undefined;
 const encoder = new TextEncoder();
 const base64url = (bytes: Uint8Array) => btoa(String.fromCharCode(...bytes)).replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
@@ -74,20 +74,30 @@ Deno.serve(async request => {
     try { body = JSON.parse(text); } catch { return json(400, { error: 'invalid_request' }); }
     const days = body?.days;
     if (![7, 30, 90].includes(days)) return json(400, { error: 'invalid_range' });
-    const cached = cache.get(days);
+    const filterNames = ['country', 'deviceCategory', 'sessionSourceMedium'];
+    const incomingFilters = body?.filters || {};
+    if (typeof incomingFilters !== 'object' || Array.isArray(incomingFilters) || Object.keys(incomingFilters).some(key => !filterNames.includes(key))) return json(400, { error: 'invalid_filters' });
+    const appliedFilters = Object.fromEntries(filterNames.map(key => [key, incomingFilters[key] ?? '']));
+    if (Object.values(appliedFilters).some(value => typeof value !== 'string' || value.length > 120)) return json(400, { error: 'invalid_filters' });
+    const expressions = Object.entries(appliedFilters).filter(([, value]) => value).map(([fieldName, value]) => ({ filter: { fieldName, stringFilter: { matchType: 'EXACT', value, caseSensitive: false } } }));
+    const dimensionFilter = expressions.length ? { andGroup: { expressions } } : undefined;
+    const cacheKey = JSON.stringify({ days, appliedFilters });
+    for (const [key, value] of cache) if(value.expires <= Date.now()) cache.delete(key);
+    if(cache.size >= 50 && !cache.has(cacheKey)) cache.delete(cache.keys().next().value!);
+    const cached = cache.get(cacheKey);
     if (cached && cached.expires > Date.now()) return json(200, cached.data);
     const accessToken = await googleToken();
     const dateRanges = [{ startDate: `${days - 1}daysAgo`, endDate: 'today' }];
     const metricNames = ['activeUsers', 'sessions', 'screenPageViews'];
-    const summaryQuery = { dateRanges, metrics: metricNames.map(name => ({ name })) };
-    const rankingQuery = (dimension: string, metric: string) => ({ dateRanges, dimensions: [{ name: dimension }], metrics: [{ name: metric }], orderBys: [{ metric: { metricName: metric }, desc: true }], limit: 10 });
+    const summaryQuery = { dateRanges, dimensionFilter, metrics: metricNames.map(name => ({ name })) };
+    const rankingQuery = (dimension: string, metric: string) => ({ dateRanges, dimensionFilter, dimensions: [{ name: dimension }], metrics: [{ name: metric }], orderBys: [{ metric: { metricName: metric }, desc: true }], limit: 10 });
     const [summary, daily, sources, pages, devices, leads, realtime, geography] = await Promise.all([
       report('runReport', summaryQuery, accessToken),
       report('runReport', { ...summaryQuery, dimensions: [{ name: 'date' }], orderBys: [{ dimension: { dimensionName: 'date' } }], limit: 90 }, accessToken),
       report('runReport', rankingQuery('sessionSourceMedium', 'sessions'), accessToken),
       report('runReport', rankingQuery('pagePath', 'screenPageViews'), accessToken),
       report('runReport', rankingQuery('deviceCategory', 'sessions'), accessToken),
-      report('runReport', { dateRanges, metrics: [{ name: 'eventCount' }], dimensionFilter: { filter: { fieldName: 'eventName', stringFilter: { matchType: 'EXACT', value: 'generate_lead' } } } }, accessToken),
+      report('runReport', { dateRanges, metrics: [{ name: 'eventCount' }], dimensionFilter: { andGroup: { expressions: [...expressions, { filter: { fieldName: 'eventName', stringFilter: { matchType: 'EXACT', value: 'generate_lead' } } }] } } }, accessToken),
       report('runRealtimeReport', { metrics: [{ name: 'activeUsers' }] }, accessToken),
       report('runReport', { ...rankingQuery('country', 'sessions'), limit: 250 }, accessToken).then(result => ({ rows: ranked(result), status: 'available' })).catch(() => ({ rows: [], status: 'unavailable' })),
     ]);
@@ -101,8 +111,8 @@ Deno.serve(async request => {
       const row = rawDaily.get(iso.replace(/-/g, '')) as Row | undefined;
       return { date: iso, activeUsers: numberAt(row, 0), sessions: numberAt(row, 1), screenPageViews: numberAt(row, 2) };
     });
-    const data = { countries: geography.rows, geographyStatus: geography.status, days, updatedAt: new Date().toISOString(), summary: Object.fromEntries(metricNames.map((name, i) => [name, numberAt(summary.rows?.[0], i)])), daily: timeline, sources: ranked(sources), pages: ranked(pages), devices: ranked(devices), leads: numberAt(leads.rows?.[0], 0), realtime: { activeUsers: numberAt(realtime.rows?.[0], 0) } };
-    cache.set(days, { expires: Date.now() + 60000, data });
+    const data = { filterVersion: 1, appliedFilters, countries: geography.rows, geographyStatus: geography.status, days, updatedAt: new Date().toISOString(), summary: Object.fromEntries(metricNames.map((name, i) => [name, numberAt(summary.rows?.[0], i)])), daily: timeline, sources: ranked(sources), pages: ranked(pages), devices: ranked(devices), leads: numberAt(leads.rows?.[0], 0), realtime: { activeUsers: numberAt(realtime.rows?.[0], 0) } };
+    cache.set(cacheKey, { expires: Date.now() + 60000, data });
     return json(200, data);
   } catch (failure) {
     // Return only allowlisted diagnostic codes, never upstream messages or secrets.
