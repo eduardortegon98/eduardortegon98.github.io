@@ -1,3 +1,5 @@
+import { MotionConfig } from "framer-motion";
+import "./components/Motion.css";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
@@ -14,7 +16,7 @@ createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
       <ThemeProvider>
-        <LanguageProvider><App /><Analytics /></LanguageProvider>
+        <LanguageProvider><MotionConfig reducedMotion="user" transition={{duration:0.48,ease:[0.22,1,0.36,1]}}><App /><Analytics /></MotionConfig></LanguageProvider>
       </ThemeProvider>
     </BrowserRouter>
   </StrictMode>,

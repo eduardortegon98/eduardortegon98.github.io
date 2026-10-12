@@ -33,7 +33,7 @@ function AnalyticsReport() {
   useEffect(() => {
     if (focus === requestedFocus) return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { setFocus(requestedFocus); return; }
-    const timer = setTimeout(() => setFocus(requestedFocus), 360);
+    const timer = setTimeout(() => setFocus(requestedFocus), 480);
     return () => clearTimeout(timer);
   }, [focus, requestedFocus]);
   const [days, setDays] = useState(7);

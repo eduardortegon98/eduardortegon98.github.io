@@ -41,7 +41,7 @@ const Products = () => {
 
     animate(window.scrollY, el.offsetTop, {
       duration: 1.2,
-      ease: "easeInOut",
+      ease: [0.22, 1, 0.36, 1],
       onUpdate: (latest) => {
         window.scrollTo(0, latest);
       },
@@ -126,7 +126,7 @@ const Products = () => {
             custom={direction}
             variants={{
               enter: (direction) => ({
-                x: direction > 0 ? 100 : -100,
+                x: direction > 0 ? 30 : -30,
                 opacity: 0,
               }),
               center: {
@@ -134,7 +134,7 @@ const Products = () => {
                 opacity: 1,
               },
               exit: (direction) => ({
-                x: direction > 0 ? -100 : 100,
+                x: direction > 0 ? -30 : 30,
                 opacity: 0,
               }),
             }}
@@ -142,7 +142,7 @@ const Products = () => {
             animate="center"
             exit="exit"
             transition={{
-              duration: 0.45,
+              duration: 0.55,
               ease: "easeInOut",
             }}
           >

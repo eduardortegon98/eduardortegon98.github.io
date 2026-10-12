@@ -99,8 +99,8 @@ const pickSuggestion = (text, channel) => {
 const modalVariants = {
   initial: {
     opacity: 0,
-    y: 34,
-    scale: 0.86,
+    y: 14,
+    scale: 0.98,
     rotate: -6,
     filter: "blur(10px)",
     clipPath: "polygon(104% -10%, 104% -10%, -10% 104%, -10% 104%)",
@@ -116,19 +116,19 @@ const modalVariants = {
   },
   exit: {
     opacity: 0,
-    y: 36,
-    scale: 0.88,
+    y: 12,
+    scale: 0.98,
     rotate: 6,
     filter: "blur(10px)",
     clipPath: "polygon(-10% -10%, 110% -10%, 110% -10%, -10% -10%)",
-    transition: { duration: 0.55, ease: [0.7, 0, 0.84, 0] },
+    transition: { duration: 0.4, ease: [0.4, 0, 0.2, 1] },
   },
 };
 
 const overlayVariants = {
   initial: { opacity: 0 },
-  animate: { opacity: 1, transition: { duration: 0.25 } },
-  exit: { opacity: 0, transition: { duration: 0.18 } },
+  animate: { opacity: 1, transition: { duration: 0.32 } },
+  exit: { opacity: 0, transition: { duration: 0.32 } },
 };
 
 function ChannelPill({ id, Icon, title, active, onSelect }) {
@@ -244,7 +244,7 @@ function WalkieModal({
                     background:
                       "linear-gradient(135deg, rgba(192,253,185,0.30), transparent 55%, rgba(255,255,255,0.08))",
                   }}
-                  initial={{ opacity: 0, rotate: -10, scale: 1.04 }}
+                  initial={{ opacity: 0, rotate: -3, scale: 1.01 }}
                   animate={{ opacity: 1, rotate: 0, scale: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}

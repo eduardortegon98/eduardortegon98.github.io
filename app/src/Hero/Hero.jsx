@@ -10,7 +10,7 @@ export default function Hero() {
   const reduced = useReducedMotion();
   const [paused, setPaused] = useState(false);
   const visual = useRef(null);
-  const enter = { hidden: { opacity: reduced ? 1 : 0, y: reduced ? 0 : 18 }, show: { opacity: 1, y: 0, transition: { duration: reduced ? 0 : 0.65 } } };
+  const enter = { hidden: { opacity: reduced ? 1 : 0, y: reduced ? 0 : 12 }, show: { opacity: 1, y: 0, transition: { duration: reduced ? 0 : 0.8, ease: [0.22, 1, 0.36, 1] } } };
   function explore() { document.getElementById("products")?.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" }); }
   function tilt(event) {
     if (reduced || paused || event.pointerType !== "mouse") return;

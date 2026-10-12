@@ -27,7 +27,7 @@
 .analytics-filter-panel select{max-width:100%;border:1px solid #d8e5dc;border-radius:7px;background:#fff;padding:8px;color:#365a44;font:inherit;font-size:12px}
 .analytics-filter-panel button{border:1px solid #d8e5dc;border-radius:7px;background:#fff;padding:9px 12px;color:#3c6c50;font:inherit;font-size:11px;cursor:pointer}
 .analytics-filter-note{font-size:10px;line-height:1.6;color:#789083;margin:8px 0}
-@media(prefers-reduced-motion:no-preference){.editable-widget{animation:editable-appear .25s ease both}@keyframes editable-appear{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}}
+@media(prefers-reduced-motion:no-preference){.editable-widget{animation:editable-appear .48s cubic-bezier(.22,1,.36,1) both}@keyframes editable-appear{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}}
 @media(max-width:1000px){.editable-board{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:760px){.admin-content .analytics-interactive.customizable-analytics .traffic-main{padding:16px 14px}.editable-board-toolbar{flex-wrap:wrap}.editable-board-settings ul{grid-template-columns:1fr}}
 @media(max-width:500px){.editable-board{grid-template-columns:1fr}.editable-widget.wide{grid-column:1/-1}}
@@ -83,7 +83,7 @@
 .section-detail{grid-area:detail;min-width:0;padding:0;background:transparent;border:0}
 .admin-content .customizable-analytics .section-detail .analytics-focus-area{min-height:350px;height:auto;margin:0;padding:18px}
 .section-audience .editable-widget.wide:only-child{grid-column:1/-1}
-@media(prefers-reduced-motion:no-preference){.sectioned-board{transition:grid-template-columns .36s cubic-bezier(.22,.7,.25,1),gap .36s ease}.section-detail{animation:detail-column-open .35s ease both}@keyframes detail-column-open{from{opacity:0;transform:translateX(12px)}to{opacity:1;transform:none}}}
+@media(prefers-reduced-motion:no-preference){.sectioned-board{transition:grid-template-columns .48s cubic-bezier(.22,.7,.25,1),gap .48s cubic-bezier(.22,1,.36,1)}.section-detail{animation:detail-column-open .48s cubic-bezier(.22,1,.36,1) both}@keyframes detail-column-open{from{opacity:0;transform:translateX(12px)}to{opacity:1;transform:none}}}
 @media(max-width:1200px){.sectioned-board.has-detail-column{grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:"audience detail" "summary summary" "acquisition management";gap:14px}.sectioned-board.has-detail-column .section-summary .editable-board{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media(max-width:850px){.sectioned-board.has-detail-column{grid-template-columns:1fr;grid-template-areas:"summary" "audience" "detail" "acquisition" "management"}.sectioned-board.has-detail-column .section-summary .editable-board{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:400px){.sectioned-board.has-detail-column .section-summary .editable-board{grid-template-columns:1fr}}
