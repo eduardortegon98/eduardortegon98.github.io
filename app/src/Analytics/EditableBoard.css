@@ -77,3 +77,13 @@
 @media(max-width:1150px){.sectioned-board{grid-template-columns:minmax(0,1.35fr) minmax(270px,1fr);gap:14px}.analytics-section{padding:13px}}
 @media(max-width:850px){.sectioned-board{grid-template-columns:1fr;grid-template-areas:"summary" "audience" "acquisition" "management";gap:16px}.section-summary .editable-board,.section-acquisition .editable-board{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:400px){.section-summary .editable-board,.section-acquisition .editable-board,.admin-content .customizable-analytics .section-management .management-hub{grid-template-columns:1fr}}
+
+/* Add a real third track only while an expanded metric is mounted. */
+.sectioned-board.has-detail-column{grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(265px,.8fr);grid-template-areas:"audience detail summary" "audience detail acquisition" "audience detail management";gap:16px}
+.section-detail{grid-area:detail;min-width:0;padding:0;background:transparent;border:0}
+.admin-content .customizable-analytics .section-detail .analytics-focus-area{min-height:350px;height:auto;margin:0;padding:18px}
+.section-audience .editable-widget.wide:only-child{grid-column:1/-1}
+@media(prefers-reduced-motion:no-preference){.sectioned-board{transition:grid-template-columns .36s cubic-bezier(.22,.7,.25,1),gap .36s ease}.section-detail{animation:detail-column-open .35s ease both}@keyframes detail-column-open{from{opacity:0;transform:translateX(12px)}to{opacity:1;transform:none}}}
+@media(max-width:1200px){.sectioned-board.has-detail-column{grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:"audience detail" "summary summary" "acquisition management";gap:14px}.sectioned-board.has-detail-column .section-summary .editable-board{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:850px){.sectioned-board.has-detail-column{grid-template-columns:1fr;grid-template-areas:"summary" "audience" "detail" "acquisition" "management"}.sectioned-board.has-detail-column .section-summary .editable-board{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:400px){.sectioned-board.has-detail-column .section-summary .editable-board{grid-template-columns:1fr}}
