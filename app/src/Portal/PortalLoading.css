@@ -4,7 +4,11 @@
 .portal-loader-spinner{width:34px;height:34px;border:3px solid #dbe8df;border-top-color:#24573d;border-radius:50%}
 @media(prefers-reduced-motion:no-preference){.portal-loader-spinner{animation:portal-loader-spin .8s linear infinite}@keyframes portal-loader-spin{to{transform:rotate(360deg)}}}
 
-@media(prefers-reduced-motion:reduce){.portal-branded-loading svg path{animation:none!important;will-change:auto!important;opacity:1!important}}
+/* Keep a visible loading signal without travelling motion in reduced-motion mode. */
+@keyframes portal-cardio-soft-pulse{0%,100%{opacity:.35}50%{opacity:1}}
+@media(prefers-reduced-motion:reduce){
+ .portal-cardio svg path:last-child{animation:portal-cardio-soft-pulse 2.4s ease-in-out infinite;stroke-dashoffset:0;will-change:auto}
+}
 
 /* Quiet loading state: no label, no card, no layout jump on analytics refresh. */
 .portal-branded-loading{min-height:100dvh;background:#f6f8f5;padding:0;gap:0;color:#24573d}

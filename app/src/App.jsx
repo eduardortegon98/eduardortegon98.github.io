@@ -2,6 +2,7 @@ import { Suspense, lazy, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import { portalModules } from "./Portal/modules.jsx";
 import ModuleRoute from "./Portal/ModuleRoute.jsx";
+import PortalLoading from "./Portal/PortalLoading";
 import { useTheme } from "./context/ThemeContext.jsx";
 
 const PortalLayout = lazy(() => import("./Portal/PortalLayout.jsx"));
@@ -22,7 +23,7 @@ function App() {
   }, [theme]);
 
   return (
-    <Suspense fallback={null}>
+    <Suspense fallback={<PortalLoading/>}>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/panel" element={<PortalLayout />}>

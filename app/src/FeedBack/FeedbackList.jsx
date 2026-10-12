@@ -1,3 +1,4 @@
+import PortalLoading from "../Portal/PortalLoading";
 import { Localized } from "../i18n/Language";
 import React, { useEffect, useState } from "react";
 import { MessageSquareQuote, Star } from "lucide-react";
@@ -65,15 +66,7 @@ const FeedbackList = () => {
     };
   }, []);
 
-  if (loadingFeedback) {
-    return (
-      <Localized as="div" className="grid gap-6">
-        <Localized as="div" className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-3xl p-6 text-[var(--color-text-muted)]">
-          Cargando testimonios...
-        </Localized>
-      </Localized>
-    );
-  }
+  if (loadingFeedback) return <PortalLoading compact/>;
 
   if (loadError) return <Localized as="p" role="alert" className="rounded-3xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6 text-[var(--color-text-muted)]">{loadError}</Localized>;
 
