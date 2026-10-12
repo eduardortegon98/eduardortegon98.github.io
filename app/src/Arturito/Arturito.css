@@ -39,3 +39,20 @@
 .arturito-weekly-repeat{display:flex;align-items:center;gap:9px;padding-top:14px;border-top:1px solid #e4ebe5;font-size:11px;color:#476d54}.arturito-weekly-repeat span{flex:1}.arturito-weekly-repeat input{accent-color:#367950;width:16px;height:16px}
 .arturito-calendar-note{font-size:10px;line-height:1.7;color:#879b8c;margin:9px 0 0}.arturito-schedule-type{display:block;color:#638f72;font-size:9px;margin-top:4px}
 @media(max-width:400px){.arturito-calendar{padding:10px!important}.arturito-calendar-days{gap:3px}.arturito-calendar-days span{font-size:8px}.arturito-calendar-days strong{font-size:13px}}
+
+/* Summary at the upper right; next feeding beside the routine planner. */
+.arturito-heading{flex-wrap:wrap}
+.arturito-heading .arturito-mini-stats{margin-left:auto;gap:10px}
+.arturito-heading .arturito-mini-stats>div{min-width:135px;padding:11px 14px;gap:5px}
+.arturito-heading .arturito-mini-stats span{font-size:10px}
+.arturito-heading .arturito-mini-stats strong{font-size:21px}
+.arturito-columns{grid-template-columns:minmax(280px,.85fr) minmax(0,1.7fr);gap:20px}
+.arturito-overview{display:block}
+.arturito-planning-grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(160px,.75fr);gap:16px;align-items:start;min-width:0}
+.arturito-planning-grid .arturito-next{padding:18px}
+.arturito-planning-grid .arturito-next>strong{font-size:28px}
+.arturito-planning-grid .arturito-next>p{font-size:11px;line-height:1.7}
+.arturito-planning-grid .arturito-next .arturito-empty{padding:18px 4px}
+@media(max-width:1250px){.arturito-columns{grid-template-columns:1fr}.arturito-levels{grid-template-columns:repeat(4,minmax(0,1fr))}.arturito-planning-grid{grid-template-columns:minmax(0,1.7fr) minmax(210px,.8fr)}}
+@media(max-width:900px){.arturito-overview{display:block}.arturito-levels{grid-template-columns:repeat(2,minmax(0,1fr))}.arturito-heading .arturito-mini-stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:650px){.arturito-planning-grid{grid-template-columns:1fr}.arturito-heading .arturito-mini-stats{width:100%;margin-left:0}.arturito-heading .arturito-mini-stats>div{min-width:0}.arturito-heading .arturito-connection{margin-left:auto}}
