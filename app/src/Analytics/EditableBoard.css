@@ -106,3 +106,10 @@
 .analytics-config-actions .compact-action[aria-expanded=true]{background:#e5f2e9;color:#2c6c47}
 .analytics-period-actions .traffic-refresh{margin:0}
 @media(max-width:500px){.analytics-period-actions{gap:5px}.admin-content .analytics-interactive.customizable-analytics .traffic-toolbar{gap:10px}.analytics-config-actions{margin-left:auto}}
+
+.section-audience .analytics-section-heading{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.section-audience .analytics-section-heading>svg{color:#4a8865;flex-shrink:0}
+.admin-content .customizable-analytics .section-audience .analytics-persistent-map{padding:8px 10px 14px}
+.admin-content .customizable-analytics .section-audience .world-audience svg{width:100%;max-height:none;min-height:0;margin:0 0 10px}
+.admin-content .customizable-analytics .section-audience .world-audience{padding-top:0}
+@media(max-width:760px){.section-audience .analytics-section-heading{flex-direction:row}.admin-content .customizable-analytics .section-audience .analytics-persistent-map{padding:6px 8px 12px}}
