@@ -8,7 +8,7 @@ create table if not exists public.portal_modules(
  enabled boolean not null default true
 );
 insert into public.portal_modules(id,name_es,name_en,category) values
- ('messages','Mensajes','Messages','communications'),('arturito','Arturito','Arturito','pets')
+ ('messages','Mensajes','Messages','communications'),('arturito','Arturito','Arturito','pets'),('ortdesk_ai','ORTDESK.AI','ORTDESK.AI','intelligence')
  on conflict(id) do nothing;
 alter table public.portal_modules enable row level security;
 revoke all on public.portal_modules from anon,authenticated;
