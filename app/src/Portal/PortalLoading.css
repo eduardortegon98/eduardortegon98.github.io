@@ -5,3 +5,10 @@
 @media(prefers-reduced-motion:no-preference){.portal-loader-spinner{animation:portal-loader-spin .8s linear infinite}@keyframes portal-loader-spin{to{transform:rotate(360deg)}}}
 
 @media(prefers-reduced-motion:reduce){.portal-branded-loading svg path{animation:none!important;will-change:auto!important;opacity:1!important}}
+
+/* Quiet loading state: no label, no card, no layout jump on analytics refresh. */
+.portal-branded-loading{min-height:100dvh;background:#f6f8f5;padding:0;gap:0;color:#24573d}
+.portal-branded-loading.compact{min-height:100px;background:transparent;padding:20px}
+.portal-branded-loading.overlay{position:absolute;inset:0;min-height:0;padding:0;z-index:5;background:#f7faf780;backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);border-radius:12px;display:flex;align-items:center;justify-content:center}
+.admin-content .analytics-interactive .traffic-main{position:relative}
+@media(prefers-reduced-motion:no-preference){.portal-branded-loading.overlay{animation:soft-loader-in .18s ease both}@keyframes soft-loader-in{from{opacity:0}to{opacity:1}}}
