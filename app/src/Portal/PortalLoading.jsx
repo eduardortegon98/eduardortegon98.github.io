@@ -1,7 +1,8 @@
 import { useLanguage } from '../i18n/Language';
-import Cardio from '../vendor/uiball/Cardio';
+import { Cardio } from 'ldrs/react';
+import 'ldrs/react/Cardio.css';
 import './PortalLoading.css';
 export default function PortalLoading({ compact = false }) {
   const { language } = useLanguage();
-  return <div className={'portal-branded-loading' + (compact ? ' compact' : '')} role="status" aria-live="polite"><div aria-hidden="true"><Cardio size={64} stroke={3} speed={1.5} color="#24573d"/></div><span>{language === 'en' ? 'Loading…' : 'Cargando…'}</span></div>;
+  return <div className={'portal-branded-loading' + (compact ? ' compact' : '')} role="status" aria-live="polite"><div aria-hidden="true"><Cardio size="50" stroke="4" speed="2" color="#24573d"/></div><span>{language === 'en' ? 'Loading…' : 'Cargando…'}</span></div>;
 }

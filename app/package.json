@@ -26,7 +26,8 @@
     "tailwindcss": "^4.1.18",
     "three": "^0.182.0",
     "tsparticles": "^3.9.1",
-    "tsparticles-slim": "^2.12.0"
+    "tsparticles-slim": "^2.12.0",
+    "ldrs": "1.1.9"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
