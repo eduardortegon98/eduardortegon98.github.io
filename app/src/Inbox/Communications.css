@@ -100,3 +100,11 @@
 .admin-content .inbox-app .inbox-thread-header .inbox-status select{min-height:34px}
 .communications-contact-number{font-size:11px;color:#6b7f71;overflow-wrap:anywhere}
 @media(max-width:760px){.admin-content .inbox-app .inbox-thread-header{flex-wrap:wrap;gap:10px}.admin-content .inbox-app .inbox-thread-header .inbox-status{margin-left:auto}.admin-content .inbox-app .inbox-thread-header>div:not(.communications-context){min-width:100px}}
+
+/* Give channel and data-source labels distinct breathing room in both locations. */
+.admin-content .inbox-app .inbox-conversation .channel-tag{display:inline-flex;align-items:center;margin-right:12px;margin-top:5px;margin-bottom:5px}
+.admin-content .inbox-app .inbox-conversation .communication-badge{margin-top:5px;margin-bottom:5px}
+.admin-content .inbox-app .inbox-thread-header>div:not(.communications-context){gap:10px 18px}
+.admin-content .inbox-app .inbox-thread-header .channel-tag{margin-right:6px}
+.admin-content .inbox-app .inbox-thread-header .communication-badge{margin-left:4px}
+@media(max-width:760px){.admin-content .inbox-app .inbox-thread-header>div:not(.communications-context){gap:9px 14px}.admin-content .inbox-app .inbox-conversation .channel-tag{margin-right:10px}}
