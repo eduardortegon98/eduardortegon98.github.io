@@ -3,15 +3,11 @@ import { useEffect, useRef, useState } from "react";
 import { Navigate, useOutletContext } from "react-router-dom";
 import { ArrowLeft, CheckCheck, MessageCircle, Search, Send } from "lucide-react";
 import "./Inbox.css";
+import { demoConversations } from "./demoData";
 import "./Communications.css";
 const initials = name => name.trim().split(/\s+/).filter(Boolean).slice(0, 2).map(part => part[0]).join("").toLocaleUpperCase();
 const channels = ["WhatsApp", "Instagram", "Facebook"];
-const seed = [
-  { id: 1, name: "Laura Martínez", company: "Clínica Vet Norte", channel: "WhatsApp", dataSource: "mock", phone: null, unread: true, status: "Pendiente", time: "10:42", messages: [{ text: "Hola, quisiera una página web para mi veterinaria. ¿Podemos hablar de los servicios?", own: false, time: "10:42" }] },
-  { id: 2, name: "Andrés Gómez", company: "Estudio creativo", channel: "Instagram", dataSource: "mock", handle: null, unread: true, status: "Pendiente", time: "10:28", messages: [{ text: "Vi sus proyectos y me interesa automatizar las respuestas de mi negocio.", own: false, time: "10:28" }] },
-  { id: 3, name: "Carolina Ruiz", company: "Tienda Carolina", channel: "Facebook", dataSource: "mock", handle: null, unread: false, status: "En curso", time: "09:56", messages: [{ text: "¿También desarrollan tiendas en línea?", own: false, time: "09:50" }, { text: "Sí, podemos ayudarte a definir el catálogo y el proceso de compra. ¿Qué productos vendes?", own: true, time: "09:56" }] },
-  { id: 4, name: "Diego Torres", company: "Consultoría Torres", channel: "WhatsApp", unread: false, status: "Resuelto", time: "Ayer", messages: [{ text: "Gracias por la información. Ya tengo lo necesario para empezar.", own: false, time: "Ayer" }] },
-];
+const seed = demoConversations;
 export default function Inbox() {
   const { user, role } = useOutletContext();
   return role === "super_admin" ? <Workspace key={user.id} user={user} /> : <Navigate to="/panel" replace />;

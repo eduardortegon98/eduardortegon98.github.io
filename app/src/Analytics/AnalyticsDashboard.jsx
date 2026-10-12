@@ -8,6 +8,7 @@ import './AdminCharts.css';
 import './GlassAnalytics.css';
 import WorldAudience from './WorldAudience';
 import ManagementCards from '../Portal/ManagementCards';
+import PortalLoading from '../Portal/PortalLoading';
 
 export default function AnalyticsDashboard() {
   const { role } = useOutletContext();
@@ -84,7 +85,7 @@ function AnalyticsReport() {
       
       <div className="traffic-toolbar"><div className="traffic-range" role="group" aria-label={t('Periodo del informe', 'Report period')}>{[7, 30, 90].map(n => <button key={n} aria-pressed={days === n} onClick={() => setDays(n)}>{n} {t('días', 'days')}</button>)}</div><button className="traffic-refresh" disabled={state.loading} onClick={() => setRevision(n => n + 1)}><RefreshCw size={16} />{t('Actualizar', 'Refresh')}</button><a href="https://analytics.google.com/" target="_blank" rel="noreferrer">Google Analytics <ArrowUpRight size={16} /></a></div>
       {state.error && <section className="traffic-connection" role="status"><Activity size={26} /><div><h2>{t('Conexión de informes pendiente', 'Reports connection pending')}</h2><p>{t('No pudimos consultar Google Analytics. La conexión de lectura debe estar configurada y disponible para mostrar cifras reales.', 'We could not query Google Analytics. The read connection must be configured and available to show real figures.')}</p>{diagnostics[state.error] && <p role="alert">{diagnostics[state.error]}</p>}<a href="https://analytics.google.com/" target="_blank" rel="noreferrer">{t('Consultar en Google Analytics', 'View in Google Analytics')} <ArrowUpRight size={16} /></a></div></section>}
-      {state.loading && <p role="status" className="traffic-loading">{t('Consultando informes…', 'Loading reports…')}</p>}
+      {state.loading && <div className="traffic-loading"><PortalLoading compact/></div>}
       <section className="traffic-metrics" aria-label={t('Resumen del tráfico', 'Traffic summary')}>{metrics.map(([Icon, label, value, note], index) => { const key = ['activeUsers','sessions','screenPageViews','leads'][index]; return <button className="analytics-metric-button" key={key} aria-pressed={focus === key} aria-controls="analytics-focus-chart" onClick={() => setRequestedFocus(key)}><Icon size={20}/><span>{label}</span><strong>{format(value)}</strong><small>{note}</small></button>; })}</section>
       <section className="analytics-persistent-map traffic-card"><div className="traffic-card-heading"><h2>{t('Audiencia mundial', 'Worldwide audience')}</h2><Globe2 size={18}/></div><WorldAudience rows={data?.countries} status={data?.geographyStatus} en={en}/></section>
       {(focus !== 'countries' || requestedFocus !== 'countries') && <section className={`analytics-focus-area traffic-card ${closingMetric || openingMetric ? "metric-transition-hidden" : "metric-transition-visible"}`} id="analytics-focus-chart" aria-label={t('Gráfico seleccionado', 'Selected chart')}>

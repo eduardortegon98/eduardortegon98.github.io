@@ -2,6 +2,7 @@ import { useState, Suspense } from 'react';
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { LayoutDashboard, BarChart3, MessagesSquare, ExternalLink, LogOut, ShieldCheck, Menu, X, UserRound } from 'lucide-react';
 import Access from './Access';
+import PortalLoading from './PortalLoading';
 import { supabase } from '../lib/supabase';
 import { LanguageSwitch, useLanguage } from '../i18n/Language';
 import './PortalLayout.css';
@@ -45,6 +46,6 @@ function Workspace({ state }) {
     </aside>
     <div className="admin-body"><header className="admin-topbar"><button className="admin-menu" aria-controls="admin-navigation" aria-expanded={open} aria-label={en ? 'Toggle navigation' : 'Abrir o cerrar navegación'} onClick={() => setOpen(value => !value)}>{open ? <X size={20}/> : <Menu size={20}/>}</button><div className="admin-breadcrumb"><span>{en ? 'Portal' : 'Portal'}</span><span>/</span><strong>{title}</strong></div><div className="admin-top-actions">{realAdmin && <label className="admin-role-selector"><UserRound size={16} aria-hidden="true"/><span>{en ? 'Acting as' : 'Actuando como'}</span><select aria-label={en ? "Acting role" : "Rol activo"} value={actingRole} onChange={event => changeRole(event.target.value)}><option value="super_admin">Admin</option><option value="client">{en ? 'Client' : 'Cliente'}</option></select></label>}<span className="admin-access"><ShieldCheck size={15}/>{admin ? (en ? 'Admin access' : 'Acceso admin') : (en ? 'Client account' : 'Cuenta de cliente')}</span><LanguageSwitch/></div></header>
     {preview && <div className="admin-preview-banner" role="status"><div><strong>{en ? 'Client role preview' : 'Vista previa del rol cliente'}</strong><p>{en ? 'You remain signed in as administrator. This previews the interface, without accessing another person’s account.' : 'Sigues conectado como administrador. Esta vista simula la interfaz del cliente, sin acceder a la cuenta de otra persona.'}</p></div><button onClick={() => changeRole('super_admin')}>{en ? 'Return to administrator' : 'Volver a administrador'}</button></div>}
-    <div id="admin-content" className="admin-content" tabIndex={-1}><Suspense fallback={<p role="status" className="admin-loading">{en ? 'Loading section…' : 'Cargando sección…'}</p>}><Outlet key={actingRole} context={context}/></Suspense></div></div>
+    <div id="admin-content" className="admin-content" tabIndex={-1}><Suspense fallback={<PortalLoading compact/>}><Outlet key={actingRole} context={context}/></Suspense></div></div>
   </div>;
 }
