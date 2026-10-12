@@ -31,3 +31,24 @@
 @media(max-width:1000px){.editable-board{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:760px){.admin-content .analytics-interactive.customizable-analytics .traffic-main{padding:16px 14px}.editable-board-toolbar{flex-wrap:wrap}.editable-board-settings ul{grid-template-columns:1fr}}
 @media(max-width:500px){.editable-board{grid-template-columns:1fr}.editable-widget.wide{grid-column:1/-1}}
+
+/* Stable sections preserve hierarchy while retaining local personalization. */
+.sectioned-board{display:grid;gap:24px}
+.analytics-section{min-width:0}
+.analytics-section-heading{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:0 0 12px;margin-bottom:12px;border-bottom:1px solid #dce7e0}
+.analytics-section-heading h2{font-size:13px;font-weight:700;color:#34553f;letter-spacing:.01em;margin:0}
+.analytics-section-heading p{font-size:10px;color:#809488;margin:0}
+.section-summary .editable-board{grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.section-audience .editable-board{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;align-items:stretch}
+.section-audience .editable-widget.wide{grid-column:auto}
+.section-audience .editable-widget.wide:only-child{grid-column:1/-1}
+.admin-content .customizable-analytics .section-audience .analytics-persistent-map,.admin-content .customizable-analytics .section-audience .analytics-focus-area{height:100%;min-height:350px}
+.section-acquisition .editable-board{grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;align-items:stretch}
+.section-acquisition .editable-widget{height:100%}
+.admin-content .customizable-analytics .section-acquisition .analytics-report-tile,.admin-content .customizable-analytics .section-acquisition .analytics-live-tile{height:100%;min-height:110px}
+.section-management .editable-board{grid-template-columns:1fr}
+.section-management .management-hub{gap:12px}
+.sectioned-board .editable-widget-tools{font-size:10px}
+@media(max-width:1000px){.section-summary .editable-board,.section-acquisition .editable-board{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){.sectioned-board{gap:20px}.analytics-section-heading{align-items:flex-start;flex-direction:column;gap:5px}.section-audience .editable-board{grid-template-columns:1fr}.admin-content .customizable-analytics .section-audience .analytics-persistent-map,.admin-content .customizable-analytics .section-audience .analytics-focus-area{min-height:280px}}
+@media(max-width:400px){.section-summary .editable-board,.section-acquisition .editable-board{grid-template-columns:1fr}}
