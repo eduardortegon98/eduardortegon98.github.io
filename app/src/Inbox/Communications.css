@@ -108,3 +108,8 @@
 .admin-content .inbox-app .inbox-thread-header .channel-tag{margin-right:6px}
 .admin-content .inbox-app .inbox-thread-header .communication-badge{margin-left:4px}
 @media(max-width:760px){.admin-content .inbox-app .inbox-thread-header>div:not(.communications-context){gap:9px 14px}.admin-content .inbox-app .inbox-conversation .channel-tag{margin-right:10px}}
+
+/* Keep the chat header badges compact; preserve conversation-list spacing. */
+.admin-content .inbox-app .inbox-thread-header>div:not(.communications-context){gap:8px}
+.admin-content .inbox-app .inbox-thread-header .channel-tag{margin-right:0}
+.admin-content .inbox-app .inbox-thread-header .communication-badge{margin-left:0}
