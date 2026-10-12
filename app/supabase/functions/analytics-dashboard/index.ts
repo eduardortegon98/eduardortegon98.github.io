@@ -81,13 +81,25 @@ Deno.serve(async request => {
     if (Object.values(appliedFilters).some(value => typeof value !== 'string' || value.length > 120)) return json(400, { error: 'invalid_filters' });
     const expressions = Object.entries(appliedFilters).filter(([, value]) => value).map(([fieldName, value]) => ({ filter: { fieldName, stringFilter: { matchType: 'EXACT', value, caseSensitive: false } } }));
     const dimensionFilter = expressions.length ? { andGroup: { expressions } } : undefined;
-    const cacheKey = JSON.stringify({ days, appliedFilters });
+    const regionCountry = body?.regionCountry;
+    if(regionCountry !== undefined && (typeof regionCountry !== 'string' || !regionCountry.trim() || regionCountry.length > 100)) return json(400, {error:'invalid_country'});
+    const cacheKey = JSON.stringify({ days, appliedFilters, regionCountry });
     for (const [key, value] of cache) if(value.expires <= Date.now()) cache.delete(key);
     if(cache.size >= 50 && !cache.has(cacheKey)) cache.delete(cache.keys().next().value!);
     const cached = cache.get(cacheKey);
     if (cached && cached.expires > Date.now()) return json(200, cached.data);
     const accessToken = await googleToken();
     const dateRanges = [{ startDate: `${days - 1}daysAgo`, endDate: 'today' }];
+    if (regionCountry) {
+      const regions = await report('runReport', {
+        dateRanges, dimensions: [{name:'region'}], metrics: [{name:'sessions'}],
+        dimensionFilter: {filter:{fieldName:'country',stringFilter:{matchType:'EXACT',value:regionCountry,caseSensitive:false}}},
+        orderBys:[{metric:{metricName:'sessions'},desc:true}],limit:1000,
+      }, accessToken);
+      const result = {country:regionCountry,days,regions:ranked(regions),updatedAt:new Date().toISOString()};
+      cache.set(cacheKey,{expires:Date.now()+60000,data:result});
+      return json(200,result);
+    }
     const metricNames = ['activeUsers', 'sessions', 'screenPageViews'];
     const summaryQuery = { dateRanges, dimensionFilter, metrics: metricNames.map(name => ({ name })) };
     const rankingQuery = (dimension: string, metric: string) => ({ dateRanges, dimensionFilter, dimensions: [{ name: dimension }], metrics: [{ name: metric }], orderBys: [{ metric: { metricName: metric }, desc: true }], limit: 10 });

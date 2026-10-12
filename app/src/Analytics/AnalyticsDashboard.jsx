@@ -10,6 +10,7 @@ import WorldAudience from './WorldAudience';
 import ManagementCards from '../Portal/ManagementCards';
 import PortalLoading from '../Portal/PortalLoading';
 import EditableBoard from './EditableBoard';
+import CountryRegions from './CountryRegions';
 
 export default function AnalyticsDashboard() {
   const { role } = useOutletContext();
@@ -21,6 +22,7 @@ function AnalyticsReport() {
   const { language } = useLanguage();
   const en = language === 'en';
   const t = (es, english) => en ? english : es;
+  const [selectedCountry, setSelectedCountry] = useState('');
   const [focus, setFocus] = useState('countries');
   const [requestedFocus, setRequestedFocus] = useState('countries');
   const changingChart = focus !== requestedFocus;
@@ -82,7 +84,7 @@ function AnalyticsReport() {
   const dateLabel = value => new Intl.DateTimeFormat(en ? 'en-US' : 'es-CO', { day: 'numeric', month: 'short', timeZone: 'UTC' }).format(new Date(value + 'T12:00:00Z'));
   const metricKey = { 'activeUsers': 0, 'sessions': 1, 'screenPageViews': 2 };
   const activeMetric = metrics[metricKey[focus] ?? 1];
-  const expandedTitle = focus === 'countries' ? t('Audiencia mundial', 'Worldwide audience') : focus === 'sources' ? t('Orígenes del tráfico', 'Traffic sources') : focus === 'devices' ? t('Dispositivos', 'Devices') : focus === 'pages' ? t('Páginas más visitadas', 'Most visited pages') : focus === 'leads' ? t('Consultas enviadas', 'Enquiries sent') : activeMetric[1];
+  const expandedTitle = focus === 'regions' ? selectedCountry + ' · ' + t('Regiones', 'Regions') : focus === 'countries' ? t('Audiencia mundial', 'Worldwide audience') : focus === 'sources' ? t('Orígenes del tráfico', 'Traffic sources') : focus === 'devices' ? t('Dispositivos', 'Devices') : focus === 'pages' ? t('Páginas más visitadas', 'Most visited pages') : focus === 'leads' ? t('Consultas enviadas', 'Enquiries sent') : activeMetric[1];
   return <div className="traffic-dashboard analytics-interactive customizable-analytics">
     <main aria-busy={Boolean(state.loading)} className={`traffic-main ${mapOnly ? "is-map-only" : "has-open-metric"} ${closingMetric ? "is-closing-metric" : ""} ${openingMetric ? "is-opening-metric" : ""}`} data-focus={focus}>
       
@@ -91,11 +93,11 @@ function AnalyticsReport() {
       {state.loading && <PortalLoading overlay/>}
       <EditableBoard storageKey={'ortegon-analytics-layout-v1:'+user.id} en={en} widgets={[
         ...metrics.map(([Icon,label,value,note],index)=>{const key=['activeUsers','sessions','screenPageViews','leads'][index];return {id:key,title:label,className:'traffic-metrics',content:<button className="analytics-metric-button" aria-pressed={focus===key} aria-controls="analytics-focus-chart" onClick={()=>setRequestedFocus(key)}><Icon size={20}/><span>{label}</span><strong>{format(value)}</strong></button>};}),
-        {id:'map',title:t('Mapa mundial','World map'),className:'wide',content:<section className="analytics-persistent-map traffic-card"><div className="traffic-card-heading"><h2>{t('Audiencia mundial', 'Worldwide audience')}</h2><Globe2 size={18}/></div><WorldAudience rows={data?.countries} status={data?.geographyStatus} en={en}/></section>},
+        {id:'map',title:t('Mapa mundial','World map'),className:'wide',content:<section className="analytics-persistent-map traffic-card"><div className="traffic-card-heading"><h2>{t('Audiencia mundial', 'Worldwide audience')}</h2><Globe2 size={18}/></div><WorldAudience rows={data?.countries} status={data?.geographyStatus} en={en} onCountrySelect={country => { setSelectedCountry(country); setRequestedFocus('regions'); }}/></section>},
         {id:'detail',title:t('Gráfico ampliado','Expanded chart'),className:'wide',content:(focus !== 'countries' || requestedFocus !== 'countries') && <section className={`analytics-focus-area traffic-card ${closingMetric || openingMetric ? "metric-transition-hidden" : "metric-transition-visible"}`} id="analytics-focus-chart" aria-label={t('Gráfico seleccionado', 'Selected chart')}>
         <div className="traffic-card-heading"><div><p className="traffic-eyebrow">{t('EXPLORA TUS RESULTADOS', 'EXPLORE YOUR RESULTS')}</p><h2 aria-live="polite">{expandedTitle}</h2></div><button className="analytics-close-metric" onClick={() => setRequestedFocus('countries')} aria-label={t('Cerrar métrica', 'Close metric')} title={t('Cerrar métrica', 'Close metric')}><X size={17} aria-hidden="true"/></button></div>
         <div className={`analytics-focus-content ${changingChart ? "is-leaving" : ""}`} key={focus}>
-        {!data && state.loading ? <Empty loading en={en}/> : !data ? <Empty en={en}/> : ['activeUsers','sessions','screenPageViews'].includes(focus) ? (data.daily.length ? <Trend rows={data.daily} metric={focus} label={expandedTitle} formatDate={dateLabel}/> : <Empty en={en}/>) : focus === 'countries' ? <WorldAudience rows={data.countries} status={data.geographyStatus} en={en}/> : focus === 'sources' || focus === 'devices' ? <Donut title={expandedTitle} subtitle={t('Sesiones del periodo seleccionado', 'Sessions in the selected period')} rows={focus === 'sources' ? data.sources : data.devices} en={en}/> : focus === 'pages' ? <Breakdown title={expandedTitle} subtitle={t('Página · vistas', 'Page · views')} rows={data.pages} en={en}/> : <div className="analytics-lead-detail"><MessageSquare size={28}/><strong>{format(data.leads)}</strong><p>{t('Eventos generate_lead registrados por Google en este periodo.', 'Google generate_lead events recorded in this period.')}</p><small>{t('Este informe devuelve un total. No incluye una serie diaria de consultas.', 'This report returns a total and does not include a daily enquiries series.')}</small></div>}
+        {focus === 'regions' ? <CountryRegions country={selectedCountry} days={days} en={en}/> : !data && state.loading ? <Empty loading en={en}/> : !data ? <Empty en={en}/> : ['activeUsers','sessions','screenPageViews'].includes(focus) ? (data.daily.length ? <Trend rows={data.daily} metric={focus} label={expandedTitle} formatDate={dateLabel}/> : <Empty en={en}/>) : focus === 'countries' ? <WorldAudience rows={data.countries} status={data.geographyStatus} en={en}/> : focus === 'sources' || focus === 'devices' ? <Donut title={expandedTitle} subtitle={t('Sesiones del periodo seleccionado', 'Sessions in the selected period')} rows={focus === 'sources' ? data.sources : data.devices} en={en}/> : focus === 'pages' ? <Breakdown title={expandedTitle} subtitle={t('Página · vistas', 'Page · views')} rows={data.pages} en={en}/> : <div className="analytics-lead-detail"><MessageSquare size={28}/><strong>{format(data.leads)}</strong><p>{t('Eventos generate_lead registrados por Google en este periodo.', 'Google generate_lead events recorded in this period.')}</p><small>{t('Este informe devuelve un total. No incluye una serie diaria de consultas.', 'This report returns a total and does not include a daily enquiries series.')}</small></div>}
         </div>
       </section>},
         ...[['sources',Globe2,t('Orígenes','Sources'),data?.sources?.[0]?.label],['devices',MousePointer2,t('Dispositivos','Devices'),data?.devices?.[0]?.label],['pages',Eye,t('Páginas','Pages'),data?.pages?.[0]?.label]].map(([key,Icon,label,leading])=>({id:key,title:label,content:<button className="analytics-report-tile" aria-pressed={focus===key} aria-controls="analytics-focus-chart" onClick={()=>setRequestedFocus(key)}><Icon size={20}/><div><strong>{label}</strong><span>{leading||t('Sin datos disponibles','No data available')}</span></div><ArrowUpRight size={16}/></button>})),
