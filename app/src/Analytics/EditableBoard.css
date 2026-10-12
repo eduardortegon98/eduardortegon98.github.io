@@ -52,3 +52,28 @@
 @media(max-width:1000px){.section-summary .editable-board,.section-acquisition .editable-board{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:760px){.sectioned-board{gap:20px}.analytics-section-heading{align-items:flex-start;flex-direction:column;gap:5px}.section-audience .editable-board{grid-template-columns:1fr}.admin-content .customizable-analytics .section-audience .analytics-persistent-map,.admin-content .customizable-analytics .section-audience .analytics-focus-area{min-height:280px}}
 @media(max-width:400px){.section-summary .editable-board,.section-acquisition .editable-board{grid-template-columns:1fr}}
+
+/* Two stable main columns instead of several disconnected horizontal bands. */
+.sectioned-board{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(300px,1fr);grid-template-areas:"audience summary" "audience acquisition" "audience management";gap:20px;align-items:start}
+.section-audience{grid-area:audience}
+.section-summary{grid-area:summary}
+.section-acquisition{grid-area:acquisition}
+.section-management{grid-area:management}
+.analytics-section{background:#ffffff58;border:1px solid #dce7e080;border-radius:14px;padding:16px}
+.analytics-section-heading{margin-bottom:14px;padding-bottom:10px;display:block}
+.analytics-section-heading p{display:none}
+.section-summary .editable-board,.section-acquisition .editable-board{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.section-audience .editable-board{grid-template-columns:1fr;gap:16px}
+.section-audience .editable-widget.wide,.section-audience .editable-widget.wide:only-child{grid-column:1/-1}
+.admin-content .customizable-analytics .section-audience .analytics-persistent-map{min-height:0;height:auto;padding:16px}
+.admin-content .customizable-analytics .section-audience .analytics-focus-area{min-height:300px;height:auto;padding:16px}
+.admin-content .customizable-analytics .section-audience .world-audience svg{max-height:270px;margin:10px 0;min-height:0}
+.admin-content .customizable-analytics .section-audience .traffic-chart{height:auto;min-height:190px;max-height:300px}
+.admin-content .customizable-analytics .section-summary .analytics-metric-button{min-height:75px;padding:12px}
+.admin-content .customizable-analytics .section-acquisition .analytics-report-tile,.admin-content .customizable-analytics .section-acquisition .analytics-live-tile{min-height:94px;padding:14px}
+.admin-content .customizable-analytics .section-acquisition .analytics-live-tile strong{font-size:25px}
+.admin-content .customizable-analytics .section-management .management-hub{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.section-management .editable-board{display:block}
+@media(max-width:1150px){.sectioned-board{grid-template-columns:minmax(0,1.35fr) minmax(270px,1fr);gap:14px}.analytics-section{padding:13px}}
+@media(max-width:850px){.sectioned-board{grid-template-columns:1fr;grid-template-areas:"summary" "audience" "acquisition" "management";gap:16px}.section-summary .editable-board,.section-acquisition .editable-board{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:400px){.section-summary .editable-board,.section-acquisition .editable-board,.admin-content .customizable-analytics .section-management .management-hub{grid-template-columns:1fr}}
