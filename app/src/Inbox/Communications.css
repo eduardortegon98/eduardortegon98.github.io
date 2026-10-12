@@ -1,0 +1,63 @@
+/* Corporate styling scoped exclusively to the communications module. */
+.admin-content .inbox-app{color:#24372e;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+.admin-content .inbox-app .inbox-workspace{padding:32px;max-width:1700px}
+.admin-content .inbox-app .inbox-top{margin-bottom:24px;align-items:flex-start;gap:20px}
+.admin-content .inbox-app .inbox-top p{font-size:10px;letter-spacing:.12em;color:#697d71;margin:0 0 10px;font-weight:700}
+.admin-content .inbox-app .inbox-top h1{font-size:28px;font-weight:700;letter-spacing:-.035em}
+.communications-subtitle{display:block;font-size:13px;color:#6e7e74;line-height:1.7;margin-top:9px;max-width:650px}
+.communications-toolbar{display:flex;justify-content:space-between;gap:18px;align-items:center;padding:14px 18px;background:#fff;border:1px solid #dfe6e1;border-bottom:0;border-radius:10px 10px 0 0}
+.communications-toolbar nav{display:flex;flex-wrap:wrap;gap:6px}
+.communications-toolbar nav button{display:flex;align-items:center;gap:8px;padding:9px 12px;background:transparent;border:1px solid transparent;border-radius:6px;color:#62746a;font-size:12px}
+.communications-toolbar nav button.active{background:#edf4ef;border-color:#d9e7dc;color:#2e6545;font-weight:650}
+.communications-toolbar nav b{font-size:10px;min-width:18px;text-align:center;padding:2px 4px;background:#f0f3f1;border-radius:4px;color:#6b7d70}
+.communications-summary{display:flex;gap:16px;font-size:11px;color:#6e8074;white-space:nowrap}
+.communications-summary span{display:flex;align-items:center;gap:6px}.communications-summary i{width:6px;height:6px;background:#3c7954;border-radius:50%}
+.admin-content .inbox-app .inbox-grid{border-radius:0 0 10px 10px;box-shadow:0 3px 12px #203a2b05;border-color:#dfe6e1;grid-template-columns:300px minmax(0,1fr) 246px;height:clamp(520px,calc(100dvh - 300px),780px);min-height:520px;flex:none}
+.admin-content .inbox-app .inbox-list-heading{padding:20px;background:#fafbf9;border-bottom-color:#e2e8e3}
+.admin-content .inbox-app .inbox-list h2{font-size:14px;font-weight:700}
+.admin-content .inbox-app .inbox-list-heading>p{font-size:11px;margin:7px 0 16px}
+.admin-content .inbox-app .inbox-search{background:white;border-color:#dce4de;border-radius:6px;padding:10px}
+.admin-content .inbox-app .inbox-search input{font-size:12px}
+.admin-content .inbox-app .inbox-list select{font-size:12px;border-radius:6px;padding:9px}
+.admin-content .inbox-app .inbox-conversation{padding:18px;gap:12px;min-height:116px}
+.admin-content .inbox-app .inbox-conversation.selected{background:#f0f6f1;box-shadow:inset 3px 0 #346b49}
+.admin-content .inbox-app .inbox-avatar{border-radius:7px;background:#eef2ef;color:#536a5c;width:36px;height:36px;font-size:11px}
+.admin-content .inbox-app .inbox-conversation strong{font-size:12px;font-weight:650}
+.admin-content .inbox-app .inbox-conversation small{font-size:10px}
+.admin-content .inbox-app .inbox-conversation p{font-size:12px;margin:7px 0 9px}
+.admin-content .inbox-app .channel-tag{font-size:10px;border-radius:4px;padding:3px 6px}
+.admin-content .inbox-app .communication-badge{font-size:9px!important;border-radius:4px;padding:3px 6px}
+.admin-content .inbox-app .inbox-top>.communication-badge{padding:7px 10px;font-size:10px!important;flex-shrink:0}
+.admin-content .inbox-app .inbox-thread-header{padding:18px 22px;min-height:90px;gap:12px;background:#fff;flex-wrap:wrap}
+.admin-content .inbox-app .inbox-thread-header h2{font-size:15px;font-weight:650;margin-bottom:6px}
+.admin-content .inbox-app .inbox-status{font-size:10px;gap:5px}
+.admin-content .inbox-app .inbox-status select{padding:8px;font-size:11px;border-radius:5px}
+.communications-context{display:flex;flex-wrap:wrap;gap:16px 24px;padding:12px 22px;background:#fafbf9;border-bottom:1px solid #e6ebe7}
+.communications-context>div{display:grid;gap:5px;min-width:0}
+.communications-context span{font-size:9px;text-transform:uppercase;letter-spacing:.05em;color:#829087}
+.communications-context strong{font-size:11px;font-weight:500;color:#53675a;overflow-wrap:anywhere}
+.admin-content .inbox-app .inbox-messages{background:#f7f9f7;padding:24px;gap:18px}
+.admin-content .inbox-app .inbox-day{font-size:10px;color:#809087;margin:0 0 8px}
+.admin-content .inbox-app .inbox-bubble{border-radius:8px;padding:14px 16px;max-width:88%;box-shadow:0 1px 3px #203a2b05;border-color:#dfe7e0}
+.admin-content .inbox-app .inbox-bubble.own{border-radius:8px;background:#edf5ef;border-color:#d7e6da}
+.admin-content .inbox-app .inbox-bubble p{font-size:13px;line-height:1.75}
+.admin-content .inbox-app .inbox-bubble small{font-size:10px}
+.admin-content .inbox-app .inbox-compose{padding:18px 22px;background:#fff}
+.admin-content .inbox-app .inbox-compose label{font-size:12px}
+.admin-content .inbox-app .inbox-compose textarea{font-size:13px;height:80px;border-radius:6px;background:#fff}
+.admin-content .inbox-app .inbox-compose button{font-size:12px;padding:11px 15px;border-radius:6px;background:#326b49}
+.admin-content .inbox-app .inbox-compose small,.admin-content .inbox-app .inbox-compose>p{font-size:10px;line-height:1.6}
+.admin-content .inbox-app .inbox-details{display:block;padding:24px 20px;background:#fcfdfb;border-color:#e2e8e3;overflow-y:auto}
+.admin-content .inbox-app .inbox-details .inbox-nav-label{display:block;font-size:10px;letter-spacing:.08em;margin:0 0 22px}
+.admin-content .inbox-app .inbox-avatar.large{width:48px;height:48px;border-radius:8px;margin:0 0 14px;font-size:15px}
+.admin-content .inbox-app .inbox-details h2{text-align:left;font-size:14px;font-weight:650}
+.admin-content .inbox-app .inbox-details>p:not(.inbox-nav-label){text-align:left;font-size:11px}
+.admin-content .inbox-app .inbox-details dl{border-top:1px solid #e4eae5;margin-top:20px;padding-top:4px}
+.admin-content .inbox-app .inbox-details dt{font-size:10px;margin-top:17px}
+.admin-content .inbox-app .inbox-details dd{font-size:12px;font-weight:500;line-height:1.7;overflow-wrap:anywhere}
+.admin-content .inbox-app .inbox-detail-note{border-top:1px solid #e4eae5;background:transparent;padding:18px 0 0;border-radius:0;margin-top:22px}
+.admin-content .inbox-app .inbox-detail-note h3{font-size:12px}.admin-content .inbox-app .inbox-detail-note p{font-size:11px;line-height:1.7}
+@media(max-width:1360px){.admin-content .inbox-app .inbox-grid{grid-template-columns:280px minmax(0,1fr)}.admin-content .inbox-app .inbox-details{display:none}}
+@media(max-width:1000px){.admin-content .inbox-app .inbox-workspace{padding:24px 20px}.admin-content .inbox-app .inbox-grid{grid-template-columns:240px minmax(0,1fr)}.communications-toolbar{align-items:flex-start;flex-direction:column;gap:12px}.admin-content .inbox-app .inbox-top{flex-direction:column;gap:12px}.admin-content .inbox-app .inbox-compose>div{flex-wrap:wrap}}
+@media(max-width:900px){.admin-content .inbox-app .inbox-grid{display:flex}.admin-content .inbox-app .inbox-list{width:100%;border:0}.admin-content .inbox-app .inbox-thread{display:none}.admin-content .inbox-app .conversation-open .inbox-list{display:none}.admin-content .inbox-app .conversation-open .inbox-thread{display:flex;width:100%}.admin-content .inbox-app .inbox-back{display:block;border:1px solid #dde6df;border-radius:6px;padding:7px;background:white}.admin-content .inbox-app .inbox-details{display:none}}
+@media(max-width:760px){.admin-content .inbox-app .inbox-workspace{padding:22px 14px}.admin-content .inbox-app .inbox-top h1{font-size:24px}.communications-toolbar{padding:12px}.communications-toolbar nav button{padding:8px;font-size:11px}.communications-summary{font-size:10px}.admin-content .inbox-app .inbox-grid{height:650px;min-height:520px}.admin-content .inbox-app .inbox-thread-header,.admin-content .inbox-app .inbox-compose{padding:16px}.communications-context{padding:12px 16px;gap:12px 18px}.admin-content .inbox-app .inbox-messages{padding:16px}.admin-content .inbox-app .inbox-status{margin-left:0}.admin-content .inbox-app .inbox-thread-header>div{flex:1;min-width:110px}}
