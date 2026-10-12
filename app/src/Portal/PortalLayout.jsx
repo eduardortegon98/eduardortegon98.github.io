@@ -1,10 +1,11 @@
 import { useState, Suspense } from 'react';
-import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
+import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { LayoutDashboard, BarChart3, MessagesSquare, ExternalLink, LogOut, ShieldCheck, Menu, X } from 'lucide-react';
 import Access from './Access';
 import { supabase } from '../lib/supabase';
 import { LanguageSwitch, useLanguage } from '../i18n/Language';
 import './PortalLayout.css';
+import './RolePreview.css';
 
 export default function PortalLayout() {
   return <Access>{state => <Workspace key={state.user.id + state.role} state={state} />}</Access>;
@@ -13,7 +14,17 @@ function Workspace({ state }) {
   const { language } = useLanguage(), en = language === 'en';
   const [open, setOpen] = useState(false), [pending, setPending] = useState(false), [error, setError] = useState('');
   const { pathname } = useLocation();
-  const admin = state.role === 'super_admin';
+  const navigate = useNavigate();
+  const realAdmin = state.role === 'super_admin';
+  const [previewRole, setPreviewRole] = useState('super_admin');
+  const actingRole = realAdmin ? previewRole : state.role;
+  const admin = actingRole === 'super_admin';
+  const preview = realAdmin && actingRole !== state.role;
+  const context = { ...state, role: actingRole, realRole: state.role, preview };
+  function changeRole(role) {
+    if (!realAdmin || !['super_admin', 'client'].includes(role)) return;
+    setPreviewRole(role); setOpen(false); navigate('/panel');
+  }
   const title = pathname.startsWith('/panel/analitica') ? (en ? 'Website analytics' : 'Analítica de la web') : pathname.startsWith('/panel/mensajes') ? (en ? 'Unified inbox' : 'Bandeja unificada') : (en ? 'Dashboard' : 'Dashboard');
   async function logout() {
     setPending(true); setError('');
@@ -30,9 +41,10 @@ function Workspace({ state }) {
         <NavLink to="/panel" end onClick={() => setOpen(false)}><LayoutDashboard size={19}/><span>Dashboard</span></NavLink>
         {admin && <><NavLink to="/panel/analitica" onClick={() => setOpen(false)}><BarChart3 size={19}/><span>{en ? 'Analytics' : 'Analítica'}</span></NavLink><NavLink to="/panel/mensajes" onClick={() => setOpen(false)}><MessagesSquare size={19}/><span>{en ? 'Messages' : 'Mensajes'}</span><small>Demo</small></NavLink></>}
       </nav>
-      <div className="admin-sidebar-bottom"><Link to="/" className="admin-public-link"><ExternalLink size={17}/>{en ? 'View website' : 'Ver página web'}</Link><div className="admin-identity"><span className="admin-avatar">{state.user.email?.slice(0,1).toUpperCase() || 'O'}</span><div><strong>{admin ? (en ? 'Administrator' : 'Administrador') : (en ? 'Client' : 'Cliente')}</strong><span>{state.user.email}</span></div></div><button className="admin-logout" onClick={logout} disabled={pending}><LogOut size={17}/>{pending ? (en ? 'Signing out…' : 'Saliendo…') : (en ? 'Sign out' : 'Cerrar sesión')}</button>{error && <p role="alert">{error}</p>}</div>
+      <div className="admin-sidebar-bottom"><Link to="/" className="admin-public-link"><ExternalLink size={17}/>{en ? 'View website' : 'Ver página web'}</Link><div className="admin-identity"><span className="admin-avatar">{state.user.email?.slice(0,1).toUpperCase() || 'O'}</span><div><strong>{realAdmin ? (en ? 'Administrator' : 'Administrador') : (en ? 'Client' : 'Cliente')}</strong><span>{state.user.email}</span></div></div><button className="admin-logout" onClick={logout} disabled={pending}><LogOut size={17}/>{pending ? (en ? 'Signing out…' : 'Saliendo…') : (en ? 'Sign out' : 'Cerrar sesión')}</button>{error && <p role="alert">{error}</p>}</div>
     </aside>
-    <div className="admin-body"><header className="admin-topbar"><button className="admin-menu" aria-controls="admin-navigation" aria-expanded={open} aria-label={en ? 'Toggle navigation' : 'Abrir o cerrar navegación'} onClick={() => setOpen(value => !value)}>{open ? <X size={20}/> : <Menu size={20}/>}</button><div className="admin-breadcrumb"><span>{en ? 'Portal' : 'Portal'}</span><span>/</span><strong>{title}</strong></div><div className="admin-top-actions"><span className="admin-access"><ShieldCheck size={15}/>{admin ? (en ? 'Admin access' : 'Acceso admin') : (en ? 'Client account' : 'Cuenta de cliente')}</span><LanguageSwitch/></div></header>
-    <div id="admin-content" className="admin-content" tabIndex={-1}><Suspense fallback={<p role="status" className="admin-loading">{en ? 'Loading section…' : 'Cargando sección…'}</p>}><Outlet context={state}/></Suspense></div></div>
+    <div className="admin-body"><header className="admin-topbar"><button className="admin-menu" aria-controls="admin-navigation" aria-expanded={open} aria-label={en ? 'Toggle navigation' : 'Abrir o cerrar navegación'} onClick={() => setOpen(value => !value)}>{open ? <X size={20}/> : <Menu size={20}/>}</button><div className="admin-breadcrumb"><span>{en ? 'Portal' : 'Portal'}</span><span>/</span><strong>{title}</strong></div><div className="admin-top-actions">{realAdmin && <label className="admin-role-selector"><span>{en ? 'Acting as' : 'Actuando como'}</span><select value={actingRole} onChange={event => changeRole(event.target.value)}><option value="super_admin">{en ? 'Administrator' : 'Administrador'}</option><option value="client">{en ? 'Client · preview' : 'Cliente · vista previa'}</option></select></label>}<span className="admin-access"><ShieldCheck size={15}/>{admin ? (en ? 'Admin access' : 'Acceso admin') : (en ? 'Client account' : 'Cuenta de cliente')}</span><LanguageSwitch/></div></header>
+    {preview && <div className="admin-preview-banner" role="status"><div><strong>{en ? 'Client role preview' : 'Vista previa del rol cliente'}</strong><p>{en ? 'You remain signed in as administrator. This previews the interface, without accessing another person’s account.' : 'Sigues conectado como administrador. Esta vista simula la interfaz del cliente, sin acceder a la cuenta de otra persona.'}</p></div><button onClick={() => changeRole('super_admin')}>{en ? 'Return to administrator' : 'Volver a administrador'}</button></div>}
+    <div id="admin-content" className="admin-content" tabIndex={-1}><Suspense fallback={<p role="status" className="admin-loading">{en ? 'Loading section…' : 'Cargando sección…'}</p>}><Outlet key={actingRole} context={context}/></Suspense></div></div>
   </div>;
 }
