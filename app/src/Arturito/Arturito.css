@@ -31,3 +31,11 @@
 @media(max-width:1100px){.arturito-pulse-reading{min-height:147px}}
 @media(max-width:900px){.arturito-pulse-reading{min-height:172px}}
 @media(max-width:600px){.arturito-pulse-reading{min-height:140px}}
+
+.arturito-calendar{background:#fff;border:1px solid #e0e8e2!important;border-radius:10px;padding:14px!important}.arturito-calendar legend{padding:0 5px}
+.arturito-calendar-toolbar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}.arturito-calendar-toolbar strong{font-size:11px;color:#5d7a67}.arturito-calendar-toolbar button{border:1px solid #dfe8e1;background:#fff;color:#5f876d}
+.arturito-calendar-days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}.arturito-calendar-days button{display:grid;gap:7px;text-align:center;padding:10px 3px;border:1px solid #e0e8e2;background:#fff;border-radius:8px;color:#819587;font:inherit;cursor:pointer}.arturito-calendar-days span{font-size:9px}.arturito-calendar-days strong{font-size:15px;font-weight:650}.arturito-calendar-days button[aria-pressed=true]{background:#e9f5ed;border-color:#87b89a;color:#32784d}.arturito-calendar-days button.is-today strong{text-decoration:underline;text-underline-offset:5px}
+.arturito-calendar-actions{display:flex;gap:12px;margin:12px 0 16px}.arturito-calendar-actions button{border:0;background:transparent;padding:0;color:#6c8d76;font:inherit;font-size:10px;cursor:pointer}
+.arturito-weekly-repeat{display:flex;align-items:center;gap:9px;padding-top:14px;border-top:1px solid #e4ebe5;font-size:11px;color:#476d54}.arturito-weekly-repeat span{flex:1}.arturito-weekly-repeat input{accent-color:#367950;width:16px;height:16px}
+.arturito-calendar-note{font-size:10px;line-height:1.7;color:#879b8c;margin:9px 0 0}.arturito-schedule-type{display:block;color:#638f72;font-size:9px;margin-top:4px}
+@media(max-width:400px){.arturito-calendar{padding:10px!important}.arturito-calendar-days{gap:3px}.arturito-calendar-days span{font-size:8px}.arturito-calendar-days strong{font-size:13px}}
