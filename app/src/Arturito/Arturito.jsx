@@ -52,7 +52,7 @@ function BetaWorkspace({user}){
     <section className="arturito-demo-banner"><strong>{t('Vista previa del producto','Product preview')}</strong><span>{t('Los niveles son simulados. Las rutinas se guardan localmente; no ejecutan dispensaciones.','Levels are simulated. Routines are saved locally and do not dispense food.')}</span></section>
     <div className="arturito-columns">
       <div className="arturito-overview">
-        <section className="arturito-card"><header><h2>{t('Reservas del dispositivo','Device supplies')}</h2><span className="arturito-telemetry-status" title={t('Indicador de simulación: no hay lecturas de sensores reales.','Simulation indicator: no real sensor readings.')}><i aria-hidden="true"/>{t('Simulación','Simulation')}</span></header><div className="arturito-levels">
+        <section className="arturito-card"><header><h2>{t('Estado y sensores','Status and sensors')}</h2><span className="arturito-telemetry-status" title={t('Indicador de simulación: no hay lecturas de sensores reales.','Simulation indicator: no real sensor readings.')}><i aria-hidden="true"/>{t('Simulación','Simulation')}</span></header><div className="arturito-levels">
           <Level icon={Utensils} value={65} title={t('Alimento','Food')} description={t('Depósito de alimento seco','Dry food reservoir')} kind="food"/>
           <Level icon={Droplets} value={82} title={t('Agua','Water')} description={t('Depósito de agua','Water reservoir')} kind="water"/>
           <Level icon={CloudDrizzle} value={55} title={t('Humedad','Humidity')} description={t('Humedad ambiental · Demo','Ambient humidity · Demo')} kind="humidity"/>
