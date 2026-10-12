@@ -5,6 +5,7 @@ import { useTheme } from "./context/ThemeContext.jsx";
 const PortalLayout = lazy(() => import("./Portal/PortalLayout.jsx"));
 const Portal = lazy(() => import("./Portal/Portal.jsx"));
 const AnalyticsDashboard = lazy(() => import("./Analytics/AnalyticsDashboard.jsx"));
+const Assignments = lazy(() => import("./Portal/Assignments.jsx"));
 const Arturito = lazy(() => import("./Arturito/Arturito.jsx"));
 const Inbox = lazy(() => import("./Inbox/Inbox.jsx"));
 const Home = lazy(() => import("./Home/Home.jsx"));
@@ -28,6 +29,7 @@ function App() {
           <Route path="analitica" element={<AnalyticsDashboard />} />
           <Route path="mensajes" element={<Inbox />} />
           <Route path="arturito" element={<Arturito />} />
+          <Route path="asignaciones" element={<Assignments />} />
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/contacto" element={<Contacto />} />

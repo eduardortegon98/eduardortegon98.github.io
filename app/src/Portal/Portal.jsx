@@ -18,7 +18,7 @@ export default function Portal({ initialSource, recordsOnly = false }) {
   if (state.role === 'super_admin' && !recordsOnly) return <Navigate to={'/panel/analitica' + (params.toString() ? '?' + params.toString() : '')} replace/>;
   return <Dashboard key={state.user.id + state.role + index} {...state} initialSource={index} recordsOnly={recordsOnly}/>;
 }
-function Dashboard({ user, role, initialSource = 0, recordsOnly = false }) {
+function Dashboard({ user, role, modules = [], initialSource = 0, recordsOnly = false }) {
   const admin = role === 'super_admin';
   const { language } = useLanguage();
   const [source, setSource] = useState(initialSource), [search, setSearch] = useState(''), [page, setPage] = useState(0);
@@ -62,7 +62,7 @@ function Dashboard({ user, role, initialSource = 0, recordsOnly = false }) {
   return <div className="portal-app">
     <main className="portal-main">
 
-    {!admin ? <section className="portal-welcome"><Users size={36} /><L as="h2">Portal de cliente</L><L as="p">Este espacio no tiene acceso a los leads ni a los datos de otros clientes.</L><L as={Link} to="/cotizar">Solicitar cotización <ArrowRight size={16} /></L><L as={Link} to="/contacto">Contactar</L>{error && <L as="p" role="alert">{error}</L>}</section> : <>
+    {!admin ? <section className="portal-welcome"><Users size={36} /><L as="h2">Portal de cliente</L><L as="p">Este espacio no tiene acceso a los leads ni a los datos de otros clientes.</L>{modules.includes('messages')&&<Link to="/panel/mensajes">{language==='en'?'Open Messages · Demo':'Abrir Mensajes · Demo'} <ArrowRight size={16}/></Link>}{modules.includes('arturito')&&<Link to="/panel/arturito">Arturito · Beta <ArrowRight size={16}/></Link>}<L as={Link} to="/cotizar">Solicitar cotización <ArrowRight size={16} /></L><L as={Link} to="/contacto">Contactar</L>{error && <L as="p" role="alert">{error}</L>}</section> : <>
       {!recordsOnly && <section className="portal-metrics" aria-label={language === 'en' ? 'Total records by source' : 'Total de registros por origen'}>{sources.map((s, i) => { const Icon = s.icon; return <button key={s.table} onClick={() => switchSource(i)} aria-pressed={source === i}><Icon size={22} /><L>{s.label}</L><strong>{counts ? counts[i] : '—'}</strong><L as="small">Registros recibidos</L></button>; })}</section>}
       <section className="portal-records"><div className="communication-origin"><span className="communication-badge real">{language === "en" ? "Real records · Supabase" : "Registros reales · Supabase"}</span><span>{language === "en" ? "Source: website form" : "Origen: formulario de la web"}</span></div><div className="portal-toolbar">{!recordsOnly && <div className="portal-tabs" role="group" aria-label={language === 'en' ? 'Record source' : 'Origen de los registros'}>{sources.map((s, i) => <L as="button" key={s.table} aria-pressed={source === i} className={source === i ? 'active' : ''} onClick={() => switchSource(i)}>{s.label}</L>)}</div>}<L as="button" className="portal-refresh compact-action" aria-label="Actualizar" title="Actualizar" onClick={() => setRevision(n => n + 1)} disabled={loading}><RefreshCw size={17} aria-hidden="true"/></L></div>
       <div className="portal-search"><Search size={18} /><L as="input" aria-label="Buscar por nombre" placeholder="Buscar por nombre" maxLength={120} value={search} onChange={e => { setSearch(e.target.value); setPage(0); }} /><span>{loading ? '…' : total} <L>resultados</L></span></div>

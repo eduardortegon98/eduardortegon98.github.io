@@ -9,8 +9,8 @@ const initials = name => name.trim().split(/\s+/).filter(Boolean).slice(0, 2).ma
 const channels = ["WhatsApp", "Instagram", "Facebook"];
 const seed = demoConversations;
 export default function Inbox() {
-  const { user, role } = useOutletContext();
-  return role === "super_admin" ? <Workspace key={user.id} user={user} /> : <Navigate to="/panel" replace />;
+  const { user, role, modules = [] } = useOutletContext();
+  return (role === "super_admin" || modules.includes("messages")) ? <Workspace key={user.id} user={user} /> : <Navigate to="/panel" replace />;
 }
 function Workspace({ user }) {
   const { language } = useLanguage();

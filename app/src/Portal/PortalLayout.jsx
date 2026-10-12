@@ -1,6 +1,6 @@
 import { useState, Suspense } from 'react';
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, BarChart3, MessagesSquare, ExternalLink, LogOut, ShieldCheck, Menu, X, UserRound, PawPrint } from 'lucide-react';
+import { LayoutDashboard, BarChart3, MessagesSquare, ExternalLink, LogOut, ShieldCheck, Menu, X, UserRound, PawPrint, UserCog } from 'lucide-react';
 import Access from './Access';
 import PortalLoading from './PortalLoading';
 import { supabase } from '../lib/supabase';
@@ -21,12 +21,13 @@ function Workspace({ state }) {
   const actingRole = realAdmin ? previewRole : state.role;
   const admin = actingRole === 'super_admin';
   const preview = realAdmin && actingRole !== state.role;
-  const context = { ...state, role: actingRole, realRole: state.role, preview };
+  const modules = preview ? [] : (state.modules || []);
+  const context = { ...state, modules, role: actingRole, realRole: state.role, preview };
   function changeRole(role) {
     if (!realAdmin || !['super_admin', 'client'].includes(role)) return;
     setPreviewRole(role); setOpen(false); navigate('/panel');
   }
-  const title = pathname.startsWith('/panel/arturito') ? 'Arturito · Beta' : pathname.startsWith('/panel/analitica') ? (en ? 'Website analytics' : 'Analítica de la web') : pathname.startsWith('/panel/mensajes') ? (en ? 'Messages' : 'Mensajes') : (admin ? (en ? 'Analytics' : 'Analítica') : (en ? 'My account' : 'Mi cuenta'));
+  const title = pathname.startsWith('/panel/asignaciones') ? (en ? 'Assignments' : 'Asignaciones') : pathname.startsWith('/panel/arturito') ? 'Arturito · Beta' : pathname.startsWith('/panel/analitica') ? (en ? 'Website analytics' : 'Analítica de la web') : pathname.startsWith('/panel/mensajes') ? (en ? 'Messages' : 'Mensajes') : (admin ? (en ? 'Analytics' : 'Analítica') : (en ? 'My account' : 'Mi cuenta'));
   async function logout() {
     setPending(true); setError('');
     try { const { error } = await supabase.auth.signOut(); if (error) throw error; }
@@ -40,7 +41,10 @@ function Workspace({ state }) {
       <p className="admin-nav-label">{en ? 'WORKSPACE' : 'ESPACIO DE TRABAJO'}</p>
       <nav aria-label={en ? 'Portal navigation' : 'Navegación del portal'}>
         {!admin && <NavLink to="/panel" end onClick={() => setOpen(false)}><UserRound size={19}/><span>{en ? "My account" : "Mi cuenta"}</span></NavLink>}
-        {admin && <><NavLink to="/panel/analitica" onClick={() => setOpen(false)}><BarChart3 size={19}/><span>{en ? 'Analytics' : 'Analítica'}</span></NavLink><NavLink to="/panel/mensajes" onClick={() => setOpen(false)}><MessagesSquare size={19}/><span>{en ? 'Messages' : 'Mensajes'}</span><small>Demo</small></NavLink><NavLink to="/panel/arturito" onClick={() => setOpen(false)}><PawPrint size={19}/><span>Arturito</span><small>Beta</small></NavLink></>}
+        {admin && <NavLink to="/panel/analitica" onClick={() => setOpen(false)}><BarChart3 size={19}/><span>{en ? 'Analytics' : 'Analítica'}</span></NavLink>}
+        {(admin || modules.includes('messages')) && <NavLink to="/panel/mensajes" onClick={() => setOpen(false)}><MessagesSquare size={19}/><span>{en ? 'Messages' : 'Mensajes'}</span><small>Demo</small></NavLink>}
+        {(admin || modules.includes('arturito')) && <NavLink to="/panel/arturito" onClick={() => setOpen(false)}><PawPrint size={19}/><span>Arturito</span><small>Beta</small></NavLink>}
+        {admin && <NavLink to="/panel/asignaciones" onClick={() => setOpen(false)}><UserCog size={19}/><span>{en ? 'Assignments' : 'Asignaciones'}</span></NavLink>}
       </nav>
       <div className="admin-sidebar-bottom"><Link to="/" className="admin-public-link"><ExternalLink size={17}/>{en ? 'View website' : 'Ver página web'}</Link><div className="admin-identity"><span className="admin-avatar">{state.user.email?.slice(0,1).toUpperCase() || 'O'}</span><div><strong>{realAdmin ? (en ? 'Administrator' : 'Administrador') : (en ? 'Client' : 'Cliente')}</strong><span>{state.user.email}</span></div></div><button title={en ? 'Sign out' : 'Cerrar sesión'} aria-label={en ? 'Sign out' : 'Cerrar sesión'} className="admin-logout compact-action" onClick={logout} disabled={pending}><LogOut size={17} aria-hidden="true"/></button>{error && <p role="alert">{error}</p>}</div>
     </aside>

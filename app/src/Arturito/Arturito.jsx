@@ -22,7 +22,7 @@ function nextMeal(routines,now){
 }
 export default function Arturito(){
   const state=useOutletContext();
-  return state.role==='super_admin'?<BetaWorkspace key={state.user.id} user={state.user}/>:<Navigate to="/panel" replace/>;
+  return (state.role==='super_admin'||state.modules?.includes('arturito'))?<BetaWorkspace key={state.user.id} user={state.user}/>:<Navigate to="/panel" replace/>;
 }
 function BetaWorkspace({user}){
   const {language}=useLanguage(),en=language==='en';
