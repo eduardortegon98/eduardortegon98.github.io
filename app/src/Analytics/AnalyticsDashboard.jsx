@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Navigate, useOutletContext } from 'react-router-dom';
-import { Activity, ArrowUpRight, BarChart3, Eye, Users, MousePointer2, MessageSquare, RefreshCw, ShieldCheck, Radio, Globe2, Linkedin, Search, Share2, Mail, ExternalLink } from 'lucide-react';
+import { Activity, X, ArrowUpRight, BarChart3, Eye, Users, MousePointer2, MessageSquare, RefreshCw, ShieldCheck, Radio, Globe2, Linkedin, Search, Share2, Mail, ExternalLink } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useLanguage } from '../i18n/Language';
 import './AnalyticsDashboard.css';
@@ -20,10 +20,13 @@ function AnalyticsReport() {
   const [focus, setFocus] = useState('countries');
   const [requestedFocus, setRequestedFocus] = useState('countries');
   const changingChart = focus !== requestedFocus;
+  const openingMetric = focus === 'countries' && requestedFocus !== 'countries';
+  const closingMetric = focus !== 'countries' && requestedFocus === 'countries';
+  const mapOnly = focus === 'countries' && requestedFocus === 'countries';
   useEffect(() => {
     if (focus === requestedFocus) return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { setFocus(requestedFocus); return; }
-    const timer = setTimeout(() => setFocus(requestedFocus), 200);
+    const timer = setTimeout(() => setFocus(requestedFocus), 360);
     return () => clearTimeout(timer);
   }, [focus, requestedFocus]);
   const [days, setDays] = useState(7);
@@ -76,15 +79,15 @@ function AnalyticsReport() {
   const activeMetric = metrics[metricKey[focus] ?? 1];
   const expandedTitle = focus === 'countries' ? t('Audiencia mundial', 'Worldwide audience') : focus === 'sources' ? t('Orígenes del tráfico', 'Traffic sources') : focus === 'devices' ? t('Dispositivos', 'Devices') : focus === 'pages' ? t('Páginas más visitadas', 'Most visited pages') : focus === 'leads' ? t('Consultas enviadas', 'Enquiries sent') : activeMetric[1];
   return <div className="traffic-dashboard analytics-interactive">
-    <main className="traffic-main" data-focus={focus}>
+    <main className={`traffic-main ${mapOnly ? "is-map-only" : "has-open-metric"} ${closingMetric ? "is-closing-metric" : ""} ${openingMetric ? "is-opening-metric" : ""}`} data-focus={focus}>
       
       <div className="traffic-toolbar"><div className="traffic-range" role="group" aria-label={t('Periodo del informe', 'Report period')}>{[7, 30, 90].map(n => <button key={n} aria-pressed={days === n} onClick={() => setDays(n)}>{n} {t('días', 'days')}</button>)}</div><button className="traffic-refresh" disabled={state.loading} onClick={() => setRevision(n => n + 1)}><RefreshCw size={16} />{t('Actualizar', 'Refresh')}</button><a href="https://analytics.google.com/" target="_blank" rel="noreferrer">Google Analytics <ArrowUpRight size={16} /></a></div>
       {state.error && <section className="traffic-connection" role="status"><Activity size={26} /><div><h2>{t('Conexión de informes pendiente', 'Reports connection pending')}</h2><p>{t('No pudimos consultar Google Analytics. La conexión de lectura debe estar configurada y disponible para mostrar cifras reales.', 'We could not query Google Analytics. The read connection must be configured and available to show real figures.')}</p>{diagnostics[state.error] && <p role="alert">{diagnostics[state.error]}</p>}<a href="https://analytics.google.com/" target="_blank" rel="noreferrer">{t('Consultar en Google Analytics', 'View in Google Analytics')} <ArrowUpRight size={16} /></a></div></section>}
       {state.loading && <p role="status" className="traffic-loading">{t('Consultando informes…', 'Loading reports…')}</p>}
       <section className="traffic-metrics" aria-label={t('Resumen del tráfico', 'Traffic summary')}>{metrics.map(([Icon, label, value, note], index) => { const key = ['activeUsers','sessions','screenPageViews','leads'][index]; return <button className="analytics-metric-button" key={key} aria-pressed={focus === key} aria-controls="analytics-focus-chart" onClick={() => setRequestedFocus(key)}><Icon size={20}/><span>{label}</span><strong>{format(value)}</strong><small>{note}</small></button>; })}</section>
       <section className="analytics-persistent-map traffic-card"><div className="traffic-card-heading"><h2>{t('Audiencia mundial', 'Worldwide audience')}</h2><Globe2 size={18}/></div><WorldAudience rows={data?.countries} status={data?.geographyStatus} en={en}/></section>
-      {focus !== 'countries' && <section className="analytics-focus-area traffic-card" id="analytics-focus-chart" aria-label={t('Gráfico seleccionado', 'Selected chart')}>
-        <div className="traffic-card-heading"><div><p className="traffic-eyebrow">{t('EXPLORA TUS RESULTADOS', 'EXPLORE YOUR RESULTS')}</p><h2 aria-live="polite">{expandedTitle}</h2></div><button className="analytics-reset" onClick={() => setRequestedFocus('countries')} disabled={focus === 'countries'}>{t('Cerrar métrica', 'Close metric')}</button></div>
+      {(focus !== 'countries' || requestedFocus !== 'countries') && <section className={`analytics-focus-area traffic-card ${closingMetric || openingMetric ? "metric-transition-hidden" : "metric-transition-visible"}`} id="analytics-focus-chart" aria-label={t('Gráfico seleccionado', 'Selected chart')}>
+        <div className="traffic-card-heading"><div><p className="traffic-eyebrow">{t('EXPLORA TUS RESULTADOS', 'EXPLORE YOUR RESULTS')}</p><h2 aria-live="polite">{expandedTitle}</h2></div><button className="analytics-close-metric" onClick={() => setRequestedFocus('countries')} aria-label={t('Cerrar métrica', 'Close metric')} title={t('Cerrar métrica', 'Close metric')}><X size={17} aria-hidden="true"/></button></div>
         <div className={`analytics-focus-content ${changingChart ? "is-leaving" : ""}`} key={focus}>
         {state.loading ? <Empty loading en={en}/> : !data ? <Empty en={en}/> : ['activeUsers','sessions','screenPageViews'].includes(focus) ? (data.daily.length ? <Trend rows={data.daily} metric={focus} label={expandedTitle} formatDate={dateLabel}/> : <Empty en={en}/>) : focus === 'countries' ? <WorldAudience rows={data.countries} status={data.geographyStatus} en={en}/> : focus === 'sources' || focus === 'devices' ? <Donut title={expandedTitle} subtitle={t('Sesiones del periodo seleccionado', 'Sessions in the selected period')} rows={focus === 'sources' ? data.sources : data.devices} en={en}/> : focus === 'pages' ? <Breakdown title={expandedTitle} subtitle={t('Página · vistas', 'Page · views')} rows={data.pages} en={en}/> : <div className="analytics-lead-detail"><MessageSquare size={28}/><strong>{format(data.leads)}</strong><p>{t('Eventos generate_lead registrados por Google en este periodo.', 'Google generate_lead events recorded in this period.')}</p><small>{t('Este informe devuelve un total. No incluye una serie diaria de consultas.', 'This report returns a total and does not include a daily enquiries series.')}</small></div>}
         </div>
