@@ -21,6 +21,6 @@ revoke all on public.sales_prospects from anon;
 grant select on public.sales_prospects to authenticated;
 drop policy if exists "sales_prospects_admin_read" on public.sales_prospects;
 create policy "sales_prospects_admin_read" on public.sales_prospects for select to authenticated
-using (exists (select 1 from public.portal_profiles p where p.id = (select auth.uid()) and p.role = 'super_admin'));
+using ((select public.portal_is_admin()));
 -- Ingest Notion rows with a server-side job using the Supabase service role;
 -- never expose a Notion token or service-role key through Vite/GitHub Pages.
