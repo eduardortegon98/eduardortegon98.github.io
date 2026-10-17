@@ -6,6 +6,8 @@ import './ProspectsModal.css';
 export default function ProspectsModal({ onClose, en = false }) {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [syncing, setSyncing] = useState(false);
+  const [syncMessage, setSyncMessage] = useState('');
   const [error, setError] = useState('');
   const [term, setTerm] = useState('');
   const [country, setCountry] = useState('');
@@ -27,6 +29,17 @@ export default function ProspectsModal({ onClose, en = false }) {
     } catch (e) { setError(e?.message || 'No fue posible consultar prospectos.'); }
     finally { setLoading(false); }
   }
+  async function syncNotion() {
+    setSyncing(true);
+    setSyncMessage('');
+    try {
+      const { data, error: failure } = await supabase.functions.invoke('sync-prospects', { body: {} });
+      if (failure || !data?.success) throw new Error(data?.error || failure?.message || 'sync_failed');
+      setSyncMessage(t(`${data.synced} prospectos sincronizados.`, `${data.synced} prospects synced.`));
+      await load();
+    } catch (e) { setSyncMessage(t('No se pudo sincronizar Notion: ', 'Notion sync failed: ') + (e?.message || 'error')); }
+    finally { setSyncing(false); }
+  }
   useEffect(() => {
     load();
     const handle = e => { if (e.key === 'Escape') onClose(); };
@@ -44,7 +57,8 @@ export default function ProspectsModal({ onClose, en = false }) {
   return <div className="prospects-overlay" onMouseDown={e => { if (e.target === e.currentTarget) onClose(); }}>
     <section className="prospects-dialog" role="dialog" aria-modal="true" aria-labelledby="prospects-heading">
       <header className="prospects-heading"><div><span className="prospects-kicker">CRM · SOLUCIONES ORTEGÓN</span><h2 id="prospects-heading">{t('Prospectos comerciales','Sales prospects')}</h2><p>{t('Seguimiento de contactos y entregabilidad','Contacts and email delivery tracking')}</p></div>
-        <div className="prospects-heading-actions"><button title={t('Actualizar','Refresh')} aria-label={t('Actualizar','Refresh')} onClick={load} disabled={loading}><RefreshCw size={18}/></button><button title={t('Cerrar','Close')} aria-label={t('Cerrar','Close')} onClick={onClose}><X size={19}/></button></div></header>
+        <div className="prospects-heading-actions"><button onClick={syncNotion} disabled={syncing || loading} className="prospects-sync-button" title={t('Importar cambios de Notion','Import changes from Notion')} aria-label={t('Sincronizar Notion','Sync Notion')}><RefreshCw size={16}/><span>{syncing ? t('Sincronizando…','Syncing…') : t('Sincronizar Notion','Sync Notion')}</span></button><button title={t('Actualizar','Refresh')} aria-label={t('Actualizar','Refresh')} onClick={load} disabled={loading}><RefreshCw size={18}/></button><button title={t('Cerrar','Close')} aria-label={t('Cerrar','Close')} onClick={onClose}><X size={19}/></button></div></header>
+      {syncMessage && <p role="status" className="prospects-sync-message">{syncMessage}</p>}
       <div className="prospects-filters">
         <label className="prospects-search"><Search size={17}/><input value={term} onChange={e => setTerm(e.target.value)} placeholder={t('Buscar empresa, persona o correo','Search company, person or email')}/></label>
         <label>{t('País','Country')}<select value={country} onChange={e => setCountry(e.target.value)}><option value="">{t('Todos','All')}</option>{countries.map(c => <option key={c}>{c}</option>)}</select></label>
