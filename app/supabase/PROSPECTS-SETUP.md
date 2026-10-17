@@ -1,10 +1,53 @@
-# Prospectos en Analytics — configuración pendiente
+# Sincronización Notion → Supabase
 
-Se añadió un popup para super_admin en /panel/analitica. El panel consulta public.sales_prospects aplicando RLS. No se muestran prospectos ficticios.
+## 1. Base de datos
+Ya ejecutaste `app/supabase/PROSPECTS.sql`. Comprueba en SQL Editor:
+```sql
+select count(*) from public.sales_prospects;
+```
+El primer resultado debe ser 0 antes de importar.
 
-1. Ejecuta `app/supabase/PROSPECTS.sql` en Supabase SQL Editor.
-2. Sincroniza la base «Soluciones Tecnológicas Ortegón | CRM Comercial» (Notion data source `18af7b9d-22ce-4ab9-9f37-989537d61f98`) desde un proceso seguro del lado del servidor usando una integración de Notion y la service role de Supabase. Guarda ambos secretos solo en Supabase secrets. Haz UPSERT por `notion_page_id`.
-3. Mapea Empresa→company, Persona→person, Email→email, País→country, Sector→sector, Estado→status, Fecha de contacto→contacted_at, Asunto→subject, Enlace Gmail→gmail_url, Próxima acción→notes. Los países fuera de la lista de selección actual de Notion pueden extraerse de Sector hasta que se amplíe esa propiedad. Interpreta estados de entrega en Próxima acción sin confundir bloqueos del conector con rebotes de SMTP.
-4. Si quieres datos en tiempo real, programa sincronización periódica desde Supabase o un webhook validado de Notion. Solo GitHub Pages no sincroniza el CRM.
+## 2. Integración de Notion
+- En Notion abre Settings → Connections / Integrations → Develop or manage integrations (o https://www.notion.so/profile/integrations).
+- Crea una integración **interna**, solo de lectura (Read content). Copia su secreto; no lo compartas en chat ni en GitHub.
+- Abre «Soluciones Tecnológicas Ortegón | CRM Comercial» y en el menú ••• → Connections añade esa integración. Si la base es una subpágina, comparte la base directamente con la integración.
+- Confirma que la integración puede ver los registros del CRM.
 
-No se ha ejecutado SQL ni se ha desplegado función en Supabase. El popup mostrará estado vacío o error hasta hacer estos pasos.
+## 3. Secrets de Supabase
+En Supabase → tu proyecto → Edge Functions → Secrets, añade:
+- `NOTION_API_KEY` = token secreto de la integración de Notion.
+- `NOTION_DATA_SOURCE_ID` = `18af7b9d-22ce-4ab9-9f37-989537d61f98`.
+
+La función usa automáticamente `SUPABASE_URL`, `SUPABASE_ANON_KEY` y `SUPABASE_SERVICE_ROLE_KEY` del proyecto; no los copies al frontend.
+Si tu proyecto usa nuevas publishable keys y no expone `SUPABASE_ANON_KEY`, tendrás que configurar esa variable del lado de Edge Functions o adaptar la autenticación antes de ejecutar.
+
+## 4. Desplegar función (independiente de GitHub Pages)
+Recomendado con Supabase CLI desde la carpeta del repositorio:
+```bash
+cd app
+npx supabase login
+npx supabase link --project-ref TU_PROJECT_REF
+npx supabase functions deploy sync-prospects
+```
+Reemplaza TU_PROJECT_REF por el Project Ref visible en Supabase → Settings → General.
+El código está en `app/supabase/functions/sync-prospects/index.ts`.
+Alternativa: crea la función `sync-prospects` desde el dashboard de Supabase, pega el contenido de ese archivo en `index.ts` y pulsa Deploy.
+Mantén la verificación JWT activada si la configuración del proyecto usa JWT legacy compatible. Para proyectos con keys modernas, revisa la configuración JWT de Supabase y utiliza la validación de identidad implementada dentro de la función; nunca elimines esa validación.
+
+## 5. Importación desde el panel
+1. Inicia sesión con tu usuario `super_admin`.
+2. Abre `https://solucionesortegon.com/panel/analitica`.
+3. En el popup de Prospectos pulsa **Sincronizar Notion**.
+4. Espera el mensaje con el número de prospectos sincronizados.
+5. Consulta de nuevo `select count(*) from public.sales_prospects;`.
+
+La función recorre las páginas de Notion de 100 en 100 y realiza upsert por `notion_page_id`, sin duplicar registros. Solamente puede ser ejecutada por un usuario autenticado con perfil `super_admin`. No borra registros antiguos al desaparecer de Notion: para sincronización bidireccional o purgado habría que diseñar ese comportamiento por separado.
+
+## 6. Comportamiento y limitaciones
+- Notion es la fuente de datos. La importación es **manual** desde el popup, no automática por cron.
+- Países que la propiedad País de Notion no admite (Chile, España, Estados Unidos) se recuperan provisionalmente de Sector.
+- Estado comercial y estado de entrega se diferencian. Se inferirá `rebotado` / `bloqueado` / `retrasado` de las notas «Próxima acción» y, en los demás, `sin confirmar`.
+- Si aparece `notion_query_failed`, revisa permiso de la integración y data source ID.
+- Si aparece `forbidden`, verifica `portal_profiles.role = 'super_admin'`.
+- Si aparece `database_upsert_failed`, comprueba SQL y estructura de la tabla.
+- No guardes secrets en GitHub Actions de frontend ni en variables `VITE_...`.
