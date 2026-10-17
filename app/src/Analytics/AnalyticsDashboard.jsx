@@ -11,6 +11,7 @@ import ManagementCards from '../Portal/ManagementCards';
 import PortalLoading from '../Portal/PortalLoading';
 import EditableBoard from './EditableBoard';
 import CountryRegions from './CountryRegions';
+import ProspectsModal from './ProspectsModal';
 
 export default function AnalyticsDashboard() {
   const { role } = useOutletContext();
@@ -23,6 +24,7 @@ function AnalyticsReport() {
   const en = language === 'en';
   const t = (es, english) => en ? english : es;
   const [panelEditing, setPanelEditing] = useState(false);
+  const [prospectsOpen, setProspectsOpen] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState('');
   const [focus, setFocus] = useState('countries');
   const [requestedFocus, setRequestedFocus] = useState('countries');
@@ -89,7 +91,7 @@ function AnalyticsReport() {
   return <div className="traffic-dashboard analytics-interactive customizable-analytics">
     <main aria-busy={Boolean(state.loading)} className={`traffic-main ${mapOnly ? "is-map-only" : "has-open-metric"} ${closingMetric ? "is-closing-metric" : ""} ${openingMetric ? "is-opening-metric" : ""}`} data-focus={focus}>
       
-      <div className="traffic-toolbar"><div className="analytics-period-actions" role="group" aria-label={t('Periodo y actualización','Period and refresh')}><div className="traffic-range" role="group" aria-label={t('Periodo del informe', 'Report period')}>{[7, 30, 90].map(n => <button key={n} aria-pressed={days === n} onClick={() => setDays(n)}>{n} {t('días', 'days')}</button>)}</div><button className="traffic-refresh compact-action" aria-label={t('Actualizar', 'Refresh')} title={t('Actualizar', 'Refresh')} disabled={state.loading} onClick={() => setRevision(n => n + 1)}><RefreshCw size={17} aria-hidden="true"/></button></div><div className="analytics-config-actions" role="group" aria-label={t('Configuración y herramientas','Settings and tools')}><button className="compact-action" aria-controls="dashboard-personalization" aria-expanded={panelEditing} aria-label={panelEditing ? t('Terminar edición','Finish editing') : t('Personalizar panel','Customize panel')} title={panelEditing ? t('Terminar edición','Finish editing') : t('Personalizar panel','Customize panel')} onClick={()=>setPanelEditing(value=>!value)}>{panelEditing?<Check size={17} aria-hidden="true"/>:<Settings2 size={17} aria-hidden="true"/>}</button><a className="compact-action" href="https://analytics.google.com/" target="_blank" rel="noreferrer" aria-label="Google Analytics" title="Google Analytics"><BarChart3 size={17} aria-hidden="true"/></a></div></div>
+      <div className="traffic-toolbar"><div className="analytics-period-actions" role="group" aria-label={t('Periodo y actualización','Period and refresh')}><div className="traffic-range" role="group" aria-label={t('Periodo del informe', 'Report period')}>{[7, 30, 90].map(n => <button key={n} aria-pressed={days === n} onClick={() => setDays(n)}>{n} {t('días', 'days')}</button>)}</div><button className="traffic-refresh compact-action" aria-label={t('Actualizar', 'Refresh')} title={t('Actualizar', 'Refresh')} disabled={state.loading} onClick={() => setRevision(n => n + 1)}><RefreshCw size={17} aria-hidden="true"/></button></div><div className="analytics-config-actions" role="group" aria-label={t('Configuración y herramientas','Settings and tools')}><button className="compact-action" onClick={() => setProspectsOpen(true)} aria-label={t('Ver prospectos comerciales','View sales prospects')} title={t('Ver prospectos comerciales','View sales prospects')}><Users size={17} aria-hidden="true"/></button><button className="compact-action" aria-controls="dashboard-personalization" aria-expanded={panelEditing} aria-label={panelEditing ? t('Terminar edición','Finish editing') : t('Personalizar panel','Customize panel')} title={panelEditing ? t('Terminar edición','Finish editing') : t('Personalizar panel','Customize panel')} onClick={()=>setPanelEditing(value=>!value)}>{panelEditing?<Check size={17} aria-hidden="true"/>:<Settings2 size={17} aria-hidden="true"/>}</button><a className="compact-action" href="https://analytics.google.com/" target="_blank" rel="noreferrer" aria-label="Google Analytics" title="Google Analytics"><BarChart3 size={17} aria-hidden="true"/></a></div></div>
       {state.error && <section className="traffic-connection" role="status"><Activity size={26} /><div><h2>{t('Conexión de informes pendiente', 'Reports connection pending')}</h2><p>{t('No pudimos consultar Google Analytics. La conexión de lectura debe estar configurada y disponible para mostrar cifras reales.', 'We could not query Google Analytics. The read connection must be configured and available to show real figures.')}</p>{diagnostics[state.error] && <p role="alert">{diagnostics[state.error]}</p>}<a href="https://analytics.google.com/" target="_blank" rel="noreferrer">{t('Consultar en Google Analytics', 'View in Google Analytics')} <ArrowUpRight size={16} /></a></div></section>}
       {state.loading && <PortalLoading overlay/>}
       <EditableBoard editing={panelEditing} storageKey={'ortegon-analytics-layout-v1:'+user.id} en={en} widgets={[
@@ -105,6 +107,7 @@ function AnalyticsReport() {
         {id:'realtime',title:t('Tiempo real','Realtime'),content:<section className="analytics-live-tile"><Radio size={18}/><span>{t('Activos · últimos 30 min', 'Active · last 30 min')}</span><strong>{format(data?.realtime?.activeUsers)}</strong><small>{t('Actualiza para consultar de nuevo.', 'Refresh to query again.')}</small></section>},
         {id:'management',title:t('Gestión del negocio','Business management'),className:'full',content:<ManagementCards/>}
       ]}/>
+      {prospectsOpen && <ProspectsModal en={en} onClose={() => setProspectsOpen(false)}/>}
       <footer className="traffic-footnote"><ShieldCheck size={16} /><p>{t('Datos agregados de visitantes que aceptaron analítica. No incluye contenido de mensajes ni información personal de los formularios. Los informes históricos pueden tardar 24–48 horas.', 'Aggregate data from visitors who accepted analytics. No message contents or personal form information. Historical reports may take 24–48 hours.')}{data?.updatedAt && ` · ${t('Consulta', 'Fetched')}: ${new Intl.DateTimeFormat(en ? 'en-US' : 'es-CO', { timeStyle: 'short', timeZone: 'America/Bogota' }).format(new Date(data.updatedAt))} (Bogotá)`}</p></footer>
     </main>
   </div>;
