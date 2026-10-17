@@ -1,0 +1,61 @@
+import { useEffect, useMemo, useState } from 'react';
+import { X, Search, ExternalLink, RefreshCw, Users } from 'lucide-react';
+import { supabase } from '../lib/supabase';
+import './ProspectsModal.css';
+
+export default function ProspectsModal({ onClose, en = false }) {
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [term, setTerm] = useState('');
+  const [country, setCountry] = useState('');
+  const [status, setStatus] = useState('');
+  const [from, setFrom] = useState('');
+  const [to, setTo] = useState('');
+  const t = (es, english) => en ? english : es;
+
+  async function load() {
+    setLoading(true);
+    setError('');
+    try {
+      if (!supabase) throw new Error('Supabase no está configurado.');
+      const { data, error: failure } = await supabase.from('sales_prospects')
+        .select('id,company,email,person,country,sector,status,delivery_status,contacted_at,subject,gmail_url,notes,updated_at')
+        .order('updated_at', { ascending: false }).limit(1000);
+      if (failure) throw failure;
+      setItems(data || []);
+    } catch (e) { setError(e?.message || 'No fue posible consultar prospectos.'); }
+    finally { setLoading(false); }
+  }
+  useEffect(() => {
+    load();
+    const handle = e => { if (e.key === 'Escape') onClose(); };
+    document.addEventListener('keydown', handle);
+    return () => document.removeEventListener('keydown', handle);
+  }, []);
+  const countries = useMemo(() => [...new Set(items.map(i => i.country).filter(Boolean))].sort(), [items]);
+  const statuses = useMemo(() => [...new Set(items.map(i => i.status).filter(Boolean))].sort(), [items]);
+  const filtered = useMemo(() => items.filter(i => {
+    const query = [i.company, i.email, i.person, i.notes, i.sector].join(' ').toLowerCase();
+    const day = i.contacted_at?.slice(0, 10) || '';
+    return (!term || query.includes(term.toLowerCase())) && (!country || i.country === country)
+      && (!status || i.status === status) && (!from || (day && day >= from)) && (!to || (day && day <= to));
+  }), [items, term, country, status, from, to]);
+  return <div className="prospects-overlay" onMouseDown={e => { if (e.target === e.currentTarget) onClose(); }}>
+    <section className="prospects-dialog" role="dialog" aria-modal="true" aria-labelledby="prospects-heading">
+      <header className="prospects-heading"><div><span className="prospects-kicker">CRM · SOLUCIONES ORTEGÓN</span><h2 id="prospects-heading">{t('Prospectos comerciales','Sales prospects')}</h2><p>{t('Seguimiento de contactos y entregabilidad','Contacts and email delivery tracking')}</p></div>
+        <div className="prospects-heading-actions"><button title={t('Actualizar','Refresh')} aria-label={t('Actualizar','Refresh')} onClick={load} disabled={loading}><RefreshCw size={18}/></button><button title={t('Cerrar','Close')} aria-label={t('Cerrar','Close')} onClick={onClose}><X size={19}/></button></div></header>
+      <div className="prospects-filters">
+        <label className="prospects-search"><Search size={17}/><input value={term} onChange={e => setTerm(e.target.value)} placeholder={t('Buscar empresa, persona o correo','Search company, person or email')}/></label>
+        <label>{t('País','Country')}<select value={country} onChange={e => setCountry(e.target.value)}><option value="">{t('Todos','All')}</option>{countries.map(c => <option key={c}>{c}</option>)}</select></label>
+        <label>{t('Estado','Status')}<select value={status} onChange={e => setStatus(e.target.value)}><option value="">{t('Todos','All')}</option>{statuses.map(s => <option key={s}>{s}</option>)}</select></label>
+        <label>{t('Desde','From')}<input type="date" value={from} onChange={e => setFrom(e.target.value)}/></label>
+        <label>{t('Hasta','To')}<input type="date" value={to} onChange={e => setTo(e.target.value)}/></label>
+      </div>
+      <div className="prospects-summary"><span><Users size={16}/> {filtered.length} / {items.length} {t('prospectos','prospects')}</span><span>{filtered.filter(i => i.status === 'Respondió').length} {t('respuestas','replies')}</span><span>{filtered.filter(i => i.delivery_status === 'rebotado').length} {t('rebotes','bounces')}</span><span>{filtered.filter(i => i.delivery_status === 'bloqueado').length} {t('bloqueados','blocked')}</span></div>
+      {error && <div className="prospects-error" role="alert">{t('No se pudieron cargar los datos. Ejecuta la migración de Supabase y configura la sincronización con Notion.','Could not load data. Apply the Supabase migration and set up Notion synchronization.')} <small>{error}</small></div>}
+      {loading ? <p className="prospects-empty">{t('Consultando prospectos…','Loading prospects…')}</p> : !error && !filtered.length ? <p className="prospects-empty">{items.length ? t('No hay resultados con estos filtros.','No matching prospects.') : t('Sin datos sincronizados todavía.','No synchronized records yet.')}</p> : !error && <div className="prospects-table-wrap"><table><thead><tr><th>{t('Empresa','Company')}</th><th>{t('Contacto','Contact')}</th><th>{t('País','Country')}</th><th>{t('Estado','Status')}</th><th>{t('Entrega','Delivery')}</th><th>{t('Fecha','Date')}</th><th>{t('Correo','Email')}</th></tr></thead><tbody>{filtered.map(i => <tr key={i.id}><td><strong>{i.company}</strong><small>{i.sector}</small></td><td>{i.person || '—'}<small>{i.email}</small></td><td>{i.country || '—'}</td><td><span className="prospects-pill">{i.status || '—'}</span></td><td>{i.delivery_status || '—'}<small title={i.notes}>{i.notes}</small></td><td>{i.contacted_at?.slice(0,10) || '—'}</td><td>{i.gmail_url ? <a href={i.gmail_url} target="_blank" rel="noreferrer" aria-label={t('Abrir Gmail','Open Gmail')}><ExternalLink size={16}/></a> : '—'}</td></tr>)}</tbody></table></div>}
+      <footer className="prospects-footer"><span>{t('Datos privados; únicamente disponibles para súper administradores.','Private data; super administrators only.')}</span><a href="https://app.notion.com/p/0eaf28ad2891459eb2ece0dad41cd61e" target="_blank" rel="noreferrer">{t('Abrir Notion','Open Notion')} <ExternalLink size={14}/></a></footer>
+    </section>
+  </div>;
+}
