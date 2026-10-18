@@ -45,3 +45,18 @@
 .fin-paid .fin-entry strong{font-variant-numeric:tabular-nums}
 .fin-month-due .fin-simple-rows>div{display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;gap:3px}
 .fin-month-due .fin-simple-rows strong{margin-top:4px}
+
+.fin-traffic{border-radius:16px;border:1px solid #efc0bb;background:linear-gradient(105deg,#fff4f2,#fff);padding:14px 19px;display:grid;gap:10px}
+.fin-traffic-head,.fin-traffic-footer{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.fin-traffic-eyebrow{font-size:10px;letter-spacing:.13em;font-weight:850;opacity:.78}
+.fin-traffic h3{margin:3px 0;font-size:23px;letter-spacing:-.03em}
+.fin-traffic p{margin:0;font-size:12px;line-height:1.5}
+.fin-traffic-footer{font-size:12px;border-top:1px solid #dca9a33d;padding-top:9px}
+.fin-traffic-lights{display:flex;gap:8px;padding:10px;border-radius:50px;background:#233329;flex-shrink:0}
+.fin-traffic-lights span{width:19px;height:19px;display:block;border-radius:50%;opacity:.2;background:#ccc}
+.fin-traffic-lights span:nth-child(1){background:#ed3935}.fin-traffic-lights span:nth-child(2){background:#ffc542}.fin-traffic-lights span:nth-child(3){background:#23bc65}
+.fin-traffic-lights span.on{opacity:1;box-shadow:0 0 0 3px #ffffff30,0 0 13px currentColor}
+.fin-traffic-red{color:#9d2323}
+.fin-traffic-yellow{background:linear-gradient(105deg,#fff9e6,#fff);border-color:#f0d68b;color:#806011}
+.fin-traffic-green{background:linear-gradient(105deg,#e9fff1,#fff);border-color:#a5e5b7;color:#177a43}
+@media(max-width:550px){.fin-traffic{padding:12px}.fin-traffic-footer{align-items:flex-start;flex-direction:column;gap:3px}.fin-traffic h3{font-size:21px}}
