@@ -15,9 +15,10 @@ export default function FinanceDashboard(){
  const {user,role}=useOutletContext();
  const {language}=useLanguage();
  const en=language==='en';
- const [settings,setSettings]=useState(DEFAULTS),[expenses,setExpenses]=useState([]),[bills,setBills]=useState([]),[extras,setExtras]=useState([]),[incomes,setIncomes]=useState([]);
+ const [settings,setSettings]=useState(DEFAULTS),[expenses,setExpenses]=useState([]),[bills,setBills]=useState([]),[extras,setExtras]=useState([]),[incomes,setIncomes]=useState([]),[bufferMovements,setBufferMovements]=useState([]);
  const [month,setMonth]=useState(currentMonth()),[tab,setTab]=useState('gasto'),[form,setForm]=useState(initial);
  const [isReady,setReady]=useState(false),[loading,setLoading]=useState(true),[saving,setSaving]=useState(false),[error,setError]=useState(''),[edit,setEdit]=useState(false);
+ const [bufferDirection,setBufferDirection]=useState('out');
  const [paymentFor,setPaymentFor]=useState('Banco'),[hours,setHours]=useState(''),[historyOpen,setHistoryOpen]=useState(false),[historyMonth,setHistoryMonth]=useState(currentMonth());
  const owner=user?.id;
  const refresh=async()=>{
@@ -31,11 +32,12 @@ export default function FinanceDashboard(){
     supabase.from('personal_finance_expenses').select('*').eq('user_id',owner).order('date',{ascending:false}).limit(1000),
     supabase.from('personal_finance_bills').select('*').eq('user_id',owner).order('due_date',{ascending:false}).limit(1000),
     supabase.from('personal_finance_extras').select('*').eq('user_id',owner).order('date',{ascending:false}).limit(1000),
-    supabase.from('personal_finance_income').select('*').eq('user_id',owner).order('date',{ascending:false}).limit(1000)
+    supabase.from('personal_finance_income').select('*').eq('user_id',owner).order('date',{ascending:false}).limit(1000),
+    supabase.from('personal_finance_buffer_movements').select('*').eq('user_id',owner).order('date',{ascending:false}).limit(1000)
    ]);
    for(const q of queries)if(q.error)throw q.error;
    setSettings({...DEFAULTS,...(queries[0].data||{})});
-   setExpenses(queries[1].data||[]);setBills(queries[2].data||[]);setExtras(queries[3].data||[]);setIncomes(queries[4].data||[]);setReady(true);
+   setExpenses(queries[1].data||[]);setBills(queries[2].data||[]);setExtras(queries[3].data||[]);setIncomes(queries[4].data||[]);setBufferMovements(queries[5].data||[]);setReady(true);
   }catch(e){setError('No se pudieron cargar los datos. Si no has actualizado Supabase, ejecuta el SQL de OrtFinance. '+(e.message||''));setReady(false)}
   finally{setLoading(false)}
  };
@@ -79,6 +81,11 @@ export default function FinanceDashboard(){
    const amount=Number(form.amount),note=form.note.trim();
    if(!form.date||!Number.isFinite(amount)||amount<=0)throw new Error('Ingresa un valor mayor que cero.');
    let table,record;
+   if(tab==='colchon'){
+    const {error:e}=await supabase.rpc('move_my_finance_buffer',{p_amount:amount,p_direction:bufferDirection,p_date:form.date,p_note:note});
+    if(e)throw e;
+    setForm(initial);await refresh();return;
+   }
    if(tab==='ingreso'){table='personal_finance_income';record={date:form.date,amount,source:paymentFor,note};}
    else if(tab==='gasto'){table='personal_finance_expenses';record={date:form.date,amount,category:form.category,note};}
    else if(tab==='pago'){table='personal_finance_bills';record={due_date:form.date,amount,title:note||paymentFor,category:paymentFor,status:'paid'};}
@@ -87,7 +94,10 @@ export default function FinanceDashboard(){
    setForm(initial);setHours('');await refresh();
   }catch(e){setError(e.message||'No se guardó el registro.')}finally{setSaving(false)}
  };
- const del=async(table,id)=>{if(!window.confirm('¿Eliminar este movimiento?'))return;setError('');const {error:e}=await supabase.from(table).delete().eq('id',id).eq('user_id',owner);if(e)setError(e.message);else await refresh()};
+ const del=async(table,id)=>{if(!window.confirm('¿Eliminar este movimiento?'))return;setError('');const {error:e}=table==='personal_finance_buffer_movements'
+   ?await supabase.rpc('undo_my_finance_buffer_movement',{p_id:id})
+   :await supabase.from(table).delete().eq('id',id).eq('user_id',owner);
+   if(e)setError(e.message);else await refresh()};
  const saveGoals=async()=>{
   setSaving(true);setError('');
   const payload={user_id:owner,...Object.fromEntries(Object.keys(DEFAULTS).map(k=>[k,['goal_date','nu_paid_month','nu_next_due','pila_last_processed_month'].includes(k)?settings[k]:Math.max(0,Number(settings[k])||0)]))};
@@ -97,7 +107,7 @@ export default function FinanceDashboard(){
  if(role!=='super_admin')return <p>Solo el administrador puede consultar sus finanzas.</p>;
  const historyPaid=bills.filter(x=>x.status==='paid'&&x.due_date.slice(0,7)===historyMonth);
  const historyHasNu=historyMonth===settings.nu_paid_month&&!historyPaid.some(x=>x.category==='Banco');
- const movements=[...(historyHasNu?[{id:'nu-confirmed-'+month,date:historyMonth+'-01',label:'Cuota Nu registrada como pagada (fecha exacta no indicada)',amount:settings.nu_last_payment_amount,kind:'Pago confirmado',table:null}]:[]),...expenses.filter(x=>x.date.slice(0,7)===historyMonth).map(x=>({id:x.id,date:x.date,label:x.note||x.category,amount:x.amount,kind:'Gasto',table:'personal_finance_expenses'})),...historyPaid.map(x=>({id:x.id,date:x.due_date,label:x.title,amount:x.amount,kind:'Pago',table:'personal_finance_bills'})),...extras.filter(x=>x.date.slice(0,7)===historyMonth).map(x=>({id:x.id,date:x.date,label:x.note||'Horas en Blu',amount:x.amount,kind:x.hours+' h extra',table:'personal_finance_extras'})),...incomes.filter(x=>x.date.slice(0,7)===historyMonth).map(x=>({id:x.id,date:x.date,label:x.note||x.source,amount:x.amount,kind:'Recibí · '+x.source,table:'personal_finance_income'}))].sort((a,b)=>b.date.localeCompare(a.date));
+ const movements=[...(historyHasNu?[{id:'nu-confirmed-'+month,date:historyMonth+'-01',label:'Cuota Nu registrada como pagada (fecha exacta no indicada)',amount:settings.nu_last_payment_amount,kind:'Pago confirmado',table:null}]:[]),...bufferMovements.filter(x=>x.date.slice(0,7)===historyMonth).map(x=>({id:x.id,date:x.date,label:x.note||'Movimiento del colchón',amount:x.amount,kind:x.direction==='in'?'Colchón · entrada':'Colchón · salida',table:'personal_finance_buffer_movements'})),...expenses.filter(x=>x.date.slice(0,7)===historyMonth).map(x=>({id:x.id,date:x.date,label:x.note||x.category,amount:x.amount,kind:'Gasto',table:'personal_finance_expenses'})),...historyPaid.map(x=>({id:x.id,date:x.due_date,label:x.title,amount:x.amount,kind:'Pago',table:'personal_finance_bills'})),...extras.filter(x=>x.date.slice(0,7)===historyMonth).map(x=>({id:x.id,date:x.date,label:x.note||'Horas en Blu',amount:x.amount,kind:x.hours+' h extra',table:'personal_finance_extras'})),...incomes.filter(x=>x.date.slice(0,7)===historyMonth).map(x=>({id:x.id,date:x.date,label:x.note||x.source,amount:x.amount,kind:'Recibí · '+x.source,table:'personal_finance_income'}))].sort((a,b)=>b.date.localeCompare(a.date));
  return <main className="fin-page fin-simple">
   <div className="fin-head"><div><p className="fin-eyebrow">TU LIBRETA PERSONAL</p><h2>OrtFinance.AI</h2><p>Lo que debes, lo que pagas y lo que estás logrando. Sin fórmulas complicadas.</p></div><button className="fin-secondary" onClick={refresh}><RefreshCw size={16}/> Actualizar</button></div>
   {error&&<p className="fin-error" role="alert">{error}</p>}
@@ -126,14 +136,14 @@ export default function FinanceDashboard(){
   <section className="fin-section fin-income"><div className="fin-line"><h3>Recibí</h3><span className="fin-tag">{received.length} ingresos</span></div><div className="fin-income-amount">{pesos(totalReceived)}</div><p>Este mes</p>{received.slice(0,3).map(x=><div className="fin-entry" key={x.id}><span>{fmtDate(x.date)}<small>{x.source}</small></span><strong>{pesos(x.amount)}</strong></div>)}{!received.length&&<p className="fin-muted">Sin ingresos anotados todavía.</p>}</section>
   <section className="fin-section fin-paid"><div className="fin-line"><h3>Pagaste</h3><span className="fin-tag">{visiblePayments} {visiblePayments===1?'registro':'registros'}</span></div><div className="fin-ledger-head"><span>Cuándo / a quién</span><span>Cuánto</span></div>{hasNuPayment&&<div className="fin-entry"><span>Cuota Nu · {month}<small>Pagada · fecha exacta sin registrar</small></span><strong>{pesos(settings.nu_last_payment_amount)}</strong></div>}{paid.length?paid.map(x=><div className="fin-entry" key={x.id}><span>{fmtDate(x.due_date)}<small>{x.title}</small></span><strong>{pesos(x.amount)}</strong></div> ):!hasNuPayment&&<p className="fin-muted">Todavía no has registrado pagos este mes.</p>}</section>
    <section className="fin-section fin-extras"><div className="fin-line"><h3>Extras</h3><span className="fin-tag">{month}</span></div><div className="fin-simple-rows"><div><span>Trabajadas <small>Horas extra en Blu</small></span><strong>{hoursTotal} h</strong></div><div><span>Ganado en extras</span><strong>{pesos(extraEarned)}</strong></div><div><span>Gastados <small>Gastos diarios registrados</small></span><strong>{pesos(spent)}</strong></div><div><span>Gastos hormiga</span><strong>{pesos(ants)}</strong></div></div></section>
-   <section className="fin-section fin-buffer"><div className="fin-line"><h3>Mi colchón</h3><button className="fin-link" onClick={()=>setEdit(true)}>Editar</button></div><div className="fin-buffer-number">{pesos(settings.buffer)}</div><p>Dinero de emergencia disponible. Solo cambia cuando actualices la cifra.</p></section>
+   <section className="fin-section fin-buffer"><div className="fin-line"><h3>Mi colchón</h3><button className="fin-link" onClick={()=>setEdit(true)}>Editar</button></div><div className="fin-buffer-number">{pesos(settings.buffer)}</div><p>Dinero disponible para emergencias. Las entradas y salidas se registran desde Movimientos → Colchón.</p></section>
   <section className="fin-section fin-add fin-overview-add"><div className="fin-line"><h3>Movimientos</h3><div className="fin-movement-actions"><button type="button" className="fin-eye-button" title="Ver historial de movimientos" aria-label="Ver historial de movimientos" onClick={()=>{setHistoryMonth(month);setHistoryOpen(true)}}><Eye size={19}/></button><label className="fin-month">Mes <input type="month" value={month} onChange={e=>setMonth(e.target.value)}/></label></div></div>
-   <div className="fin-tabs">{[['ingreso','Recibí'],['gasto','Gasté'],['pago','Pagué'],['extra','Trabajé extra']].map(([key,title])=><button key={key} className={tab===key?'selected':''} onClick={()=>setTab(key)}>{title}</button>)}</div>
+   <div className="fin-tabs">{[['ingreso','Recibí'],['gasto','Gasté'],['pago','Pagué'],['extra','Trabajé extra'],['colchon','Colchón']].map(([key,title])=><button key={key} className={tab===key?'selected':''} onClick={()=>setTab(key)}>{title}</button>)}</div>
    <form className="fin-simple-form" onSubmit={e=>{e.preventDefault();save()}}>
     <label>Cuándo<input type="date" required value={form.date} onChange={e=>setForm(p=>({...p,date:e.target.value}))}/></label>
     <label>Cuánto (COP)<input type="number" min="1" required placeholder="Ej. 20000" value={form.amount} onChange={e=>setForm(p=>({...p,amount:e.target.value}))}/></label>
     {tab==='ingreso'?<label>De quién<select value={paymentFor} onChange={e=>setPaymentFor(e.target.value)}>{['Blu','Cliente STO','Reembolso','Otro'].map(x=><option key={x}>{x}</option>)}</select></label>:tab==='pago'?<label>A quién<select value={paymentFor} onChange={e=>setPaymentFor(e.target.value)}>{[['Banco','Banco'],['Máster','Máster'],['PILA atrasada','PILA atrasada'],['Salud y pensión','Salud y pensión'],['Casa','Doris (casa)'],['Otro','Otro']].map(([value,label])=><option key={value} value={value}>{label}</option>)}</select></label>:tab==='gasto'?<label>Tipo<select value={form.category} onChange={e=>setForm(p=>({...p,category:e.target.value}))}>{['Otro','Gasto hormiga','Alimentación','Transporte','Salud','Casa','Estudio','Ocio'].map(x=><option key={x}>{x}</option>)}</select></label>:<label>Horas trabajadas<input type="number" min=".25" step=".25" required value={hours} onChange={e=>setHours(e.target.value)} placeholder="Ej. 8"/></label>}
-    <label>Detalle (opcional)<input maxLength="180" value={form.note} onChange={e=>setForm(p=>({...p,note:e.target.value}))} placeholder={tab==='ingreso'?'Ej. quincena de Blu':tab==='pago'?'Ej. cuota de octubre':tab==='extra'?'Ej. lunes en Blu':'Ej. café'}/></label>
+    <label>Detalle (opcional)<input maxLength="180" value={form.note} onChange={e=>setForm(p=>({...p,note:e.target.value}))} placeholder={tab==='ingreso'?'Ej. quincena de Blu':tab==='pago'?'Ej. cuota de octubre':tab==='extra'?'Ej. lunes en Blu':tab==='colchon'?'Ej. ahorro o préstamo familiar':'Ej. café'}/></label>
     <button type="submit" className="fin-primary" disabled={saving}><Plus size={16}/> Guardar</button>
    </form>
   </section>
