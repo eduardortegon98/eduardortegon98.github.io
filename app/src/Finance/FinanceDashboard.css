@@ -205,3 +205,9 @@
 .fin-income .fin-entry>strong,.fin-paid .fin-entry>strong{white-space:nowrap}
 .fin-inline-delete{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;width:26px;height:26px;min-width:26px;padding:4px;border-radius:7px;cursor:pointer}
 .fin-inline-delete:hover{background:#fff0f0;color:#b91c1c}
+
+.fin-history-toolbar{flex-wrap:wrap;justify-content:flex-start}
+.fin-history-toolbar label{min-width:0}
+.fin-history-toolbar select{border:1px solid #d5e3d9;border-radius:9px;padding:9px;background:#fff;color:#183c27;max-width:220px;width:100%;font-size:12px}
+.fin-history-toolbar .fin-tag{margin-left:auto}
+@media(max-width:600px){.fin-history-toolbar label{flex:1 1 160px;flex-wrap:wrap}.fin-history-toolbar .fin-tag{margin-left:0}}
