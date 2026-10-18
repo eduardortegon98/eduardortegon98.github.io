@@ -85,3 +85,58 @@ ALTER TABLE public.personal_finance_settings
  ADD COLUMN IF NOT EXISTS nu_paid_month text NOT NULL DEFAULT '2026-10',
  ADD COLUMN IF NOT EXISTS nu_last_payment_amount numeric(15,2) NOT NULL DEFAULT 963048,
  ADD COLUMN IF NOT EXISTS nu_next_due date NOT NULL DEFAULT '2026-11-15';
+
+-- Rollover at the start of each new month, never earlier than Oct 2026.
+-- Existing missed months are already included in pila_balance and must not be added twice.
+ALTER TABLE public.personal_finance_settings
+ ADD COLUMN IF NOT EXISTS pila_last_processed_month date NOT NULL DEFAULT '2026-10-01';
+
+CREATE TABLE IF NOT EXISTS public.personal_finance_pila_rollovers (
+ user_id uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+ contribution_month date NOT NULL,
+ amount numeric(15,2) NOT NULL CHECK(amount >= 0),
+ created_at timestamptz NOT NULL DEFAULT now(),
+ PRIMARY KEY(user_id,contribution_month)
+);
+ALTER TABLE public.personal_finance_pila_rollovers ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS finance_own_pila_rollovers ON public.personal_finance_pila_rollovers;
+CREATE POLICY finance_own_pila_rollovers ON public.personal_finance_pila_rollovers
+ FOR SELECT TO authenticated USING(auth.uid()=user_id);
+
+CREATE OR REPLACE FUNCTION public.rollover_my_pila()
+RETURNS numeric LANGUAGE plpgsql SECURITY INVOKER SET search_path = public AS $$
+DECLARE
+ v_user uuid := auth.uid();
+ v_settings public.personal_finance_settings%ROWTYPE;
+ v_month date;
+ v_current date := date_trunc('month', (now() AT TIME ZONE 'America/Bogota'))::date;
+ v_paid numeric;
+ v_missing numeric;
+BEGIN
+ IF v_user IS NULL THEN RAISE EXCEPTION 'Authentication required'; END IF;
+ INSERT INTO public.personal_finance_settings(user_id) VALUES(v_user)
+ ON CONFLICT(user_id) DO NOTHING;
+ SELECT * INTO v_settings FROM public.personal_finance_settings
+ WHERE user_id=v_user FOR UPDATE;
+ v_month := greatest(v_settings.pila_last_processed_month, date '2026-10-01');
+ WHILE v_month < v_current LOOP
+   SELECT coalesce(sum(amount),0) INTO v_paid
+   FROM public.personal_finance_bills
+   WHERE user_id=v_user AND category='Salud y pensión'
+    AND status='paid' AND due_date >= v_month AND due_date < (v_month+interval '1 month');
+   v_missing := greatest(0,v_settings.health-v_paid);
+   INSERT INTO public.personal_finance_pila_rollovers(user_id,contribution_month,amount)
+   VALUES(v_user,v_month,v_missing)
+   ON CONFLICT(user_id,contribution_month) DO NOTHING;
+   IF FOUND THEN
+     v_settings.pila_balance:=v_settings.pila_balance+v_missing;
+   END IF;
+   v_month:=(v_month+interval '1 month')::date;
+ END LOOP;
+ UPDATE public.personal_finance_settings
+ SET pila_balance=v_settings.pila_balance,pila_last_processed_month=v_current
+ WHERE user_id=v_user;
+ RETURN v_settings.pila_balance;
+END; $$;
+REVOKE ALL ON FUNCTION public.rollover_my_pila() FROM PUBLIC;
+GRANT EXECUTE ON FUNCTION public.rollover_my_pila() TO authenticated;
