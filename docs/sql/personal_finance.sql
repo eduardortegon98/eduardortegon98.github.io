@@ -78,3 +78,10 @@ CREATE INDEX IF NOT EXISTS personal_finance_income_user_date
  ON public.personal_finance_income(user_id,date);
 -- New accounts start with the user's current stated emergency cushion.
 ALTER TABLE public.personal_finance_settings ALTER COLUMN buffer SET DEFAULT 126000;
+
+-- Track the month already paid separately from the total bank balance.
+-- A due date displayed in the portal is not a push notification.
+ALTER TABLE public.personal_finance_settings
+ ADD COLUMN IF NOT EXISTS nu_paid_month text NOT NULL DEFAULT '2026-10',
+ ADD COLUMN IF NOT EXISTS nu_last_payment_amount numeric(15,2) NOT NULL DEFAULT 963048,
+ ADD COLUMN IF NOT EXISTS nu_next_due date NOT NULL DEFAULT '2026-11-15';
