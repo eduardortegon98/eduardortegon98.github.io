@@ -60,3 +60,28 @@
 .fin-traffic-yellow{background:linear-gradient(105deg,#fff9e6,#fff);border-color:#f0d68b;color:#806011}
 .fin-traffic-green{background:linear-gradient(105deg,#e9fff1,#fff);border-color:#a5e5b7;color:#177a43}
 @media(max-width:550px){.fin-traffic{padding:12px}.fin-traffic-footer{align-items:flex-start;flex-direction:column;gap:3px}.fin-traffic h3{font-size:21px}}
+
+/* Family financial health: two clear cards, independent status signals. */
+.fin-family-health{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:stretch}
+.fin-person-card{border-radius:17px;padding:18px 21px;border:1px solid #d7e4da;background:#fff;display:flex;flex-direction:column;gap:10px;min-width:0}
+.fin-person-top{display:flex;align-items:center;justify-content:space-between;gap:14px}
+.fin-person-top h3{font-size:23px;line-height:1.1;margin:4px 0 0}
+.fin-person-face{font-size:44px;line-height:1.2}
+.fin-person-status{font-size:17px;font-weight:900;letter-spacing:.035em}
+.fin-person-card p{margin:0;font-size:12px;line-height:1.5}
+.fin-person-card .fin-track{margin:2px 0}
+.fin-doris-columns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fin-doris-columns>div{display:grid;gap:5px;border:1px solid #e1eae2;border-radius:9px;padding:10px;background:#ffffffa6}
+.fin-doris-columns small,.fin-doris-helper{font-size:11px;color:#687c6b}
+.fin-doris-columns strong{font-size:17px;font-variant-numeric:tabular-nums}
+.fin-person-pending{background:linear-gradient(125deg,#fff8ee,#fff);border-color:#f0dfb8;color:#855214}
+.fin-person-pending .fin-track>div{background:#e6ab42}
+.fin-person-happy{background:linear-gradient(125deg,#edfff3,#fff);border-color:#a7dcc0;color:#20764b}
+.fin-person-happy .fin-track>div{background:#269c55}
+.fin-person-main{display:flex;justify-content:space-between;align-items:center;gap:15px;flex:1}
+.fin-vertical{flex-direction:column;gap:8px;border-radius:35px;padding:11px}
+.fin-vertical span{width:24px;height:24px}
+.fin-person-bottom{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;border-top:1px solid #00000012;padding-top:10px;font-size:12px}
+.fin-person-bottom strong{font-size:16px;font-variant-numeric:tabular-nums}
+.fin-person-bottom span{font-size:11px}
+@media(max-width:690px){.fin-family-health{grid-template-columns:1fr}.fin-person-card{padding:15px}.fin-person-face{font-size:38px}}
