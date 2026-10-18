@@ -97,3 +97,18 @@
 .fin-traffic-green .fin-eduard-progress .fin-track{background:#d4edda}
 .fin-traffic-green .fin-eduard-progress .fin-track>div{background:#27a45a}
 .fin-eduard-edit{justify-self:start;padding:5px 0;font-size:12px}
+
+/* Quick entry is now a peer card in the overview's three-column grid. */
+.fin-overview-add{display:flex;flex-direction:column;min-width:0}
+.fin-overview-add .fin-line{align-items:center}
+.fin-overview-add .fin-line h3{margin:0}
+.fin-overview-add .fin-month{font-size:10px;max-width:125px}
+.fin-overview-add .fin-month input{padding:6px 7px;font-size:11px}
+.fin-overview-add .fin-tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:11px 0}
+.fin-overview-add .fin-tabs button{padding:8px 5px;font-size:11px;text-align:center;white-space:normal}
+.fin-simple .fin-overview-add .fin-simple-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:auto}
+.fin-overview-add .fin-simple-form label{font-size:11px}
+.fin-overview-add .fin-simple-form input,.fin-overview-add .fin-simple-form select{padding:9px 8px;font-size:12px}
+.fin-simple .fin-overview-add .fin-primary{grid-column:1/-1;width:100%;min-height:38px}
+@media(max-width:1150px){.fin-overview-add{grid-column:1/-1}.fin-simple .fin-overview-add .fin-simple-form{grid-template-columns:repeat(4,minmax(0,1fr))}.fin-simple .fin-overview-add .fin-primary{grid-column:1/-1}}
+@media(max-width:650px){.fin-overview-add{grid-column:1/-1}.fin-simple .fin-overview-add .fin-simple-form{grid-template-columns:repeat(2,minmax(0,1fr))}}
