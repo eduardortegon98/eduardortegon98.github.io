@@ -1,0 +1,22 @@
+.admin-shell .module-brand{display:inline-flex;align-items:baseline;gap:0;white-space:nowrap;font-family:var(--portal-font-display,'Manrope',sans-serif);font-weight:800;letter-spacing:-.055em;line-height:1.25;min-width:0;vertical-align:baseline}
+.admin-shell .module-brand>.module-brand-name{font-family:inherit;font-weight:inherit;letter-spacing:inherit;color:#141d18}
+.admin-shell .module-brand>.module-brand-ai{font-family:inherit;font-weight:inherit;letter-spacing:-.045em;color:#2b8a5c}
+.admin-shell .module-brand-dark>.module-brand-name{color:#fff}
+.admin-shell .module-brand-dark>.module-brand-ai{color:#b7e7c8}
+.admin-shell .module-brand-heading{display:flex;margin:0 0 22px;font-size:clamp(24px,2.3vw,30px);line-height:1.25}
+.admin-shell .admin-sidebar nav .module-brand{font-size:13px;font-weight:700;letter-spacing:-.025em}
+.admin-shell .admin-sidebar nav a.active .module-brand-name{color:#1d4b32}
+.admin-shell .admin-topbar .admin-current-section>.module-brand{font-size:inherit;max-width:100%;letter-spacing:-.05em}
+.admin-shell .arturito-brand h1 .module-brand,.admin-shell .knowledge-brand h1 .module-brand{font-size:inherit}
+.admin-content .analytics-brand-heading{max-width:1500px;margin:0 auto;padding:28px 32px 0}
+.admin-content .analytics-brand-heading>.module-brand-heading{margin-bottom:0}
+.admin-content .analytics-brand-heading+.traffic-main{padding-top:18px}
+@media(max-width:760px){.admin-shell .module-brand-heading{font-size:25px;margin-bottom:18px}.admin-content .analytics-brand-heading{padding:22px 16px 0}.admin-content .analytics-brand-heading+.traffic-main{padding-top:16px}}
+.admin-shell .arturito-project h1,.admin-shell .knowledge-brand h1{font-size:clamp(24px,2.3vw,30px)}
+.admin-shell .admin-sidebar nav a{display:grid;grid-template-columns:19px minmax(0,1fr) auto;gap:8px;padding-inline:10px}
+.admin-shell .admin-sidebar nav a>.module-brand{min-width:0;max-width:100%;overflow:hidden}
+.admin-shell .admin-sidebar nav a>.module-brand>.module-brand-name{min-width:0;overflow:hidden;text-overflow:ellipsis}
+.admin-shell .admin-sidebar nav a>.module-brand>.module-brand-ai{flex-shrink:0}
+.admin-shell .admin-sidebar nav a>small{margin-left:0}
+@media(max-width:1100px){.admin-shell .admin-sidebar nav .module-brand{font-size:12px}}
+@media(max-width:760px){.admin-shell .arturito-project h1,.admin-shell .knowledge-brand h1{font-size:25px}}

@@ -1,8 +1,9 @@
+import ModuleBrand from './ModuleBrand';
 import { useEffect, useRef, useState } from 'react';
 import { Navigate, useOutletContext } from 'react-router-dom';
 import { Search, Save, RefreshCw, X, ChevronLeft, ChevronRight, Settings2 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
-import { moduleById } from './modules';
+import { moduleById, moduleTitle } from './modules';
 import { readClientModules, readModuleCatalog } from './moduleData';
 import { useLanguage } from '../i18n/Language';
 import PortalLoading from './PortalLoading';
@@ -32,7 +33,7 @@ function AssignmentWorkspace(){
   return()=>{active=false;clearTimeout(timer);};
  },[search,page,revision,language]);
  useEffect(()=>{if(client&&!dialog.current.open)dialog.current.showModal();else if(!client&&dialog.current.open)dialog.current.close();},[client]);
- return <div className="module-assignments">
+ return <div className="module-assignments"><ModuleBrand id="assignments" as="h1" className="module-brand-heading"/>
   <div className="assignment-toolbar"><label><Search size={17}/><input type="search" aria-label={t('Buscar cliente por correo','Search clients by email')} placeholder={t('Buscar cliente','Search clients')} value={search} onChange={event=>{setSearch(event.target.value);setPage(0);}}/></label><button className="compact-action" disabled={loading} onClick={()=>setRevision(value=>value+1)} title={t('Actualizar','Refresh')} aria-label={t('Actualizar','Refresh')}><RefreshCw size={17}/></button></div>
   <p className="assignment-hint">{t('Elige un cliente y gestiona sus módulos en un solo lugar.','Choose a client and manage their modules in one place.')}</p>
   {error&&<p role="alert" className="assignment-error">{error}</p>}{notice&&<p role="status" className="assignment-notice">{notice}</p>}
@@ -53,7 +54,7 @@ function ModulePicker({client,close,onSaved}){
   }).catch(()=>{if(active)setError(t('No pudimos cargar el catálogo. Verifica la conexión y ejecuta module-catalog.sql en Supabase.','Could not load the catalog. Check the connection and run module-catalog.sql in Supabase.'));}).finally(()=>{if(active)setLoading(false);});
   return()=>{active=false;};
  },[client.id,retry,language]);
- const name=module=>en?module.name_en:module.name_es;
+ const name=module=>moduleById.has(module.id)?moduleTitle(moduleById.get(module.id),language):(en?module.name_en:module.name_es);
  const installed=catalog.filter(module=>moduleById.has(module.id));
  const categories=[...new Set(installed.map(module=>module.category))].sort();
  const categoryName=id=>{const known=[...moduleById.values()].find(module=>module.category===id);return known?(known.categoryLabel[language]||known.categoryLabel.es):id;};

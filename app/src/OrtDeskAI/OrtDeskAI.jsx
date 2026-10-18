@@ -1,3 +1,4 @@
+import ModuleBrand from '../Portal/ModuleBrand';
 import { useEffect, useRef, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { BrainCircuit, Upload, FileText, Image, Search, Plus, X, Check, Trash2, Database, ShieldCheck, Clock3, HardDrive, Sparkles, FolderOpen, Download } from 'lucide-react';
@@ -65,7 +66,7 @@ function KnowledgeWorkspace({owner}){
  const categoryLabel=id=>{const value=categories.find(item=>item.id===id);return value?(en?value.en:value.es):id;};
  const visible=[...sources].sort((a,b)=>b.createdAt.localeCompare(a.createdAt)).filter(source=>(!category||source.category===category)&&(!filter||(filter==='reviewed'?source.reviewed:!source.reviewed))&&(source.title+' '+source.originName).toLocaleLowerCase().includes(query.toLocaleLowerCase()));
  return <div className="ortdesk-ai">
-  <header className="knowledge-heading"><div className="knowledge-brand"><span><BrainCircuit size={26}/></span><div><h1>ORTDESK<span>.AI</span><small>Beta</small></h1><p>{t('El conocimiento detrás de Ortex.','The knowledge behind Ortex.')}</p></div></div><span className="knowledge-local"><HardDrive size={14}/>{t('Borradores locales','Local drafts')}</span></header>
+  <header className="knowledge-heading"><div className="knowledge-brand"><span><BrainCircuit size={26}/></span><div><h1><ModuleBrand id="ortdesk_ai"/><small>Beta</small></h1><p>{t('El conocimiento detrás de Ortex.','The knowledge behind Ortex.')}</p></div></div><span className="knowledge-local"><HardDrive size={14}/>{t('Borradores locales','Local drafts')}</span></header>
   <div className="knowledge-summary"><article><Database size={18}/><span>{t('Fuentes','Sources')}</span><strong>{sources.length}</strong></article><article><ShieldCheck size={18}/><span>{t('Revisadas','Reviewed')}</span><strong>{reviewed}</strong></article><article><Clock3 size={18}/><span>{t('Sin indexar','Not indexed')}</span><strong>{sources.length}</strong></article></div>
   <section className="knowledge-storage-note"><HardDrive size={17}/><p>{t('Guardado solo en este navegador y dispositivo. La conexión al almacenamiento de la empresa y a los embeddings está pendiente. Añadir fuentes no entrena el modelo.','Saved only in this browser and device. Company storage and embeddings are not connected yet. Adding sources does not train the model.')}</p></section>
   {error&&<p className="knowledge-alert" role="alert">{error}<button onClick={()=>setRetry(value=>value+1)} disabled={busy||loading}>{t('Reintentar','Retry')}</button></p>}{notice&&<p className="knowledge-notice" role="status">{notice}</p>}

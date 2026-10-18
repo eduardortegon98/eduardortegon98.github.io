@@ -1,3 +1,4 @@
+import ModuleBrand from '../Portal/ModuleBrand';
 import { useEffect, useRef, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { Globe2, Plus, Search, RefreshCw, Pencil, ArrowUpRight, Github, WifiOff, X, Save, Archive, RotateCcw, ChevronLeft, ChevronRight, CheckCircle2, Clock3 } from 'lucide-react';
@@ -45,7 +46,7 @@ function WebsiteWorkspace({state}){
   catch{setError(t('No pudimos actualizar el registro.','Could not update the record.'));}
   finally{setWorking(null);}
  }
- return <div className="websites-workspace">
+ return <div className="websites-workspace"><ModuleBrand id="websites" as="h1" className="module-brand-heading"/>
   <div className="websites-toolbar"><label><Search size={17}/><input type="search" placeholder={t('Buscar web por nombre','Find website by name')} aria-label={t('Buscar web','Search websites')} value={search} onChange={event=>{setSearch(event.target.value);setPage(0);}}/></label><select aria-label={t('Estado del diseño','Design status')} value={status} onChange={event=>{setStatus(event.target.value);setPage(0);}}><option value="">{t('Todos los diseños','All designs')}</option>{designs.map(item=><option key={item.id} value={item.id}>{en?item.en:item.es}</option>)}</select>{admin&&<select aria-label={t('Registros archivados','Archived records')} value={String(archived)} onChange={event=>{setArchived(event.target.value==='true');setPage(0);}}><option value="false">{t('En gestión','Managed')}</option><option value="true">{t('Archivadas','Archived')}</option></select>}<button className="compact-action" disabled={loading||!!working} onClick={()=>setRevision(value=>value+1)} title={t('Actualizar','Refresh')} aria-label={t('Actualizar','Refresh')}><RefreshCw size={17}/></button>{admin&&<button className="websites-primary" onClick={()=>setEditing({})}><Plus size={16}/>{t('Nueva web','New website')}</button>}</div>
   <div className="websites-stats"><article><Globe2 size={19}/><span>{t('Webs en gestión','Managed websites')}</span><strong>{counts?.[0]??'—'}</strong></article><article><CheckCircle2 size={19}/><span>{t('Diseños aprobados','Approved designs')}</span><strong>{counts?.[1]??'—'}</strong></article><article><WifiOff size={19}/><span>{t('Conexión de hosting','Hosting connection')}</span><strong className="websites-pending">{t('Pendiente','Pending')}</strong></article></div>
   <div className="websites-integration"><WifiOff size={17}/><p>{t('Dominio y repositorio son referencias. Publicar, suspender o reactivar registra una solicitud; aún no ejecuta cambios en GitHub, DNS o hosting.','Domain and repository are references. Publish, suspend or reactivate records a request; GitHub, DNS and hosting changes are not connected yet.')}</p></div>
