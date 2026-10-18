@@ -45,3 +45,16 @@ No modificar este prototipo para escribir automáticamente al backend sin incorp
 
 - model.test.mjs: separación de monedas, métricas por canal, duplicados, vencimientos, acciones terminadas y persistencia por cuenta.
 - ESLint para los nuevos JS/JSX y build Vite.
+
+## Organización por secciones
+
+La navegación principal y el detalle del contacto comparten seis áreas, en este orden:
+
+0. Contratación: ficha comercial, responsables, contactos, oportunidades, métricas, cotizaciones/propuestas y preparación de cliente.
+1. Historial: actividad local ordenada por fecha y referencia CRM del contacto.
+2. Legal: contratos, firmas registradas y documentos legales.
+3. Pagos: cobros/anticipos, comprobantes y métodos de pago.
+4. Comunicaciones: canales, acceso a Mensajes, seguimiento y notas internas.
+5. Proyectos: proyectos, entregables, hitos y archivos de entrega.
+
+Los registros conservan las mismas claves y almacenamiento; esta reorganización no requiere migrar ni borrar datos locales. Los accesos desde notificaciones y recordatorios se dirigen al área correspondiente.
