@@ -2,3 +2,129 @@
 
 /* Six stable business sections; secondary views stay inside their parent. */
 .commercial-workspace>.crm-tabs{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;border:1px solid #dce7df;border-radius:12px;background:#fff;padding:6px;overflow:visible}.commercial-workspace>.crm-tabs button{padding:11px 8px;gap:6px}.crm-section-index{display:inline-grid;place-items:center;width:18px;height:18px;flex-shrink:0;border-radius:5px;background:#edf2ed;color:#718778;font-size:10px;font-variant-numeric:tabular-nums}.crm-tabs button.active .crm-section-index{background:#24573d;color:#fff}.crm-subnav{display:flex;gap:5px;margin:0 0 18px}.commercial-workspace .crm-subnav button{background:transparent;color:#657c6d;border:0;border-radius:0;padding:8px 12px;border-bottom:2px solid transparent;font-size:12px}.commercial-workspace .crm-subnav button.active{color:#24573d;border-bottom-color:#43825a}.crm-category-panel{background:#fff;border:1px solid #dce7df;border-radius:12px;padding:18px;margin-bottom:16px;min-width:0}.crm-category-panel>h3{margin:0 0 16px;font-size:13px;font-weight:600}.crm-category-panel>.crm-record:last-child{margin-bottom:0}.crm-category-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}.crm-category-grid>.crm-panel,.crm-category-grid>.crm-category-panel{margin-bottom:16px}.crm-contact-channel{display:flex;align-items:center;gap:16px;flex-wrap:wrap;font-size:12px;color:#657c6d;overflow-wrap:anywhere}.crm-detail-tabs{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px;padding:10px 16px}.crm-dialog .crm-detail-tabs button{gap:6px;padding:9px 5px;font-size:11px}.crm-category-panel .crm-empty{padding:22px 12px}.crm-category-panel .crm-conversion{margin-top:18px}.crm-team{display:flex;gap:8px;flex-wrap:wrap}@media(max-width:1200px){.commercial-workspace>.crm-tabs{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:760px){.crm-detail-tabs{grid-template-columns:repeat(3,minmax(0,1fr))}.crm-category-grid{grid-template-columns:1fr}.crm-category-panel{padding:15px}.crm-contact-channel{gap:10px}.commercial-workspace>.crm-tabs button{justify-content:flex-start}.commercial-workspace>.crm-tabs button>svg{display:none}}@media(max-width:420px){.commercial-workspace>.crm-tabs button{font-size:11px;padding:9px 4px}.crm-section-index{width:15px;height:15px}.crm-dialog .crm-detail-tabs button{font-size:10px;gap:4px}.crm-detail-tabs{padding:8px}.crm-category-panel .crm-section-heading{flex-wrap:wrap}}
+
+
+/* Shared gutters and consistent spacing across the commercial workspace. */
+.admin-content .commercial-workspace {
+  padding: 28px 32px 40px;
+  width: 100%;
+}
+.crm-section-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-width: 0;
+  padding: 6px 4px 12px;
+}
+.crm-section-content > .crm-panel,
+.crm-section-content > .crm-category-grid,
+.crm-section-content > .crm-projects-area,
+.crm-section-content > .crm-operation-grid {
+  margin: 0;
+}
+.crm-section-content :is(.crm-panel, .crm-category-panel) {
+  min-width: 0;
+  padding: 24px;
+}
+.crm-section-content .crm-category-grid,
+.crm-section-content .crm-operation-grid,
+.crm-section-content .crm-connections {
+  gap: 24px;
+}
+.crm-section-content .crm-category-grid > .crm-panel,
+.crm-section-content .crm-connections > .crm-panel,
+.crm-projects-area > .crm-panel {
+  margin: 0;
+}
+.crm-section-content .crm-panel > h3,
+.crm-section-content .crm-panel > .crm-section-heading {
+  margin: 0 0 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e5ece6;
+}
+.crm-methods-section > .crm-muted,
+.crm-channels-section > .crm-muted {
+  margin: 0 0 22px;
+}
+.crm-detail-body {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 28px;
+}
+.crm-detail-body > :is(.crm-category-panel, .crm-category-grid) {
+  margin: 0;
+}
+.crm-detail-body .crm-category-panel {
+  padding: 24px;
+  margin-bottom: 0;
+}
+.crm-detail-body .crm-category-grid { gap: 24px; }
+.crm-detail-body .crm-category-panel > h3,
+.crm-detail-body .crm-category-panel > .crm-section-heading {
+  margin: 0 0 22px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e5ece6;
+}
+.crm-detail-body > .crm-timeline {
+  padding: 24px;
+  background: #fff;
+  border: 1px solid #dce7df;
+  border-radius: 12px;
+}
+.crm-timeline article { padding-bottom: 28px; }
+.crm-timeline article:last-of-type { padding-bottom: 0; }
+.crm-timeline article:last-of-type::before { display: none; }
+.crm-timeline strong { line-height: 1.7; overflow-wrap: anywhere; }
+.commercial-workspace .crm-agenda-row,
+.crm-dialog .crm-agenda-row {
+  gap: 20px;
+  margin-top: 10px;
+  padding: 16px 18px;
+  border: 1px solid #e6ede7;
+  border-radius: 9px;
+  background: #f9fbf8;
+}
+.crm-agenda-row > span:first-child { min-width: 0; }
+.crm-agenda-row strong { line-height: 1.6; overflow-wrap: anywhere; }
+.crm-agenda-row > span:last-child { flex-shrink: 0; }
+.crm-category-panel .crm-record {
+  margin: 14px 0 0;
+  padding: 20px;
+  background: #fbfcfa;
+}
+.crm-record-title { gap: 20px; }
+.crm-record-meta { column-gap: 18px; row-gap: 10px; margin-top: 14px; }
+.crm-upload { gap: 14px; margin-bottom: 18px; }
+.crm-file { padding: 18px 4px; gap: 16px; }
+.crm-balance { padding: 18px; gap: 14px; line-height: 1.8; }
+.crm-contact-channel { gap: 14px 24px; line-height: 1.8; }
+.crm-detail-body > .crm-alert { margin: 0; }
+@media (max-width: 1100px) {
+  .admin-content .commercial-workspace { padding: 24px; }
+}
+@media (max-width: 760px) {
+  .admin-content .commercial-workspace { padding: 20px 16px 28px; }
+  .crm-section-content { padding: 4px 0 8px; gap: 18px; }
+  .crm-section-content :is(.crm-panel, .crm-category-panel),
+  .crm-detail-body .crm-category-panel,
+  .crm-detail-body > .crm-timeline { padding: 18px; }
+  .crm-detail-body { padding: 20px 16px; gap: 18px; }
+  .crm-section-content .crm-category-grid,
+  .crm-section-content .crm-operation-grid,
+  .crm-section-content .crm-connections,
+  .crm-detail-body .crm-category-grid { gap: 18px; }
+  .crm-section-content .crm-panel > h3,
+  .crm-section-content .crm-panel > .crm-section-heading,
+  .crm-detail-body .crm-category-panel > h3,
+  .crm-detail-body .crm-category-panel > .crm-section-heading {
+    margin-bottom: 18px; padding-bottom: 14px;
+  }
+  .commercial-workspace .crm-agenda-row,
+  .crm-dialog .crm-agenda-row { padding: 14px; gap: 14px; flex-wrap: wrap; }
+  .crm-agenda-row > span:last-child { text-align: left; }
+  .crm-category-panel .crm-record { padding: 16px; }
+  .crm-file { gap: 10px; padding-block: 16px; }
+  .crm-record-title { flex-wrap: wrap; gap: 10px; }
+  .crm-record-meta { column-gap: 12px; }
+}
