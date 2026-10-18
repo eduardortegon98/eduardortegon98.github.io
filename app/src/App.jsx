@@ -11,7 +11,6 @@ const Account = lazy(() => import("./Portal/Account.jsx"));
 const AnalyticsDashboard = lazy(() => import("./Analytics/AnalyticsDashboard.jsx"));
 const CommercialPortal = lazy(() => import("./CRM/CommercialPortal.jsx"));
 const Assignments = lazy(() => import("./Portal/Assignments.jsx"));
-const STOEcosystemDocs = lazy(() => import("./Portal/STOEcosystemDocs.jsx"));
 const Home = lazy(() => import("./Home/Home.jsx"));
 const Login = lazy(() => import("./Login/Login.jsx"));
 const Contacto = lazy(() => import("./Contacto/Contacto.jsx"));
@@ -35,7 +34,6 @@ function App() {
           {portalModules.map(module=><Route key={module.id} path={module.path.replace('/panel/','')} element={<ModuleRoute id={module.id}/>}/>)}
           <Route path="comercial" element={<CommercialPortal />} />
           <Route path="asignaciones" element={<Assignments />} />
-          <Route path="documentacion/sto" element={<STOEcosystemDocs />} />
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/contacto" element={<Contacto />} />
