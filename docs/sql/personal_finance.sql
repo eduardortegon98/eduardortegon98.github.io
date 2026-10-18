@@ -41,3 +41,20 @@ drop policy if exists finance_own_bills on public.personal_finance_bills;
 create policy finance_own_bills on public.personal_finance_bills for all to authenticated using(auth.uid()=user_id) with check(auth.uid()=user_id);
 create index if not exists personal_finance_expenses_user_date on public.personal_finance_expenses(user_id,date);
 create index if not exists personal_finance_bills_user_due on public.personal_finance_bills(user_id,due_date);
+
+-- Extra hours and their actual income (entered manually, never assumed).
+create table if not exists public.personal_finance_extras(
+ id uuid primary key default gen_random_uuid(),
+ user_id uuid not null references auth.users(id) on delete cascade,
+ date date not null,
+ hours numeric(9,2) not null check(hours>0),
+ amount numeric(15,2) not null check(amount>=0),
+ note text not null default '',
+ created_at timestamptz not null default now()
+);
+alter table public.personal_finance_extras enable row level security;
+drop policy if exists finance_own_extras on public.personal_finance_extras;
+create policy finance_own_extras on public.personal_finance_extras
+ for all to authenticated
+ using(auth.uid()=user_id) with check(auth.uid()=user_id);
+create index if not exists personal_finance_extras_user_date on public.personal_finance_extras(user_id,date);
