@@ -27,3 +27,11 @@
 .fin-history .fin-line h3{margin:0}
 @media(max-width:1200px){.fin-overview{grid-template-columns:repeat(2,minmax(0,1fr))}.fin-simple .fin-add .fin-simple-form{grid-template-columns:repeat(2,minmax(0,1fr))}.fin-month-due .fin-simple-rows{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:650px){.fin-overview{grid-template-columns:1fr 1fr;gap:8px}.fin-simple .fin-section{padding:11px}.fin-overview .fin-goal-number{font-size:20px}.fin-overview .fin-simple-rows strong,.fin-overview .fin-entry strong{font-size:12px}.fin-simple .fin-add .fin-simple-form{grid-template-columns:1fr 1fr}.fin-month-due .fin-simple-rows{grid-template-columns:1fr 1fr}.fin-tips .fin-action-list{grid-template-columns:1fr}}
+
+.fin-overview{grid-template-columns:repeat(3,minmax(0,1fr))}
+.fin-overview .fin-income-amount,.fin-overview .fin-buffer-number{font-size:clamp(20px,2.1vw,30px);font-weight:850;color:#18834a;margin:8px 0}
+.fin-overview .fin-income .fin-entry{padding:6px 0}
+.fin-overview .fin-income .fin-entry strong{font-size:12px}
+.fin-overview .fin-buffer{background:linear-gradient(115deg,#f1fff6,#fff)}
+@media(max-width:1150px){.fin-overview{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:650px){.fin-overview{grid-template-columns:repeat(2,minmax(0,1fr))}}
