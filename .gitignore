@@ -1,0 +1,12 @@
+# Never commit local environment files or secrets
+.env
+.env.*
+**/.env
+**/.env.*
+
+# Dependencies and local build output
+node_modules/
+**/node_modules/
+dist/
+**/dist/
+*.log
