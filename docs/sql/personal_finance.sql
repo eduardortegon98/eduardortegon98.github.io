@@ -11,7 +11,7 @@ create table if not exists public.personal_finance_settings(
  nu_target numeric(15,2) not null default 1043400,
  pila_target numeric(15,2) not null default 220400,
  health numeric(15,2) not null default 500000,
- health_refund numeric(15,2) not null default 500000,
+ health_refund numeric(15,2) not null default 0,
  personal_budget numeric(15,2) not null default 0,
  goal_date date not null default '2027-10-18'
 );
