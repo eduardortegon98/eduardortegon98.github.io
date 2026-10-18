@@ -5,12 +5,19 @@ import { ArrowLeft, CheckCheck, MessageCircle, Search, Send, FilterX } from "luc
 import "./Inbox.css";
 import { demoConversations } from "./demoData";
 import "./Communications.css";
+import RegisteredMessages from "./RegisteredMessages";
+import "./RegisteredMessages.css";
 const initials = name => name.trim().split(/\s+/).filter(Boolean).slice(0, 2).map(part => part[0]).join("").toLocaleUpperCase();
 const channels = ["WhatsApp", "Instagram", "Facebook"];
 const seed = demoConversations;
 export default function Inbox() {
   const { user, role, modules = [] } = useOutletContext();
-  return (role === "super_admin" || modules.includes("messages")) ? <Workspace key={user.id} user={user} /> : <Navigate to="/panel" replace />;
+  return (role === "super_admin" || modules.includes("messages")) ? <MessagesWorkspace key={user.id+role} user={user} admin={role==="super_admin"} /> : <Navigate to="/panel" replace />;
+}
+function MessagesWorkspace({user,admin}){
+ const {language}=useLanguage(),en=language==="en";
+ const [mode,setMode]=useState(admin?'registered':'demo');
+ return <div className="messages-source-workspace">{admin&&<div className="messages-source-tabs" role="group" aria-label={en?'Message data source':'Origen de los mensajes'}><button aria-pressed={mode==='registered'} onClick={()=>setMode('registered')}>{en?'Registered activity':'Actividad registrada'}</button><button aria-pressed={mode==='demo'} onClick={()=>setMode('demo')}>{en?'Channel demo':'Demo de canales'}</button></div>}{mode==='registered'&&admin?<RegisteredMessages/>:<Workspace user={user}/>}</div>;
 }
 function Workspace({ user }) {
   const { language } = useLanguage();
