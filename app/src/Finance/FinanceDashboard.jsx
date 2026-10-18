@@ -44,6 +44,9 @@ export default function FinanceDashboard(){
  const paid=bills.filter(x=>x.status==='paid'&&x.due_date.slice(0,7)===month);
  const hasNuPayment=month===settings.nu_paid_month&&!paid.some(x=>x.category==='Banco');
  const visiblePayments=paid.length+(hasNuPayment?1:0);
+ const dorisPaid=paid.filter(x=>x.category==='Casa').reduce((sum,x)=>sum+Number(x.amount),0);
+ const dorisGoal=Number(settings.house);
+ const dorisCovered=dorisGoal>0&&dorisPaid>=dorisGoal;
  const worked=extras.filter(x=>x.date.slice(0,7)===month);
  const received=incomes.filter(x=>x.date.slice(0,7)===month);
  const totalReceived=received.reduce((a,x)=>a+Number(x.amount),0);
@@ -97,7 +100,21 @@ export default function FinanceDashboard(){
   <div className="fin-head"><div><p className="fin-eyebrow">TU LIBRETA PERSONAL</p><h2>OrtFinance.AI</h2><p>Lo que debes, lo que pagas y lo que estás logrando. Sin fórmulas complicadas.</p></div><button className="fin-secondary" onClick={refresh}><RefreshCw size={16}/> Actualizar</button></div>
   {error&&<p className="fin-error" role="alert">{error}</p>}
   {!isReady?<p className="fin-empty">{loading?'Cargando tu libreta...':'Activa las tablas de OrtFinance en Supabase para comenzar.'}</p>:<>
-  <section className={'fin-traffic fin-traffic-'+light} aria-label={'Estado financiero: '+lightName}><div className="fin-traffic-head"><div><span className="fin-traffic-eyebrow">SEMÁFORO DE EDUARD</span><h3>{lightName}</h3><p>{lightMessage}</p></div><div className="fin-traffic-lights" aria-hidden="true"><span className={light==='red'?'on':''}/><span className={light==='yellow'?'on':''}/><span className={light==='green'?'on':''}/></div></div><div className="fin-traffic-footer"><strong>{pesos(totalDebt)} pendientes</strong><span>{progress.toFixed(1)}% de la deuda inicial saldada</span></div></section>
+  <div className="fin-family-health">
+    <section className={'fin-person-card fin-doris '+(dorisCovered?'fin-person-happy':'fin-person-pending')} aria-label={'Doris: '+(dorisCovered?'aporte cubierto':'aporte por confirmar')}>
+      <div className="fin-person-top"><div><span className="fin-traffic-eyebrow">SALUD FINANCIERA DE DORIS</span><h3>Doris</h3></div><span className="fin-person-face" role="img" aria-label={dorisCovered?'Carita feliz':'Carita triste'}>{dorisCovered?'😊':'😟'}</span></div>
+      <div className="fin-person-status">{dorisCovered?'FELIZ':'PENDIENTE'}</div>
+      <p>{dorisCovered?'Este mes recibió todo su presupuesto. ❤️':'Falta registrar el aporte completo de este mes.'}</p>
+      <div className="fin-doris-columns"><div><small>Recibió</small><strong>{pesos(dorisPaid)}</strong></div><div><small>Meta del mes</small><strong>{pesos(dorisGoal)}</strong></div></div>
+      <div className="fin-track"><div style={{width:(dorisGoal>0?Math.min(100,dorisPaid/dorisGoal*100):0)+'%'}}/></div>
+      <small className="fin-doris-helper">Regístralo en «Pagué → Doris (casa)». No se cuenta dos veces.</small>
+    </section>
+    <section className={'fin-person-card fin-eduard fin-traffic-'+light} aria-label={'Eduard: '+lightName}>
+      <div className="fin-person-top"><div><span className="fin-traffic-eyebrow">SALUD FINANCIERA DE EDUARD</span><h3>Eduard</h3></div><span className="fin-person-face" role="img" aria-label={light==='green'?'Carita muy feliz':light==='yellow'?'Carita enfocada':'Carita triste'}>{light==='green'?'🥳':light==='yellow'?'😤':'😢'}</span></div>
+      <div className="fin-person-main"><div><div className="fin-person-status">{light==='red'?'ROJÍSIMO':light==='yellow'?'ENFOCADO':'¡RE FELIZ!'}</div><p>{lightMessage}</p></div><div className="fin-traffic-lights fin-vertical" aria-hidden="true"><span className={light==='red'?'on':''}/><span className={light==='yellow'?'on':''}/><span className={light==='green'?'on':''}/></div></div>
+      <div className="fin-person-bottom"><strong>{pesos(totalDebt)} por pagar</strong><span>{progress.toFixed(1)}% de la deuda inicial saldada</span></div>
+    </section>
+  </div>
   <div className="fin-overview"><section className="fin-section fin-goal"><div className="fin-line"><div><span className="fin-label">META PARA RETOMAR STO</span><h3>Estar libre de deudas</h3></div><button className="fin-link" onClick={()=>setEdit(!edit)}>{edit?'Cerrar':'Editar cifras'}</button></div><div className="fin-goal-number">{pesos(totalDebt)}</div><p>Esto falta por pagar entre el banco y PILA. El máster es un pago mensual aparte.</p><div className="fin-track"><div style={{width:Math.max(0,Math.min(100,(1-totalDebt/(10974592.35+2643800))*100))+'%'}}/></div><small>Objetivo: {settings.goal_date} · Actualiza los saldos después de pagar.</small></section>
   <section className="fin-section fin-debts"><h3>Debes</h3><div className="fin-simple-rows"><div><span>Máster <small>Cuota de este mes</small></span><strong>{pesos(master)}</strong></div><div><span>Banco · Nu <small>Saldo total · cuota de octubre pagada</small></span><strong>{pesos(debtNu)}</strong></div><div><span>PILA atrasada <small>Sin pagar · aportes de meses anteriores</small></span><strong>{pesos(debtPila)}</strong><em className="fin-pending-pill">Pendiente</em></div></div></section>
   <section className="fin-section fin-income"><div className="fin-line"><h3>Recibí</h3><span className="fin-tag">{received.length} ingresos</span></div><div className="fin-income-amount">{pesos(totalReceived)}</div><p>Este mes</p>{received.slice(0,3).map(x=><div className="fin-entry" key={x.id}><span>{fmtDate(x.date)}<small>{x.source}</small></span><strong>{pesos(x.amount)}</strong></div>)}{!received.length&&<p className="fin-muted">Sin ingresos anotados todavía.</p>}</section>
@@ -110,7 +127,7 @@ export default function FinanceDashboard(){
    <form className="fin-simple-form" onSubmit={e=>{e.preventDefault();save()}}>
     <label>Cuándo<input type="date" required value={form.date} onChange={e=>setForm(p=>({...p,date:e.target.value}))}/></label>
     <label>Cuánto (COP)<input type="number" min="1" required placeholder="Ej. 20000" value={form.amount} onChange={e=>setForm(p=>({...p,amount:e.target.value}))}/></label>
-    {tab==='ingreso'?<label>De quién<select value={paymentFor} onChange={e=>setPaymentFor(e.target.value)}>{['Blu','Cliente STO','Reembolso','Otro'].map(x=><option key={x}>{x}</option>)}</select></label>:tab==='pago'?<label>A quién<select value={paymentFor} onChange={e=>setPaymentFor(e.target.value)}>{['Banco','Máster','PILA atrasada','Salud y pensión','Casa','Otro'].map(x=><option key={x}>{x}</option>)}</select></label>:tab==='gasto'?<label>Tipo<select value={form.category} onChange={e=>setForm(p=>({...p,category:e.target.value}))}>{['Otro','Gasto hormiga','Alimentación','Transporte','Salud','Casa','Estudio','Ocio'].map(x=><option key={x}>{x}</option>)}</select></label>:<label>Horas trabajadas<input type="number" min=".25" step=".25" required value={hours} onChange={e=>setHours(e.target.value)} placeholder="Ej. 8"/></label>}
+    {tab==='ingreso'?<label>De quién<select value={paymentFor} onChange={e=>setPaymentFor(e.target.value)}>{['Blu','Cliente STO','Reembolso','Otro'].map(x=><option key={x}>{x}</option>)}</select></label>:tab==='pago'?<label>A quién<select value={paymentFor} onChange={e=>setPaymentFor(e.target.value)}>{[['Banco','Banco'],['Máster','Máster'],['PILA atrasada','PILA atrasada'],['Salud y pensión','Salud y pensión'],['Casa','Doris (casa)'],['Otro','Otro']].map(([value,label])=><option key={value} value={value}>{label}</option>)}</select></label>:tab==='gasto'?<label>Tipo<select value={form.category} onChange={e=>setForm(p=>({...p,category:e.target.value}))}>{['Otro','Gasto hormiga','Alimentación','Transporte','Salud','Casa','Estudio','Ocio'].map(x=><option key={x}>{x}</option>)}</select></label>:<label>Horas trabajadas<input type="number" min=".25" step=".25" required value={hours} onChange={e=>setHours(e.target.value)} placeholder="Ej. 8"/></label>}
     <label>Detalle (opcional)<input maxLength="180" value={form.note} onChange={e=>setForm(p=>({...p,note:e.target.value}))} placeholder={tab==='ingreso'?'Ej. quincena de Blu':tab==='pago'?'Ej. cuota de octubre':tab==='extra'?'Ej. lunes en Blu':'Ej. café'}/></label>
     <button type="submit" className="fin-primary" disabled={saving}><Plus size={16}/> Guardar</button>
    </form>
