@@ -20,10 +20,16 @@ export default function FinanceDashboard(){
  const [isReady,setReady]=useState(false),[loading,setLoading]=useState(true),[saving,setSaving]=useState(false),[error,setError]=useState(''),[edit,setEdit]=useState(false);
  const [bufferDirection,setBufferDirection]=useState('out'),[historyCategory,setHistoryCategory]=useState('Todas');
  const [incomeCurrency,setIncomeCurrency]=useState('COP'),[trm,setTrm]=useState(null),[trmLoading,setTrmLoading]=useState(false),[trmError,setTrmError]=useState('');
- const [paymentFor,setPaymentFor]=useState('Banco'),[hours,setHours]=useState(''),[historyOpen,setHistoryOpen]=useState(false),[historyMonth,setHistoryMonth]=useState(currentMonth());
+ const [hourlyUsd,setHourlyUsd]=useState(''),[paymentFor,setPaymentFor]=useState('Banco'),[hours,setHours]=useState(''),[historyOpen,setHistoryOpen]=useState(false),[historyMonth,setHistoryMonth]=useState(currentMonth());
  const owner=user?.id;
+ useEffect(()=>{if(owner)setHourlyUsd(window.localStorage.getItem('ortfinance_extra_hourly_usd_'+owner)||'');},[owner]);
+ const setHourlyRate=value=>{
+  setHourlyUsd(value);
+  if(owner){if(value)window.localStorage.setItem('ortfinance_extra_hourly_usd_'+owner,value);else window.localStorage.removeItem('ortfinance_extra_hourly_usd_'+owner);}
+ };
+ const extraEstimate=tab==='extra'&&trm&&trm.date===form.date&&Number(hours)>0&&Number(hourlyUsd)>0?Math.round(Number(hours)*Number(hourlyUsd)*trm.rate*100)/100:null;
  useEffect(()=>{
-  if(tab!=='ingreso'||incomeCurrency!=='USD'||!form.date){setTrm(null);setTrmError('');setTrmLoading(false);return;}
+  if(!((tab==='ingreso'&&incomeCurrency==='USD')||tab==='extra')||!form.date){setTrm(null);setTrmError('');setTrmLoading(false);return;}
   let cancelled=false;
   setTrm(null);setTrmLoading(true);setTrmError('');
   const controller=new AbortController();
@@ -96,8 +102,8 @@ export default function FinanceDashboard(){
   setError('');setSaving(true);
   try{
    const enteredAmount=Number(form.amount),note=form.note.trim();
-   if(tab==='ingreso'&&incomeCurrency==='USD'&&(!trm||trmLoading||trm.date!==form.date))throw new Error('Espera a que cargue la TRM oficial de la fecha de transferencia.');
-   const amount=tab==='ingreso'&&incomeCurrency==='USD'?Math.round(enteredAmount*trm.rate*100)/100:enteredAmount;
+   if(((tab==='ingreso'&&incomeCurrency==='USD')||tab==='extra')&&(!trm||trmLoading||trm.date!==form.date))throw new Error('Espera a que cargue la TRM oficial de la fecha de transferencia.');
+   const amount=tab==='extra'?extraEstimate:tab==='ingreso'&&incomeCurrency==='USD'?Math.round(enteredAmount*trm.rate*100)/100:enteredAmount;
    if(!form.date||!Number.isFinite(amount)||amount<=0)throw new Error('Ingresa un valor mayor que cero.');
    let table,record;
    if(tab==='colchon'){
@@ -112,7 +118,13 @@ export default function FinanceDashboard(){
    }
    else if(tab==='gasto'){table='personal_finance_expenses';record={date:form.date,amount,category:form.category,note};}
    else if(tab==='pago'){table='personal_finance_bills';record={due_date:form.date,amount,title:note||paymentFor,category:paymentFor,status:'paid'};}
-   else {const h=Number(hours);if(!Number.isFinite(h)||h<=0)throw new Error('Indica las horas trabajadas.');table='personal_finance_extras';record={date:form.date,hours:h,amount,note};}
+   else {
+    const h=Number(hours),rate=Number(hourlyUsd);
+    if(!Number.isFinite(h)||h<=0)throw new Error('Indica las horas trabajadas.');
+    if(!Number.isFinite(rate)||rate<=0)throw new Error('Configura tu tarifa en USD por hora.');
+    table='personal_finance_extras';
+    record={date:form.date,hours:h,amount,note:'Estimado: '+h+' h × USD '+rate+'/h × TRM '+trm.rate+' ('+form.date+'; dolarencolombia.co). '+note};
+   }
    const {error:e}=await supabase.from(table).insert({...record,user_id:owner});if(e)throw e;
    setForm(initial);setHours('');await refresh();
   }catch(e){setError(e.message||'No se guardó el registro.')}finally{setSaving(false)}
@@ -172,10 +184,10 @@ export default function FinanceDashboard(){
    <div className="fin-tabs">{[['ingreso','Recibí'],['gasto','Gasté'],['pago','Pagué'],['extra','Trabajé extra'],['colchon','Colchón']].map(([key,title])=><button key={key} className={tab===key?'selected':''} onClick={()=>setTab(key)}>{title}</button>)}</div>
    <form className="fin-simple-form" onSubmit={e=>{e.preventDefault();save()}}>
     <label>Cuándo<input type="date" required value={form.date} onChange={e=>setForm(p=>({...p,date:e.target.value}))}/></label>
-    <label>Cuánto ({tab==='ingreso'?incomeCurrency:'COP'})<input type="number" min={tab==='ingreso'&&incomeCurrency==='USD'?'0.01':'1'} step={tab==='ingreso'&&incomeCurrency==='USD'?'0.01':'1'} required placeholder={tab==='ingreso'&&incomeCurrency==='USD'?'Ej. 200.50':'Ej. 20000'} value={form.amount} onChange={e=>setForm(p=>({...p,amount:e.target.value}))}/></label>
+    {tab!=='extra'&&<label>Cuánto ({tab==='ingreso'?incomeCurrency:'COP'})<input type="number" min={tab==='ingreso'&&incomeCurrency==='USD'?'0.01':'1'} step={tab==='ingreso'&&incomeCurrency==='USD'?'0.01':'1'} required placeholder={tab==='ingreso'&&incomeCurrency==='USD'?'Ej. 200.50':'Ej. 20000'} value={form.amount} onChange={e=>setForm(p=>({...p,amount:e.target.value}))}/></label>}
     {tab==='ingreso'?<label>De quién<select value={paymentFor} onChange={e=>setPaymentFor(e.target.value)}>{['Blu','Cliente STO','Reembolso','Otro'].map(x=><option key={x}>{x}</option>)}</select></label>:tab==='pago'?<label>A quién<select value={paymentFor} onChange={e=>setPaymentFor(e.target.value)}>{[['Banco','Banco'],['Máster','Máster'],['PILA atrasada','PILA atrasada'],['Salud y pensión','Salud y pensión'],['Casa','Doris (casa)'],['Otro','Otro']].map(([value,label])=><option key={value} value={value}>{label}</option>)}</select></label>:tab==='gasto'?<label>Tipo<select value={form.category} onChange={e=>setForm(p=>({...p,category:e.target.value}))}>{['Otro','Gasto hormiga','Alimentación','Transporte','Salud','Casa','Estudio','Ocio'].map(x=><option key={x}>{x}</option>)}</select></label>:tab==='colchon'?<label>Operación<select value={bufferDirection} onChange={e=>setBufferDirection(e.target.value)}><option value="out">Sacar del colchón</option><option value="in">Guardar en el colchón</option></select></label>:<label>Horas trabajadas<input type="number" min=".25" step=".25" required value={hours} onChange={e=>setHours(e.target.value)} placeholder="Ej. 8"/></label>}
     <label>Detalle (opcional)<input maxLength="180" value={form.note} onChange={e=>setForm(p=>({...p,note:e.target.value}))} placeholder={tab==='ingreso'?'Ej. quincena de Blu':tab==='pago'?'Ej. cuota de octubre':tab==='extra'?'Ej. lunes en Blu':tab==='colchon'?'Ej. ahorro o préstamo familiar':'Ej. café'}/></label>
-    <button type="submit" className="fin-primary" disabled={saving}><Plus size={16}/> Guardar</button>
+    <button type="submit" className="fin-primary" disabled={saving||((tab==='extra'||(tab==='ingreso'&&incomeCurrency==='USD'))&&(!trm||trmLoading||trm.date!==form.date))}><Plus size={16}/> Guardar</button>
    </form>
   </section>
   </div>
