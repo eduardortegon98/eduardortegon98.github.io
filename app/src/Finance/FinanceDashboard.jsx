@@ -5,7 +5,7 @@ import { useLanguage } from '../i18n/Language';
 import { Plus, Trash2, Wallet, CalendarDays, Target, AlertTriangle, CheckCircle2, RefreshCw } from 'lucide-react';
 import './FinanceDashboard.css';
 
-const START={nu_balance:10974592.35,pila_balance:2643800,buffer:100000,monthly_salary:3000000,extra_monthly:0,house:1500000,study:900000,nu_target:1043400,pila_target:220400,health:500000,health_refund:500000,personal_budget:0,goal_date:'2027-10-18'};
+const START={nu_balance:10974592.35,pila_balance:2643800,buffer:100000,monthly_salary:3000000,extra_monthly:0,house:1500000,study:900000,nu_target:1043400,pila_target:220400,health:500000,health_refund:0,personal_budget:0,goal_date:'2027-10-18'};
 const money=n=>new Intl.NumberFormat('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0}).format(Number(n)||0);
 const dateISO=()=>new Date().toLocaleDateString('en-CA');
 const initialExpense={date:dateISO(),amount:'',category:'Otro',note:''};
