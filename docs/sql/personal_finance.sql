@@ -140,3 +140,60 @@ BEGIN
 END; $$;
 REVOKE ALL ON FUNCTION public.rollover_my_pila() FROM PUBLIC;
 GRANT EXECUTE ON FUNCTION public.rollover_my_pila() TO authenticated;
+
+-- Atomic movements of the emergency cushion, independent of expenses/income.
+CREATE TABLE IF NOT EXISTS public.personal_finance_buffer_movements (
+ id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+ user_id uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+ date date NOT NULL DEFAULT CURRENT_DATE,
+ amount numeric(15,2) NOT NULL CHECK(amount>0),
+ direction text NOT NULL CHECK(direction IN ('in','out')),
+ note text NOT NULL DEFAULT '',
+ created_at timestamptz NOT NULL DEFAULT now()
+);
+ALTER TABLE public.personal_finance_buffer_movements ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS finance_own_buffer_movements ON public.personal_finance_buffer_movements;
+CREATE POLICY finance_own_buffer_movements ON public.personal_finance_buffer_movements
+ FOR SELECT TO authenticated USING(auth.uid()=user_id);
+CREATE INDEX IF NOT EXISTS personal_finance_buffer_movements_user_date
+ ON public.personal_finance_buffer_movements(user_id,date);
+
+CREATE OR REPLACE FUNCTION public.move_my_finance_buffer(
+ p_amount numeric, p_direction text, p_date date, p_note text DEFAULT ''
+) RETURNS numeric
+LANGUAGE plpgsql SECURITY INVOKER SET search_path=public AS $$
+DECLARE v_user uuid:=auth.uid(); v_balance numeric;
+BEGIN
+ IF v_user IS NULL THEN RAISE EXCEPTION 'Authentication required'; END IF;
+ IF p_amount IS NULL OR p_amount<=0 OR p_direction NOT IN ('in','out') OR p_date IS NULL THEN
+  RAISE EXCEPTION 'Invalid cushion movement';
+ END IF;
+ INSERT INTO public.personal_finance_settings(user_id) VALUES(v_user)
+ ON CONFLICT(user_id) DO NOTHING;
+ SELECT buffer INTO v_balance FROM public.personal_finance_settings WHERE user_id=v_user FOR UPDATE;
+ IF p_direction='out' AND p_amount>v_balance THEN RAISE EXCEPTION 'Saldo insuficiente en el colchón'; END IF;
+ UPDATE public.personal_finance_settings SET buffer=buffer+CASE WHEN p_direction='in' THEN p_amount ELSE -p_amount END
+ WHERE user_id=v_user RETURNING buffer INTO v_balance;
+ INSERT INTO public.personal_finance_buffer_movements(user_id,date,amount,direction,note)
+ VALUES(v_user,p_date,p_amount,p_direction,left(coalesce(p_note,''),180));
+ RETURN v_balance;
+END; $$;
+REVOKE ALL ON FUNCTION public.move_my_finance_buffer(numeric,text,date,text) FROM PUBLIC;
+GRANT EXECUTE ON FUNCTION public.move_my_finance_buffer(numeric,text,date,text) TO authenticated;
+
+CREATE OR REPLACE FUNCTION public.undo_my_finance_buffer_movement(p_id uuid)
+RETURNS numeric LANGUAGE plpgsql SECURITY INVOKER SET search_path=public AS $$
+DECLARE v_user uuid:=auth.uid(); v_movement public.personal_finance_buffer_movements%ROWTYPE; v_balance numeric;
+BEGIN
+ IF v_user IS NULL THEN RAISE EXCEPTION 'Authentication required'; END IF;
+ SELECT buffer INTO v_balance FROM public.personal_finance_settings WHERE user_id=v_user FOR UPDATE;
+ SELECT * INTO v_movement FROM public.personal_finance_buffer_movements WHERE id=p_id AND user_id=v_user FOR UPDATE;
+ IF NOT FOUND THEN RAISE EXCEPTION 'Movimiento no encontrado'; END IF;
+ IF v_movement.direction='in' AND v_movement.amount>v_balance THEN RAISE EXCEPTION 'No hay suficiente dinero para revertir este ingreso'; END IF;
+ UPDATE public.personal_finance_settings SET buffer=buffer+CASE WHEN v_movement.direction='in' THEN -v_movement.amount ELSE v_movement.amount END
+ WHERE user_id=v_user RETURNING buffer INTO v_balance;
+ DELETE FROM public.personal_finance_buffer_movements WHERE id=p_id AND user_id=v_user;
+ RETURN v_balance;
+END; $$;
+REVOKE ALL ON FUNCTION public.undo_my_finance_buffer_movement(uuid) FROM PUBLIC;
+GRANT EXECUTE ON FUNCTION public.undo_my_finance_buffer_movement(uuid) TO authenticated;
