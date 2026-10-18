@@ -1,16 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Star, Info, X, Search, RefreshCw } from 'lucide-react';
+import { Info, X, Search, RefreshCw } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { CONTACT_STAGES, loadQualifiedContacts } from './contactStages';
 import './QualifiedContacts.css';
+import { ContactStageBadge } from './ContactStageTooltip';
 import PortalLoading from './PortalLoading';
 
-function Rating({ stage, en }) {
-  return <span className={'contact-rating contact-stage-' + stage} aria-label={(en ? 'Contact ' : 'Contacto ') + stage + ' / 5'}>
-    <span aria-hidden="true">{[1,2,3,4,5].map(value => <Star key={value} size={15} fill={value <= stage ? 'currentColor' : 'none'} />)}</span>
-    <b>{en ? 'Contact' : 'Contacto'} {stage}</b>
-  </span>;
-}
+function Rating({stage,en}) { return <ContactStageBadge stage={stage} en={en}/>; }
 export default function QualifiedContacts({ en = false }) {
   const [items,setItems]=useState([]), [stages,setStages]=useState({});
   const [loading,setLoading]=useState(true), [ready,setReady]=useState(false);
