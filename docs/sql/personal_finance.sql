@@ -58,3 +58,23 @@ create policy finance_own_extras on public.personal_finance_extras
  for all to authenticated
  using(auth.uid()=user_id) with check(auth.uid()=user_id);
 create index if not exists personal_finance_extras_user_date on public.personal_finance_extras(user_id,date);
+
+-- Income received: date, amount and payer. This is separate from extra hours
+-- because worked hours are not always paid yet.
+CREATE TABLE IF NOT EXISTS public.personal_finance_income (
+ id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+ user_id uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+ date date NOT NULL,
+ amount numeric(15,2) NOT NULL CHECK(amount > 0),
+ source text NOT NULL DEFAULT 'Otro',
+ note text NOT NULL DEFAULT '',
+ created_at timestamptz NOT NULL DEFAULT now()
+);
+ALTER TABLE public.personal_finance_income ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS finance_own_income ON public.personal_finance_income;
+CREATE POLICY finance_own_income ON public.personal_finance_income
+ FOR ALL TO authenticated USING(auth.uid()=user_id) WITH CHECK(auth.uid()=user_id);
+CREATE INDEX IF NOT EXISTS personal_finance_income_user_date
+ ON public.personal_finance_income(user_id,date);
+-- New accounts start with the user's current stated emergency cushion.
+ALTER TABLE public.personal_finance_settings ALTER COLUMN buffer SET DEFAULT 126000;
