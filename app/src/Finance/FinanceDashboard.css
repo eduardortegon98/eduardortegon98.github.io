@@ -173,3 +173,11 @@
  .fin-person-card{padding:8px 12px;gap:4px}
  .fin-person-face{font-size:25px}
 }
+
+/* Align Movimientos title with other cards; keep eye action unobtrusive. */
+.fin-simple .fin-overview-add>.fin-line{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px;min-height:34px}
+.fin-simple .fin-overview-add>.fin-line h3{margin:0;line-height:1.25;align-self:center}
+.fin-simple .fin-overview-add .fin-movement-actions{display:flex;align-items:center;gap:6px}
+.fin-simple .fin-overview-add .fin-eye-button{width:28px;height:28px;min-width:28px;padding:0;border-radius:8px}
+.fin-simple .fin-overview-add .fin-eye-button svg{width:15px;height:15px}
+.fin-simple .fin-overview-add .fin-month{max-width:125px}
