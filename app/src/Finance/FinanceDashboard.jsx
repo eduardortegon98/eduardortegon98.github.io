@@ -152,7 +152,7 @@ export default function FinanceDashboard(){
  const categories=['Todas',...Array.from(new Set(movements.map(x=>x.category))).sort((a,b)=>a.localeCompare(b,'es'))];
  const filteredMovements=historyCategory==='Todas'?movements:movements.filter(x=>x.category===historyCategory);
  return <main className="fin-page fin-simple">
-  <div className="fin-head"><div><p className="fin-eyebrow">TU LIBRETA PERSONAL</p><h2>OrtFinance.AI</h2><p>Lo que debes, lo que pagas y lo que estás logrando. Sin fórmulas complicadas.</p></div><button className="fin-secondary" onClick={refresh}><RefreshCw size={16}/> Actualizar</button></div>
+  <div className="fin-head fin-head-compact"><p>Lo que debes, lo que pagas y lo que estás logrando.</p><button type="button" className="fin-refresh-button" onClick={refresh} disabled={loading} title="Actualizar datos" aria-label="Actualizar datos"><RefreshCw size={15}/> <span>Actualizar</span></button></div>
   {error&&<p className="fin-error" role="alert">{error}</p>}
   {!isReady?<p className="fin-empty">{loading?'Cargando tu libreta...':'Activa las tablas de OrtFinance en Supabase para comenzar.'}</p>:<>
   <div className="fin-family-health">
