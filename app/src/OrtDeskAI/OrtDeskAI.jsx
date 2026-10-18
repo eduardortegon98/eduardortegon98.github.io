@@ -10,8 +10,8 @@ const accepted=['pdf','docx','txt','md','csv','json','png','jpg','jpeg','webp'];
 const categories=[{id:'business',es:'Negocio',en:'Business'},{id:'products',es:'Productos y servicios',en:'Products and services'},{id:'support',es:'Soporte',en:'Support'},{id:'policies',es:'Políticas',en:'Policies'},{id:'other',es:'Otros',en:'Other'}];
 const bytes=value=>value<1024*1024?Math.ceil(value/1024)+' KB':(value/(1024*1024)).toFixed(1)+' MB';
 export default function OrtDeskAI(){
- const {user}=useOutletContext();
- return <KnowledgeWorkspace key={user.id} owner={user.id}/>;
+ const {user,role}=useOutletContext();
+ return <><div style={{margin:'16px 22px 0'}}>{role==='super_admin'&&<a href='/panel/documentacion/sto' style={{display:'inline-flex',gap:8,alignItems:'center',padding:'11px 15px',borderRadius:12,border:'1px solid #438b6d',color:'inherit',fontWeight:600,textDecoration:'none'}}>Documentación estratégica de STO →</a>}</div><KnowledgeWorkspace key={user.id} owner={user.id}/></>;
 }
 function KnowledgeWorkspace({owner}){
  const {language}=useLanguage(),en=language==='en',t=(es,english)=>en?english:es;
