@@ -189,3 +189,6 @@
 .fin-simple .fin-overview-add .fin-movement-actions>.fin-eye-button{width:28px;height:28px;margin-bottom:1px;align-self:flex-end}
 .fin-simple .fin-overview-add .fin-month{display:flex;flex-direction:column;gap:3px;justify-content:flex-end}
 .fin-simple .fin-overview-add .fin-month input{height:29px;box-sizing:border-box}
+
+.fin-overview-add .fin-tabs{display:flex;flex-wrap:wrap;align-items:center}
+.fin-overview-add .fin-tabs button{flex:1 1 auto;min-width:0;white-space:nowrap;font-size:11px;padding:6px 5px}
