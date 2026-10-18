@@ -87,3 +87,4 @@ export default function FinanceDashboard(){
    <section className="fin-panel fin-suggestions"><h3><Wallet size={19}/> Acciones sugeridas</h3>{suggested.map((x,i)=><p key={i}><CheckCircle2 size={17}/>{x}</p>)}<small>Sugerencias basadas en los registros; no ejecutan pagos ni reemplazan asesoría financiera.</small></section>
    </>}
  </main>;
+}
