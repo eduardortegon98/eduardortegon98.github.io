@@ -198,3 +198,10 @@
 .fin-overview-add .fin-trm-quote strong{font-size:12px}
 .fin-overview-add .fin-trm-quote a{color:#196b38;text-decoration:underline}
 .fin-overview-add .fin-trm-quote .fin-trm-error{color:#b13838}
+
+/* Explicit removal actions on real income and payment entries. */
+.fin-income .fin-entry,.fin-paid .fin-entry{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;column-gap:7px}
+.fin-income .fin-entry>span,.fin-paid .fin-entry>span{min-width:0}
+.fin-income .fin-entry>strong,.fin-paid .fin-entry>strong{white-space:nowrap}
+.fin-inline-delete{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;width:26px;height:26px;min-width:26px;padding:4px;border-radius:7px;cursor:pointer}
+.fin-inline-delete:hover{background:#fff0f0;color:#b91c1c}
