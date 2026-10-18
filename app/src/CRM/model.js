@@ -14,6 +14,7 @@ function loadWorkspace(userId) {
 }
 function saveWorkspace(userId, data) {
   localStorage.setItem(storageKey(userId), JSON.stringify(data));
+  if(typeof window!=='undefined')window.dispatchEvent(new CustomEvent('ortdesk:commercial-change',{detail:{userId}}));
 }
 function contactData(workspace, id) {
   return { profile: {}, stage: 0, notes: [], actions: [], files: [], quotes: [], contracts: [], payments: [], projects: [], history: [], ...workspace.contacts[id] };

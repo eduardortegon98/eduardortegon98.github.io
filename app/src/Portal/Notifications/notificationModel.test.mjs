@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+import {readFile} from 'node:fs/promises';
+const root=new URL('../../CRM/model.js',import.meta.url);
+const source=await readFile(root,'utf8'),modelUrl='data:text/javascript;base64,'+Buffer.from(source).toString('base64');
+const model=await import(modelUrl);
+const adapter=await readFile(new URL('./notificationModel.js',import.meta.url),'utf8');
+const {commercialNotifications,mergeNotifications,notificationKey}=await import('data:text/javascript;base64,'+Buffer.from(adapter.replace("'../../CRM/model'",JSON.stringify(modelUrl))).toString('base64'));
+const workspace=model.emptyWorkspace();workspace.contacts.c={...model.contactData(workspace,'c'),actions:[{id:'a',title:'Seguimiento',due:'2026-01-01T10:00'}],payments:[{id:'p',title:'Saldo',due:'2026-01-02',status:'pending'}],contracts:[{id:'s',title:'Contrato',status:'sent'}]};workspace.events=[{id:'reply:other',contactId:'not-allowed',title:'Not visible'}];workspace.read=['action:a'];
+const rows=[{id:'c',company:'Contacto de prueba'}];
+const items=commercialNotifications(rows,workspace,new Date('2026-10-18'));
+assert.equal(items.length,3);assert.equal(items.find(n=>n.sourceId==='action:a').read,true);assert.ok(items.find(n=>n.sourceId==='action:a').path.includes('section=communications'));assert.ok(items.find(n=>n.sourceId==='payment:p').path.includes('section=payments'));assert.ok(items.find(n=>n.sourceId==='contract:s').path.includes('section=legal'));
+const merged=mergeNotifications(items,[items[0],{id:'bad',title:'External',path:'https://external.invalid'},{id:'global:1',title:'Module event',path:'/panel/arturito',read:false}]);assert.equal(merged.length,4);assert.equal(merged.at(-1).read,true);assert.notEqual(notificationKey('a','client'),notificationKey('b','client'));assert.notEqual(notificationKey('a','client'),notificationKey('a','super_admin'));
+const data=new Map();globalThis.localStorage={getItem:k=>data.get(k)||null,setItem:(k,v)=>data.set(k,v)};let event;globalThis.window={dispatchEvent:e=>{event=e}};globalThis.CustomEvent=class{constructor(type,options){this.type=type;this.detail=options.detail}};model.saveWorkspace('account-a',workspace);assert.equal(event.type,'ortdesk:commercial-change');assert.equal(event.detail.userId,'account-a');assert.equal(model.loadWorkspace('account-a').read[0],'action:a');assert.equal(model.loadWorkspace('account-b').read.length,0);
+console.log('PASS: notification routing, read state, deduplication, contact scope, account/role isolation, and same-tab updates');

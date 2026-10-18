@@ -1,6 +1,6 @@
 import { createElement, useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import { Link, Navigate, useOutletContext, useSearchParams } from "react-router-dom";
-import { Users, Columns3, CalendarClock, BarChart3, Plug, CreditCard, Search, Plus, X, Bell, Info, Upload, Download, Trash2, Check, ArrowRight, FileText, RefreshCw, ChevronRight, AlertCircle, History, Scale, MessagesSquare, FolderKanban } from "lucide-react";
+import { Users, Columns3, CalendarClock, BarChart3, Plug, CreditCard, Search, Plus, X, Info, Upload, Download, Trash2, Check, ArrowRight, FileText, RefreshCw, ChevronRight, AlertCircle, History, Scale, MessagesSquare, FolderKanban } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import { useLanguage } from "../i18n/Language";
 import { loadQualifiedContacts, CONTACT_STAGES } from "../Portal/contactStages";
@@ -88,7 +88,7 @@ function Workspace({ user }) {
   const requested = params.get("view");
   const [view, setView] = useState([...navigation.map((n) => n[0]), "board", "metrics"].includes(requested) ? requested : "contacts");
   const [workspace, setWorkspace] = useState(() => loadWorkspace(user.id)), [rows, setRows] = useState([]), [loading, setLoading] = useState(true), [error, setError] = useState(""), [message, setMessage] = useState("");
-  const [term, setTerm] = useState(""), [owner, setOwner] = useState(""), [stageFilter, setStageFilter] = useState(""), [selected, setSelected] = useState(params.get("contact") || null), [tab, setTab] = useState("hiring"), [form, setForm] = useState(null), [help, setHelp] = useState(false), [notifications, setNotifications] = useState(false), [busy, setBusy] = useState(false), [category, setCategory] = useState("Contrato");
+  const [term, setTerm] = useState(""), [owner, setOwner] = useState(""), [stageFilter, setStageFilter] = useState(""), [selected, setSelected] = useState(params.get("contact") || null), [tab, setTab] = useState("hiring"), [form, setForm] = useState(null), [help, setHelp] = useState(false), [busy, setBusy] = useState(false), [category, setCategory] = useState("Contrato");
   const [clock, setClock] = useState(() => /* @__PURE__ */ new Date());
   useEffect(() => {
     const timer = setInterval(() => setClock(/* @__PURE__ */ new Date()), 6e4);
@@ -148,14 +148,23 @@ function Workspace({ user }) {
     let active = true;
     load();
     function changes(e) {
-      if (e.key === `ortdesk:commercial:v1:${user.id}` && active) setWorkspace(loadWorkspace(user.id));
+      if ((e.key === `ortdesk:commercial:v1:${user.id}` || e.detail?.userId===user.id || e.type==='storage'&&e.key===null) && active) setWorkspace(loadWorkspace(user.id));
     }
     window.addEventListener("storage", changes);
+    window.addEventListener("ortdesk:commercial-change", changes);
     return () => {
       active = false;
       window.removeEventListener("storage", changes);
+      window.removeEventListener("ortdesk:commercial-change", changes);
     };
   }, [user.id, load]);
+
+  useEffect(()=>{
+    const id=params.get('contact');
+    setSelected(id||null);
+    const target=params.get('section');
+    if(target&&detailTabs.some(item=>item[0]===target))setTab(target);
+  },[params]);
   function commit(next) {
     try {
       saveWorkspace(user.id, next);
@@ -176,12 +185,14 @@ function Workspace({ user }) {
     setTab(contactSection(target));
     const next = new URLSearchParams(params);
     next.set("contact", id);
+    next.set("section", contactSection(target));
     setParams(next, { replace: true });
   }
   function closeContact() {
     setSelected(null);
     const next = new URLSearchParams(params);
     next.delete("contact");
+    next.delete("section");
     setParams(next, { replace: true });
   }
   function changeView(next) {
@@ -290,7 +301,7 @@ function Workspace({ user }) {
   }
   const summary = <div className="crm-summary"><span><b>{rows.length}</b>{t("Respuestas confirmadas", "Confirmed replies")}</span><span><b>{stats.quotes}</b>{t("Cotizaciones locales", "Local quotes")}</span><span><b>{stats.wins}</b>{t("Firmados / ejecuci\xF3n", "Signed / in progress")}</span><span><b>{alerts.filter((a) => a.overdue).length}</b>{t("Pendientes vencidos", "Overdue items")}</span></div>;
   return <div className="commercial-workspace">
-<div className="crm-top"><div><span className="crm-local"><i />{t("Prototipo frontend \xB7 guardado local", "Frontend prototype \xB7 local storage")}</span><p>{t("Contactos reales de Supabase. La gesti\xF3n nueva solo se guarda en este navegador y cuenta.", "Real contacts from Supabase. New management data is saved only in this browser and account.")}</p></div><div className="crm-top-actions"><button className="crm-icon" title={t("Notificaciones", "Notifications")} aria-label={t("Notificaciones", "Notifications")} onClick={() => setNotifications(true)}><Bell size={18} /><span className="crm-counter">{alerts.filter((a) => !workspace.read.includes(a.id)).length}</span></button><button className="crm-icon" aria-label={t("Ayuda y etapas", "Help and stages")} onClick={() => setHelp(true)}><Info size={18} /></button><button className="crm-icon" disabled={loading} title={t("Actualizar contactos", "Refresh contacts")} aria-label={t("Actualizar contactos", "Refresh contacts")} onClick={load}><RefreshCw size={18} /></button></div></div>
+<div className="crm-top"><div><span className="crm-local"><i />{t("Prototipo frontend \xB7 guardado local", "Frontend prototype \xB7 local storage")}</span><p>{t("Contactos reales de Supabase. La gesti\xF3n nueva solo se guarda en este navegador y cuenta.", "Real contacts from Supabase. New management data is saved only in this browser and account.")}</p></div><div className="crm-top-actions"><button className="crm-icon" aria-label={t("Ayuda y etapas", "Help and stages")} onClick={() => setHelp(true)}><Info size={18} /></button><button className="crm-icon" disabled={loading} title={t("Actualizar contactos", "Refresh contacts")} aria-label={t("Actualizar contactos", "Refresh contacts")} onClick={load}><RefreshCw size={18} /></button></div></div>
 {error && <p className="crm-alert" role="alert">{error}</p>}{message && <p className="crm-notice" role="status">{message}<button className="crm-icon" aria-label={t("Cerrar aviso", "Dismiss notice")} onClick={() => setMessage("")}><X size={14} /></button></p>}
 {summary}<nav className="crm-tabs" aria-label={t("Gesti\xF3n comercial", "Commercial management")}>{navigation.map(([id, Icon, es, english], index) => <button key={id} className={view === id || id === "contacts" && ["board", "metrics"].includes(view) ? "active" : ""} aria-current={view === id || id === "contacts" && ["board", "metrics"].includes(view) ? "page" : void 0} onClick={() => changeView(id)}><span className="crm-section-index">{index}</span>{createElement(Icon, { size: 16 })}{t(es, english)}</button>)}</nav>
 {["contacts", "board", "metrics"].includes(view) && <div className="crm-subnav" aria-label={t("Vistas de contrataci\xF3n", "Contracting views")}>{[["contacts", Users, "Contactos", "Contacts"], ["board", Columns3, "Oportunidades", "Opportunities"], ["metrics", BarChart3, "M\xE9tricas", "Metrics"]].map(([id, Icon, es, english]) => <button key={id} className={view === id ? "active" : ""} aria-pressed={view === id} onClick={() => changeView(id)}>{createElement(Icon, { size: 15 })}{t(es, english)}</button>)}</div>}
@@ -327,6 +338,7 @@ function Workspace({ user }) {
     setView("methods");
     const next = new URLSearchParams(params);
     next.delete("contact");
+    next.delete("section");
     next.set("view", "methods");
     setParams(next, { replace: true });
   }}><CreditCard size={16} />{t("Administrar m\xE9todos de pago", "Manage payment methods")}</button></>}
@@ -336,12 +348,7 @@ function Workspace({ user }) {
 </div></Modal>}
 {form && <Modal title={titleOf(form.kind)} onClose={() => setForm(null)}><RecordForm key={form.kind + ":" + (form.record?.id || "new")} kind={form.kind} values={form.record} onSubmit={submitRecord} onClose={() => setForm(null)} en={en} workspace={workspace} contact={contact || { files: [] }} externalError={error} /></Modal>}
 {help && <Modal title={t("Etapas y alcance", "Stages and scope")} onClose={() => setHelp(false)}><div className="crm-detail-body"><p>{t("Las etapas existentes se leen de Supabase al abrir el m\xF3dulo; los cambios nuevos son locales y manuales. No sobrescriben Supabase.", "Existing stages are read from Supabase when opening the module; new changes are local and manual. They do not overwrite Supabase.")}</p>{CONTACT_STAGES.map((s, i) => <div className="crm-help-stage" key={i}><Rating stage={i} en={en} /><div><strong>{s[en ? 2 : 0]}</strong><p>{s[en ? 3 : 1]}</p></div></div>)}<p className="crm-muted">{t("Sin env\xEDos autom\xE1ticos, firma electr\xF3nica, cobros, permisos ni sincronizaci\xF3n de estos cambios. Las notificaciones son recordatorios internos calculados mientras est\xE1 abierto el portal.", "No automatic sending, electronic signatures, charges, permissions or synchronization of these changes. Notifications are internal reminders calculated while the portal is open.")}</p></div></Modal>}
-{notifications && <Modal title={t("Notificaciones", "Notifications")} onClose={() => setNotifications(false)}><div className="crm-detail-body"><p className="crm-muted">{t("Pendientes derivados del registro local; no son mensajes entrantes en vivo.", "Pending items derived from local records; these are not live incoming messages.")}</p>{alerts.map((a) => <div className="crm-contact-record-link" key={a.id}><button className={"crm-agenda-row" + (workspace.read.includes(a.id) ? " read" : "")} key={a.id} onClick={() => {
-    if (commit({ ...workspace, read: [.../* @__PURE__ */ new Set([...workspace.read, a.id])] })) {
-      setNotifications(false);
-      openContact(a.contactId, a.kind === "action" ? "actions" : a.kind === "payment" ? "payments" : a.kind === "reply" ? "history" : "contracts");
-    }
-  }}><span><strong>{a.title}</strong><small>{a.company}</small></span><span>{date(a.due)}{a.overdue && <small>{t("Vencido", "Overdue")}</small>}</span></button><ContactStageTooltip stage={contactData(workspace,a.contactId).stage} en={en} compact/></div>)}{!alerts.length && <Empty t={t} />}</div></Modal>}
+
 </div>;
 }
 function Empty({ t }) {

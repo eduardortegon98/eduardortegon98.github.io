@@ -1,6 +1,6 @@
 import { useState, Suspense } from 'react';
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, BarChart3, MessagesSquare, ExternalLink, LogOut, ShieldCheck, Menu, X, UserRound, PawPrint, UserCog, Users } from 'lucide-react';
+import { BarChart3, ExternalLink, LogOut, Menu, X, UserRound, UserCog, Users } from 'lucide-react';
 import ModuleNavigation from './ModuleNavigation';
 import { portalModules, moduleTitle } from './modules';
 import './Assignments.css';
@@ -11,6 +11,9 @@ import { LanguageSwitch, useLanguage } from '../i18n/Language';
 import './PortalLayout.css';
 import './RolePreview.css';
 import './Account.css';
+import PortalNotifications from './Notifications/PortalNotifications';
+import NotificationCenter from './Notifications/NotificationCenter';
+import './GlobalHeader.css';
 
 export default function PortalLayout() {
   return <Access>{state => <Workspace key={state.user.id + state.role} state={state} />}</Access>;
@@ -39,7 +42,7 @@ function Workspace({ state }) {
     catch { setError(en ? 'Could not sign out. Try again.' : 'No pudimos cerrar sesión. Inténtalo nuevamente.'); }
     finally { setPending(false); }
   }
-  return <div className="admin-shell">
+  return <PortalNotifications key={actingRole} userId={state.user.id} role={actingRole} admin={admin} preview={preview}><div className="admin-shell">
     <a href="#admin-content" className="admin-skip">{en ? 'Skip to content' : 'Ir al contenido'}</a>
     <aside className={'admin-sidebar' + (open ? ' is-open' : '')} id="admin-navigation">
       <Link to="/panel" className="admin-logo" onClick={() => setOpen(false)}><span>O.</span><div>Ortegón<small>{en ? 'Management portal' : 'Portal de gestión'}</small></div></Link>
@@ -52,8 +55,14 @@ function Workspace({ state }) {
       </nav>
       <div className="admin-sidebar-bottom"><Link to="/" className="admin-public-link"><ExternalLink size={17}/>{en ? 'View website' : 'Ver página web'}</Link><div className="admin-identity"><Link to="/panel/cuenta" className="account-profile-link" onClick={()=>setOpen(false)} aria-label={en?'Open my account':'Abrir mi cuenta'} title={en?'My account':'Mi cuenta'}><span className="admin-avatar">{state.user.email?.slice(0,1).toUpperCase() || 'O'}</span></Link><div><strong>{realAdmin ? (en ? 'Administrator' : 'Administrador') : (en ? 'Client' : 'Cliente')}</strong><span>{state.user.email}</span></div></div><button title={en ? 'Sign out' : 'Cerrar sesión'} aria-label={en ? 'Sign out' : 'Cerrar sesión'} className="admin-logout compact-action" onClick={logout} disabled={pending}><LogOut size={17} aria-hidden="true"/></button>{error && <p role="alert">{error}</p>}</div>
     </aside>
-    <div className="admin-body"><header className="admin-topbar"><button className="admin-menu" aria-controls="admin-navigation" aria-expanded={open} aria-label={en ? 'Toggle navigation' : 'Abrir o cerrar navegación'} onClick={() => setOpen(value => !value)}>{open ? <X size={20}/> : <Menu size={20}/>}</button><div className="admin-breadcrumb"><span>{en ? 'Portal' : 'Portal'}</span><span>/</span><strong>{title}</strong></div><div className="admin-top-actions">{realAdmin && <label className="admin-role-selector"><UserRound size={16} aria-hidden="true"/><span>{en ? 'Acting as' : 'Actuando como'}</span><select aria-label={en ? "Acting role" : "Rol activo"} value={actingRole} onChange={event => changeRole(event.target.value)}><option value="super_admin">Admin</option><option value="client">{en ? 'Client' : 'Cliente'}</option></select></label>}<span className="admin-access" title={admin ? (en ? 'Admin access' : 'Acceso admin') : (en ? 'Client account' : 'Cuenta de cliente')}><ShieldCheck size={16} aria-label={admin ? (en ? 'Admin access' : 'Acceso admin') : (en ? 'Client account' : 'Cuenta de cliente')}/></span><LanguageSwitch/><Link to="/panel/cuenta" className="account-profile-link" onClick={()=>setOpen(false)} aria-label={en?'Open my account':'Abrir mi cuenta'} title={en?'My account':'Mi cuenta'}><span className="admin-avatar">{state.user.email?.slice(0,1).toUpperCase()||'O'}</span></Link></div></header>
+    <div className="admin-body"><header className="admin-topbar">
+      <div className="admin-header-context"><button className="admin-menu" aria-controls="admin-navigation" aria-expanded={open} aria-label={en ? 'Toggle navigation' : 'Abrir o cerrar navegación'} onClick={() => setOpen(value => !value)}>{open ? <X size={20}/> : <Menu size={20}/>}</button><div className="admin-breadcrumb"><span>Portal</span><span aria-hidden="true">/</span><strong title={title}>{title}</strong></div></div>
+      <div className="admin-top-actions">
+        {realAdmin && <label className="admin-role-selector"><UserRound size={16} aria-hidden="true"/><span>{en ? 'Acting as' : 'Actuando como'}</span><select aria-label={en ? "Acting role" : "Rol activo"} value={actingRole} onChange={event => changeRole(event.target.value)}><option value="super_admin">Admin</option><option value="client">{en ? 'Client' : 'Cliente'}</option></select></label>}
+        <div className="admin-header-utilities"><NotificationCenter userId={state.user.id}/><LanguageSwitch/><Link to="/panel/cuenta" className="account-profile-link" onClick={()=>setOpen(false)} aria-label={en?'Open my account':'Abrir mi cuenta'} title={en?'My account':'Mi cuenta'}><span className="admin-avatar">{state.user.email?.slice(0,1).toUpperCase()||'O'}</span></Link></div>
+      </div>
+    </header>
     {preview && <div className="admin-preview-banner" role="status"><div><strong>{en ? 'Client role preview' : 'Vista previa del rol cliente'}</strong><p>{en ? 'You remain signed in as administrator. This previews the interface, without accessing another person’s account.' : 'Sigues conectado como administrador. Esta vista simula la interfaz del cliente, sin acceder a la cuenta de otra persona.'}</p></div><button onClick={() => changeRole('super_admin')}>{en ? 'Return to administrator' : 'Volver a administrador'}</button></div>}
     <div id="admin-content" className="admin-content" tabIndex={-1}><Suspense fallback={<PortalLoading compact/>}><Outlet key={actingRole} context={context}/></Suspense></div></div>
-  </div>;
+  </div></PortalNotifications>;
 }
