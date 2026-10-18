@@ -1,49 +1,7 @@
-import { Localized, useLanguage } from "../i18n/Language";
-import { useEffect, useRef, useState } from "react";
-import { Navigate, useOutletContext } from "react-router-dom";
-import { ArrowLeft, CheckCheck, MessageCircle, Search, Send, FilterX } from "lucide-react";
-import "./Inbox.css";
-import { demoConversations } from "./demoData";
-import "./Communications.css";
-import RegisteredMessages from "./RegisteredMessages";
-import "./RegisteredMessages.css";
-const initials = name => name.trim().split(/\s+/).filter(Boolean).slice(0, 2).map(part => part[0]).join("").toLocaleUpperCase();
-const channels = ["WhatsApp", "Instagram", "Facebook"];
-const seed = demoConversations;
-export default function Inbox() {
-  const { user, role, modules = [] } = useOutletContext();
-  return (role === "super_admin" || modules.includes("messages")) ? <MessagesWorkspace key={user.id+role} user={user} admin={role==="super_admin"} /> : <Navigate to="/panel" replace />;
-}
-function MessagesWorkspace({user,admin}){
- const {language}=useLanguage(),en=language==="en";
- const [mode,setMode]=useState(admin?'registered':'demo');
- return <div className="messages-source-workspace">{admin&&<div className="messages-source-tabs" role="group" aria-label={en?'Message data source':'Origen de los mensajes'}><button aria-pressed={mode==='registered'} onClick={()=>setMode('registered')}>{en?'Registered activity':'Actividad registrada'}</button><button aria-pressed={mode==='demo'} onClick={()=>setMode('demo')}>{en?'Channel demo':'Demo de canales'}</button></div>}{mode==='registered'&&admin?<RegisteredMessages/>:<Workspace user={user}/>}</div>;
-}
-function Workspace({ user }) {
-  const { language } = useLanguage();
-  const en = language === "en";
-  const [conversations, setConversations] = useState(seed);
-  const [channel, setChannel] = useState("Todos"), [filter, setFilter] = useState("Todos"), [query, setQuery] = useState("");
-  const [selected, setSelected] = useState(1), [mobileOpen, setMobileOpen] = useState(false), [drafts, setDrafts] = useState({});
-  const [notice, setNotice] = useState("");
-  const bottom = useRef(null);
-  const current = conversations.find(c => c.id === selected);
-  const draft = drafts[selected] || "";
-  const visible = conversations.filter(c => (channel === "Todos" || c.channel === channel) && (filter === "Todos" || (filter === "Sin leer" ? c.unread : c.status === filter)) && `${c.name} ${c.company} ${c.messages.at(-1).text}`.toLocaleLowerCase().includes(query.toLocaleLowerCase()));
-  useEffect(() => { bottom.current?.scrollIntoView({ block: "nearest" }); }, [selected, current.messages.length]);
-  function open(c) { setSelected(c.id); setMobileOpen(true); setNotice(""); setConversations(all => all.map(item => item.id === c.id ? { ...item, unread: false } : item)); }
-  function send(e) {
-    e.preventDefault(); const text = draft.trim(); if (!text || text.length > 1500) return;
-    const time = new Intl.DateTimeFormat("es-CO", { hour: "2-digit", minute: "2-digit" }).format(new Date());
-    setConversations(all => all.map(c => c.id === selected ? { ...c, status: "En curso", unread: false, time, messages: [...c.messages, { own: true, text, time }] } : c));
-    setDrafts(all => ({ ...all, [selected]: "" })); setNotice("Respuesta añadida a la demo. No se envió a ninguna red social.");
-  }
-  return <Localized as="div" className="inbox-app">
-    <Localized as="main" className="inbox-workspace">
-    <div className="communications-toolbar"><Localized as="nav" aria-label="Filtrar por red social">{["Todos", ...channels].map(name => <Localized as="button" key={name} aria-pressed={channel === name} className={channel === name ? "active" : ""} onClick={() => { setChannel(name); setMobileOpen(false); }}><Localized as="span" className={`channel-dot ${name.toLowerCase()}`} />{name}<Localized as="b">{conversations.filter(c => (name === "Todos" || c.channel === name) && c.unread).length}</Localized></Localized>)}</Localized><div className="communications-summary"><span className="communications-live offline"><i/>{en ? "Offline · Demo" : "Sin conexión · Demo"}</span><span className="communication-badge mock">{en ? "Mock data" : "Datos mockeados"}</span><span>{conversations.length} {en ? "conversations" : "conversaciones"}</span><span><i/>{conversations.filter(c => c.unread).length} {en ? "unread" : "sin leer"}</span></div></div>
-    <Localized as="section" className={`inbox-grid ${mobileOpen ? "conversation-open" : ""}`} aria-label="Gestión de conversaciones">
-      <Localized as="aside" className="inbox-list"><Localized as="div" className="inbox-list-heading"><Localized as="h2">Conversaciones <Localized as="span">{visible.length}</Localized></Localized><Localized as="p">{conversations.filter(c => c.unread).length} pendientes de lectura</Localized><Localized as="label" className="inbox-search"><Search size={17} /><Localized as="input" aria-label="Buscar conversaciones" value={query} onChange={e => setQuery(e.target.value)} placeholder="Buscar nombre o mensaje" /></Localized><Localized as="select" aria-label="Filtrar por estado" value={filter} onChange={e => setFilter(e.target.value)}>{["Todos", "Sin leer", "Pendiente", "En curso", "Resuelto"].map(s => <Localized as="option" key={s}>{s}</Localized>)}</Localized></Localized><Localized as="div" className="inbox-conversations">{visible.length ? visible.map(c => <Localized as="button" key={c.id} className={`inbox-conversation ${selected === c.id ? "selected" : ""}`} onClick={() => open(c)} aria-pressed={selected === c.id}><Localized as="span" className="inbox-avatar">{initials(c.name)}</Localized><Localized as="div"><Localized as="div" className="inbox-conversation-title"><Localized as="strong">{c.name}</Localized><Localized as="small">{c.time}</Localized></Localized><Localized as="p" translate="no">{c.messages.at(-1).text}</Localized><Localized as="span" className={`channel-tag ${c.channel.toLowerCase()}`}>{c.channel}</Localized><span className="communication-badge mock">{en ? "Mock data" : "Mockeado"}</span>{c.unread && <Localized as="i" aria-label="Sin leer" />}</Localized></Localized>) : <Localized as="div" className="inbox-empty"><Search /><Localized as="h3">No hay coincidencias</Localized><Localized as="p">Prueba otro nombre, canal o estado.</Localized><button className="compact-action" aria-label={en ? "Clear filters" : "Limpiar filtros"} title={en ? "Clear filters" : "Limpiar filtros"} onClick={() => { setChannel("Todos"); setFilter("Todos"); setQuery(""); }}><FilterX size={17} aria-hidden="true"/></button></Localized>}</Localized></Localized>
-      <Localized as="section" className="inbox-thread" aria-label={`Conversación con ${current.name}`}><Localized as="header" className="inbox-thread-header"><Localized as="button" className="inbox-back" aria-label="Volver a conversaciones" onClick={() => setMobileOpen(false)}><ArrowLeft size={20} /></Localized><Localized as="span" className="inbox-avatar">{initials(current.name)}</Localized><Localized as="div"><Localized as="h2">{current.name}</Localized><Localized as="span" className={`channel-tag ${current.channel.toLowerCase()}`}>{current.channel}</Localized><span className="communication-badge mock">{en ? "Mock data" : "Mockeado"}</span></Localized>{(current.phone || current.handle) && <span className="communications-contact-number">{current.phone || current.handle}</span>}<Localized as="label" className="inbox-status">Estado<Localized as="select" value={current.status} onChange={e => setConversations(all => all.map(c => c.id === selected ? { ...c, status: e.target.value } : c))}>{["Pendiente", "En curso", "Resuelto"].map(s => <Localized as="option" key={s}>{s}</Localized>)}</Localized></Localized></Localized><Localized as="div" className="inbox-messages"><Localized as="p" className="inbox-day">Conversación de demostración</Localized>{current.messages.map((m, i) => <div key={i} className={`inbox-message-row ${m.own ? "own" : ""}`}>{!m.own && <span className="inbox-message-avatar" role="img" aria-label={en ? `Avatar of ${current.name}` : `Avatar de ${current.name}`} title={current.name}>{initials(current.name)}</span>}<Localized as="div" className={`inbox-bubble ${m.own ? "own" : ""}`}><Localized as="p" translate="no">{m.text}</Localized><Localized as="small">{m.time} {m.own && <CheckCheck size={13} aria-label="Guardado en la demo" />}</Localized></Localized>{m.own && <span className="inbox-message-avatar" role="img" aria-label="Soluciones Ortegón" title="Soluciones Ortegón">SO</span>}</div>)}<Localized as="div" ref={bottom} /></Localized><Localized as="form" className="inbox-compose" onSubmit={send}><Localized as="label" htmlFor="inbox-reply">Responder en la demo</Localized><Localized as="textarea" id="inbox-reply" placeholder={`Escribe una respuesta para ${current.name.split(" ")[0]}…`} value={draft} maxLength={1500} onChange={e => setDrafts(all => ({ ...all, [selected]: e.target.value }))} /><Localized as="div"><Localized as="small">{draft.length}/1500 · Se borra al recargar</Localized><button className="compact-action" disabled={!draft.trim()} type="submit" aria-label={en ? "Send demo reply" : "Enviar respuesta en la demo"} title={en ? "Send demo reply" : "Enviar respuesta en la demo"}><Send size={17} aria-hidden="true"/></button></Localized><Localized as="p" role="status">{notice || "Ningún mensaje de esta pantalla se envía a WhatsApp, Instagram o Facebook."}</Localized></Localized></Localized>
-      <Localized as="aside" className="inbox-details"><Localized as="p" className="inbox-nav-label">INFORMACIÓN DEL CONTACTO</Localized><Localized as="span" className="inbox-avatar large">{initials(current.name)}</Localized><Localized as="h2">{current.name}</Localized><Localized as="p">{current.company}</Localized><Localized as="dl"><dt>{en ? "Data source" : "Origen de los datos"}</dt><dd><span className="communication-badge mock">{en ? "Mock data · Local demonstration" : "Mockeado · Demostración local"}</span></dd><dt>{current.channel === "WhatsApp" ? (en ? "Associated phone" : "Número asociado") : (en ? "Social account" : "Cuenta de la red social")}</dt><dd>{current.phone || current.handle || (en ? "Not available in the demo" : "No disponible en la demo")}</dd><Localized as="dt">Canal de origen</Localized><Localized as="dd">{current.channel}</Localized><Localized as="dt">Estado</Localized><Localized as="dd">{current.status}</Localized><Localized as="dt">Responsable</Localized><Localized as="dd">Mi bandeja</Localized></Localized></Localized>
-    </Localized></Localized></Localized>;
+import { Navigate, useOutletContext } from 'react-router-dom';
+import RegisteredMessages from './RegisteredMessages';
+export default function Inbox(){
+ const {role,modules=[]}=useOutletContext();
+ if(role!=='super_admin'&&!modules.includes('messages'))return <Navigate to="/panel" replace/>;
+ return <RegisteredMessages admin={role==='super_admin'}/>;
 }

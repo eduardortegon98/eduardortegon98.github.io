@@ -1,10 +1,8 @@
-# Actividad real registrada
-Messages abre Actividad registrada para super_admin. La demo se mantiene en una pestaña separada. Clientes con el módulo asignado solo acceden a la demo: no tienen acceso al CRM global.
-Los registros se leen de sales_prospects, protegido por la política super_admin existente. No se amplían permisos ni se requieren tablas nuevas.
-Solo se incluyen canales Instagram/WhatsApp/Facebook con fecha de contacto. En instalaciones anteriores al campo contact_channel se reconoce Instagram por el asunto explícito Contacto por Instagram.
-La lista se pagina internamente en lotes de 500, sin truncarse a 1.000. ID estable del registro sincronizado evita duplicación al sincronizar; no crea conversaciones ni mensajes en la base.
-La actividad inicial es una constancia del contacto manual confirmado por Eduard, no una transcripción del DM ni una confirmación de entrega/lectura por Meta. Se muestra exactamente esa distinción.
-Los textos originales, timestamps de envío, respuestas, webhooks y envío bidireccional esperan integración de n8n/Meta. El compositor permanece deshabilitado; Abrir perfil abre la plataforma, sin enviar mensajes.
-Sincronizar Notion invoca la misma función sync-prospects ya instalada. Si los ocho contactos aún no se importaron, pulsar este botón. No necesita cambiar secrets ni añadir permisos.
-La card Comunicaciones de Analytics cuenta actividad registrada real, no las cuatro conversaciones de demostración.
-La integración futura debe usar propietario/empresa, account ID del proveedor, conversation ID y message ID únicos del proveedor, webhooks autenticados y filtrado por tenant. No entregar el CRM global a clientes.
+# Bandeja de comunicaciones
+Mensajes tiene una sola bandeja, sin demo ni conversaciones ficticias.
+Filtros Todos, Emails, Instagram, WhatsApp, Facebook, LinkedIn y otros canales presentes en el CRM. Emails incluye asunto, dirección y enlace al hilo original de Gmail. Historial original y envío esperan las integraciones reales.
+El administrador ve los registros de sales_prospects bajo RLS super_admin existente. El cliente con módulo asignado ve la misma estructura vacía, sin leer el CRM global, hasta que tenga sus integraciones por empresa. No se han cambiado permisos.
+Se incluyen contactos con fecha, hilo Gmail o aviso de entrega (para email). Se excluyen intentos bloqueados antes del envío y registros técnicos duplicados.
+La actividad refleja el contacto manual registrado, no una transcripción ni confirmación de entrega. Las notas de fallo/retraso y respuestas del CRM se muestran sin inventar mensajes ni marcar como leído.
+Sincronizar Notion refresca registros CRM; no conecta Gmail ni Meta. El envío está deshabilitado. No se requiere SQL adicional para esta actualización; conserva compatibilidad con el esquema anterior a contact_channel.
+Para n8n/Gmail/Meta: cuentas por empresa, IDs únicos de conversación/mensaje, webhooks autenticados, deduplicación y filtrado del propietario en servidor antes de exponer historial. La clave/token nunca va en frontend.
