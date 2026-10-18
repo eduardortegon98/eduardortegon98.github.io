@@ -20,9 +20,9 @@ export default function FinanceDashboard(){
  const [isReady,setReady]=useState(false),[loading,setLoading]=useState(true),[saving,setSaving]=useState(false),[error,setError]=useState(''),[edit,setEdit]=useState(false);
  const [bufferDirection,setBufferDirection]=useState('out'),[historyCategory,setHistoryCategory]=useState('Todas');
  const [incomeCurrency,setIncomeCurrency]=useState('COP'),[trm,setTrm]=useState(null),[trmLoading,setTrmLoading]=useState(false),[trmError,setTrmError]=useState('');
- const [hourlyUsd,setHourlyUsd]=useState(''),[paymentFor,setPaymentFor]=useState('Banco'),[hours,setHours]=useState(''),[historyOpen,setHistoryOpen]=useState(false),[historyMonth,setHistoryMonth]=useState(currentMonth());
+ const [hourlyUsd,setHourlyUsd]=useState('5.12'),[paymentFor,setPaymentFor]=useState('Banco'),[hours,setHours]=useState(''),[historyOpen,setHistoryOpen]=useState(false),[historyMonth,setHistoryMonth]=useState(currentMonth());
  const owner=user?.id;
- useEffect(()=>{if(owner)setHourlyUsd(window.localStorage.getItem('ortfinance_extra_hourly_usd_'+owner)||'');},[owner]);
+ useEffect(()=>{if(owner)setHourlyUsd(window.localStorage.getItem('ortfinance_extra_hourly_usd_'+owner)||'5.12');},[owner]);
  const setHourlyRate=value=>{
   setHourlyUsd(value);
   if(owner){if(value)window.localStorage.setItem('ortfinance_extra_hourly_usd_'+owner,value);else window.localStorage.removeItem('ortfinance_extra_hourly_usd_'+owner);}
