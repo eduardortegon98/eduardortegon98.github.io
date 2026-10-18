@@ -161,7 +161,7 @@ CREATE INDEX IF NOT EXISTS personal_finance_buffer_movements_user_date
 CREATE OR REPLACE FUNCTION public.move_my_finance_buffer(
  p_amount numeric, p_direction text, p_date date, p_note text DEFAULT ''
 ) RETURNS numeric
-LANGUAGE plpgsql SECURITY INVOKER SET search_path=public AS $$
+LANGUAGE plpgsql SECURITY DEFINER SET search_path=public,pg_temp AS $
 DECLARE v_user uuid:=auth.uid(); v_balance numeric;
 BEGIN
  IF v_user IS NULL THEN RAISE EXCEPTION 'Authentication required'; END IF;
@@ -182,7 +182,7 @@ REVOKE ALL ON FUNCTION public.move_my_finance_buffer(numeric,text,date,text) FRO
 GRANT EXECUTE ON FUNCTION public.move_my_finance_buffer(numeric,text,date,text) TO authenticated;
 
 CREATE OR REPLACE FUNCTION public.undo_my_finance_buffer_movement(p_id uuid)
-RETURNS numeric LANGUAGE plpgsql SECURITY INVOKER SET search_path=public AS $$
+RETURNS numeric LANGUAGE plpgsql SECURITY DEFINER SET search_path=public,pg_temp AS $
 DECLARE v_user uuid:=auth.uid(); v_movement public.personal_finance_buffer_movements%ROWTYPE; v_balance numeric;
 BEGIN
  IF v_user IS NULL THEN RAISE EXCEPTION 'Authentication required'; END IF;
