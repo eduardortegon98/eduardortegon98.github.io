@@ -19,8 +19,25 @@ export default function FinanceDashboard(){
  const [month,setMonth]=useState(currentMonth()),[tab,setTab]=useState('gasto'),[form,setForm]=useState(initial);
  const [isReady,setReady]=useState(false),[loading,setLoading]=useState(true),[saving,setSaving]=useState(false),[error,setError]=useState(''),[edit,setEdit]=useState(false);
  const [bufferDirection,setBufferDirection]=useState('out');
+ const [incomeCurrency,setIncomeCurrency]=useState('COP'),[trm,setTrm]=useState(null),[trmLoading,setTrmLoading]=useState(false),[trmError,setTrmError]=useState('');
  const [paymentFor,setPaymentFor]=useState('Banco'),[hours,setHours]=useState(''),[historyOpen,setHistoryOpen]=useState(false),[historyMonth,setHistoryMonth]=useState(currentMonth());
  const owner=user?.id;
+ useEffect(()=>{
+  if(tab!=='ingreso'||incomeCurrency!=='USD'||!form.date){setTrm(null);setTrmError('');setTrmLoading(false);return;}
+  let cancelled=false;
+  setTrm(null);setTrmLoading(true);setTrmError('');
+  const controller=new AbortController();
+  fetch('https://api.dolarencolombia.co/v1/trm/'+form.date,{signal:controller.signal})
+   .then(async response=>{if(!response.ok)throw new Error('HTTP '+response.status);return response.json()})
+   .then(data=>{
+    const rate=Number(data.valor);
+    if(!Number.isFinite(rate)||rate<=0)throw new Error('La API no devolvió una tasa válida.');
+    if(!cancelled){setTrm({rate,date:form.date,validFrom:data.fecha||form.date,source:'dolarencolombia.co / Superfinanciera'});setTrmError('');}
+   })
+   .catch(err=>{if(!cancelled&&err.name!=='AbortError')setTrmError('No pudimos obtener la TRM de esa fecha. '+err.message);})
+   .finally(()=>{if(!cancelled)setTrmLoading(false)});
+  return()=>{cancelled=true;controller.abort()};
+ },[tab,incomeCurrency,form.date]);
  const refresh=async()=>{
   if(!owner)return;
   setLoading(true);setError('');
@@ -78,7 +95,9 @@ export default function FinanceDashboard(){
   if(!isReady||saving)return;
   setError('');setSaving(true);
   try{
-   const amount=Number(form.amount),note=form.note.trim();
+   const enteredAmount=Number(form.amount),note=form.note.trim();
+   if(tab==='ingreso'&&incomeCurrency==='USD'&&(!trm||trmLoading||trm.date!==form.date))throw new Error('Espera a que cargue la TRM oficial de la fecha de transferencia.');
+   const amount=tab==='ingreso'&&incomeCurrency==='USD'?Math.round(enteredAmount*trm.rate*100)/100:enteredAmount;
    if(!form.date||!Number.isFinite(amount)||amount<=0)throw new Error('Ingresa un valor mayor que cero.');
    let table,record;
    if(tab==='colchon'){
@@ -86,7 +105,11 @@ export default function FinanceDashboard(){
     if(e)throw e;
     setForm(initial);await refresh();return;
    }
-   if(tab==='ingreso'){table='personal_finance_income';record={date:form.date,amount,source:paymentFor,note};}
+   if(tab==='ingreso'){
+    table='personal_finance_income';
+    const conversion=incomeCurrency==='USD'?'USD '+enteredAmount+' × TRM '+trm.rate+' COP/USD ('+form.date+'; fuente: dolarencolombia.co). ':'';
+    record={date:form.date,amount,source:paymentFor,note:conversion+note};
+   }
    else if(tab==='gasto'){table='personal_finance_expenses';record={date:form.date,amount,category:form.category,note};}
    else if(tab==='pago'){table='personal_finance_bills';record={due_date:form.date,amount,title:note||paymentFor,category:paymentFor,status:'paid'};}
    else {const h=Number(hours);if(!Number.isFinite(h)||h<=0)throw new Error('Indica las horas trabajadas.');table='personal_finance_extras';record={date:form.date,hours:h,amount,note};}
@@ -141,8 +164,8 @@ export default function FinanceDashboard(){
    <div className="fin-tabs">{[['ingreso','Recibí'],['gasto','Gasté'],['pago','Pagué'],['extra','Trabajé extra'],['colchon','Colchón']].map(([key,title])=><button key={key} className={tab===key?'selected':''} onClick={()=>setTab(key)}>{title}</button>)}</div>
    <form className="fin-simple-form" onSubmit={e=>{e.preventDefault();save()}}>
     <label>Cuándo<input type="date" required value={form.date} onChange={e=>setForm(p=>({...p,date:e.target.value}))}/></label>
-    <label>Cuánto (COP)<input type="number" min="1" required placeholder="Ej. 20000" value={form.amount} onChange={e=>setForm(p=>({...p,amount:e.target.value}))}/></label>
-    {tab==='ingreso'?<label>De quién<select value={paymentFor} onChange={e=>setPaymentFor(e.target.value)}>{['Blu','Cliente STO','Reembolso','Otro'].map(x=><option key={x}>{x}</option>)}</select></label>:tab==='pago'?<label>A quién<select value={paymentFor} onChange={e=>setPaymentFor(e.target.value)}>{[['Banco','Banco'],['Máster','Máster'],['PILA atrasada','PILA atrasada'],['Salud y pensión','Salud y pensión'],['Casa','Doris (casa)'],['Otro','Otro']].map(([value,label])=><option key={value} value={value}>{label}</option>)}</select></label>:tab==='gasto'?<label>Tipo<select value={form.category} onChange={e=>setForm(p=>({...p,category:e.target.value}))}>{['Otro','Gasto hormiga','Alimentación','Transporte','Salud','Casa','Estudio','Ocio'].map(x=><option key={x}>{x}</option>)}</select></label>:<label>Horas trabajadas<input type="number" min=".25" step=".25" required value={hours} onChange={e=>setHours(e.target.value)} placeholder="Ej. 8"/></label>}
+    <label>Cuánto ({tab==='ingreso'?incomeCurrency:'COP'})<input type="number" min={tab==='ingreso'&&incomeCurrency==='USD'?'0.01':'1'} step={tab==='ingreso'&&incomeCurrency==='USD'?'0.01':'1'} required placeholder={tab==='ingreso'&&incomeCurrency==='USD'?'Ej. 200.50':'Ej. 20000'} value={form.amount} onChange={e=>setForm(p=>({...p,amount:e.target.value}))}/></label>
+    {tab==='ingreso'?<label>De quién<select value={paymentFor} onChange={e=>setPaymentFor(e.target.value)}>{['Blu','Cliente STO','Reembolso','Otro'].map(x=><option key={x}>{x}</option>)}</select></label>:tab==='pago'?<label>A quién<select value={paymentFor} onChange={e=>setPaymentFor(e.target.value)}>{[['Banco','Banco'],['Máster','Máster'],['PILA atrasada','PILA atrasada'],['Salud y pensión','Salud y pensión'],['Casa','Doris (casa)'],['Otro','Otro']].map(([value,label])=><option key={value} value={value}>{label}</option>)}</select></label>:tab==='gasto'?<label>Tipo<select value={form.category} onChange={e=>setForm(p=>({...p,category:e.target.value}))}>{['Otro','Gasto hormiga','Alimentación','Transporte','Salud','Casa','Estudio','Ocio'].map(x=><option key={x}>{x}</option>)}</select></label>:tab==='colchon'?<label>Operación<select value={bufferDirection} onChange={e=>setBufferDirection(e.target.value)}><option value="out">Sacar del colchón</option><option value="in">Guardar en el colchón</option></select></label>:<label>Horas trabajadas<input type="number" min=".25" step=".25" required value={hours} onChange={e=>setHours(e.target.value)} placeholder="Ej. 8"/></label>}
     <label>Detalle (opcional)<input maxLength="180" value={form.note} onChange={e=>setForm(p=>({...p,note:e.target.value}))} placeholder={tab==='ingreso'?'Ej. quincena de Blu':tab==='pago'?'Ej. cuota de octubre':tab==='extra'?'Ej. lunes en Blu':tab==='colchon'?'Ej. ahorro o préstamo familiar':'Ej. café'}/></label>
     <button type="submit" className="fin-primary" disabled={saving}><Plus size={16}/> Guardar</button>
    </form>
