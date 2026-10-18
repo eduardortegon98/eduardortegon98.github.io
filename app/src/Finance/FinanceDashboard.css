@@ -85,3 +85,15 @@
 .fin-person-bottom strong{font-size:16px;font-variant-numeric:tabular-nums}
 .fin-person-bottom span{font-size:11px}
 @media(max-width:690px){.fin-family-health{grid-template-columns:1fr}.fin-person-card{padding:15px}.fin-person-face{font-size:38px}}
+
+/* Eduard debt progress replaces the redundant green goal tile. */
+.fin-eduard-progress{display:grid;gap:7px}
+.fin-eduard-progress-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:12px;font-weight:700}
+.fin-eduard-progress-heading strong{font-size:15px;font-variant-numeric:tabular-nums}
+.fin-eduard-progress .fin-track{height:11px;margin:2px 0 4px;background:#eadcdb}
+.fin-eduard-progress .fin-track>div{background:#df4946}
+.fin-traffic-yellow .fin-eduard-progress .fin-track{background:#f4e7bf}
+.fin-traffic-yellow .fin-eduard-progress .fin-track>div{background:#e4a526}
+.fin-traffic-green .fin-eduard-progress .fin-track{background:#d4edda}
+.fin-traffic-green .fin-eduard-progress .fin-track>div{background:#27a45a}
+.fin-eduard-edit{justify-self:start;padding:5px 0;font-size:12px}
