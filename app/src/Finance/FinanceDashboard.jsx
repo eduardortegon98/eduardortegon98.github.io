@@ -43,7 +43,7 @@ export default function FinanceDashboard(){
  const unpaidTotal=unpaid.reduce((a,b)=>a+Number(b.amount),0);
  const monthlyIncome=Number(settings.monthly_salary)+Number(settings.extra_monthly)+Number(settings.health_refund);
  const monthlyFixed=Number(settings.house)+Number(settings.study)+Number(settings.health)+Number(settings.nu_target)+Number(settings.pila_target)+Number(settings.personal_budget);
- const projected=monthlyIncome-monthlyFixed-monthlySpent;
+ const projected=monthlyIncome-monthlyFixed-Math.max(0,monthlySpent-Number(settings.personal_budget));
  const totalDebt=Number(settings.nu_balance)+Number(settings.pila_balance);
  const targetTotal=10974592.35+2643800;
  const progress=Math.max(0,Math.min(100,(1-totalDebt/targetTotal)*100));
