@@ -1,6 +1,6 @@
 import { useState, Suspense } from 'react';
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, BarChart3, MessagesSquare, ExternalLink, LogOut, ShieldCheck, Menu, X, UserRound, PawPrint, UserCog } from 'lucide-react';
+import { LayoutDashboard, BarChart3, MessagesSquare, ExternalLink, LogOut, ShieldCheck, Menu, X, UserRound, PawPrint, UserCog, Users } from 'lucide-react';
 import ModuleNavigation from './ModuleNavigation';
 import { portalModules, moduleTitle } from './modules';
 import './Assignments.css';
@@ -32,7 +32,7 @@ function Workspace({ state }) {
     setPreviewRole(role); setOpen(false); navigate('/panel');
   }
   const activeModule=portalModules.find(module=>pathname===module.path||pathname.startsWith(module.path+'/'));
-  const title = activeModule ? moduleTitle(activeModule,language) : pathname.startsWith('/panel/cuenta') ? (en ? 'My account' : 'Mi cuenta') : pathname.startsWith('/panel/asignaciones') ? (en ? 'Assignments' : 'Asignaciones') : pathname.startsWith('/panel/arturito') ? 'Arturito · Beta' : pathname.startsWith('/panel/analitica') ? (en ? 'Website analytics' : 'Analítica de la web') : pathname.startsWith('/panel/mensajes') ? (en ? 'Messages' : 'Mensajes') : (admin ? (en ? 'Analytics' : 'Analítica') : (en ? 'My workspace' : 'Mi espacio'));
+  const title = activeModule ? moduleTitle(activeModule,language) : pathname.startsWith('/panel/comercial') ? (en ? 'Commercial management' : 'Gestión comercial') : pathname.startsWith('/panel/cuenta') ? (en ? 'My account' : 'Mi cuenta') : pathname.startsWith('/panel/asignaciones') ? (en ? 'Assignments' : 'Asignaciones') : pathname.startsWith('/panel/arturito') ? 'Arturito · Beta' : pathname.startsWith('/panel/analitica') ? (en ? 'Website analytics' : 'Analítica de la web') : pathname.startsWith('/panel/mensajes') ? (en ? 'Messages' : 'Mensajes') : (admin ? (en ? 'Analytics' : 'Analítica') : (en ? 'My workspace' : 'Mi espacio'));
   async function logout() {
     setPending(true); setError('');
     try { const { error } = await supabase.auth.signOut(); if (error) throw error; }
@@ -46,6 +46,7 @@ function Workspace({ state }) {
       <p className="admin-nav-label">{en ? 'WORKSPACE' : 'ESPACIO DE TRABAJO'}</p>
       <nav aria-label={en ? 'Portal navigation' : 'Navegación del portal'}>
         {admin && <NavLink to="/panel/analitica" onClick={() => setOpen(false)}><BarChart3 size={19}/><span>{en ? 'Analytics' : 'Analítica'}</span></NavLink>}
+        {admin && <NavLink to="/panel/comercial" onClick={() => setOpen(false)}><Users size={19}/><span>{en ? 'Commercial' : 'Comercial'}</span></NavLink>}
         <ModuleNavigation role={actingRole} modules={modules} language={language} onNavigate={()=>setOpen(false)}/>
         {admin && <NavLink to="/panel/asignaciones" onClick={() => setOpen(false)}><UserCog size={19}/><span>{en ? 'Assignments' : 'Asignaciones'}</span></NavLink>}
       </nav>

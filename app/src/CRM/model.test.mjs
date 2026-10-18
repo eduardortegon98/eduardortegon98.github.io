@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+import {readFile} from 'node:fs/promises';
+const source=await readFile(new URL('./model.js',import.meta.url),'utf8');
+const {emptyWorkspace,contactData,metrics,reminders,duplicateGroups,saveWorkspace,loadWorkspace}=await import('data:text/javascript;base64,'+Buffer.from(source).toString('base64'));
+const store=new Map();globalThis.localStorage={getItem:k=>store.get(k)??null,setItem:(k,v)=>store.set(k,v)};
+const workspace=emptyWorkspace();
+const rows=[{id:'a',company:'Uno',email:'hello@example.com',channel:'Email'},{id:'b',company:'Dos',email:'HELLO@example.com',channel:'Instagram'}];
+workspace.contacts.a={...contactData(workspace,'a'),stage:4,profile:{phone:'+57 123'},quotes:[{id:'q',amount:100}],payments:[{id:'p',title:'Anticipo',currency:'USD',amount:'100',status:'paid'},{id:'p2',title:'Saldo',currency:'COP',amount:'200',status:'pending',due:'2026-01-01'}],actions:[{id:'x',title:'Llamar',due:'2026-01-01T12:00',done:false},{id:'y',title:'Listo',due:'2026-01-01T12:00',done:true}],contracts:[{id:'c',title:'Contrato',status:'sent'}]};
+workspace.contacts.b={...contactData(workspace,'b'),payments:[{id:'u',currency:'COP',amount:50,status:'paid'}]};
+const result=metrics(rows,workspace);assert.equal(result.contacts,2);assert.equal(result.wins,1);assert.equal(result.quotes,1);assert.deepEqual(result.revenue,{USD:100,COP:50});assert.equal(result.byChannel.Email.wins,1);
+assert.equal(duplicateGroups(rows,workspace).length,1);
+const alerts=reminders(rows,workspace,new Date('2026-10-18'));assert.equal(alerts.length,3);assert.equal(alerts.filter(a=>a.overdue).length,2);assert.ok(!alerts.some(a=>a.id==='action:y'));
+saveWorkspace('admin-a',workspace);assert.equal(loadWorkspace('admin-a').contacts.a.stage,4);assert.deepEqual(loadWorkspace('admin-b').contacts,{});assert.equal(contactData(workspace,'new').files.length,0);
+console.log('PASS: currency isolation, per-channel metrics, duplicate detection, overdue reminders, completed actions, per-account persistence, and empty defaults');

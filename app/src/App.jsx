@@ -9,6 +9,7 @@ const PortalLayout = lazy(() => import("./Portal/PortalLayout.jsx"));
 const PortalHome = lazy(() => import("./Portal/PortalHome.jsx"));
 const Account = lazy(() => import("./Portal/Account.jsx"));
 const AnalyticsDashboard = lazy(() => import("./Analytics/AnalyticsDashboard.jsx"));
+const CommercialPortal = lazy(() => import("./CRM/CommercialPortal.jsx"));
 const Assignments = lazy(() => import("./Portal/Assignments.jsx"));
 const Home = lazy(() => import("./Home/Home.jsx"));
 const Login = lazy(() => import("./Login/Login.jsx"));
@@ -31,6 +32,7 @@ function App() {
           <Route path="cuenta" element={<Account />} />
           <Route path="analitica" element={<AnalyticsDashboard />} />
           {portalModules.map(module=><Route key={module.id} path={module.path.replace('/panel/','')} element={<ModuleRoute id={module.id}/>}/>)}
+          <Route path="comercial" element={<CommercialPortal />} />
           <Route path="asignaciones" element={<Assignments />} />
         </Route>
         <Route path="/login" element={<Login />} />

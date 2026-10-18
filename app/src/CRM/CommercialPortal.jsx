@@ -1,0 +1,310 @@
+import { createElement, useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
+import { Link, Navigate, useOutletContext, useSearchParams } from "react-router-dom";
+import { Users, Columns3, CalendarClock, BarChart3, Plug, CreditCard, Search, Plus, X, Bell, Info, Upload, Download, Trash2, Check, ArrowRight, FileText, Star, RefreshCw, ChevronRight, AlertCircle } from "lucide-react";
+import { supabase } from "../lib/supabase";
+import { useLanguage } from "../i18n/Language";
+import { loadQualifiedContacts, CONTACT_STAGES } from "../Portal/contactStages";
+import { getContactChannel } from "../Analytics/prospectChannels";
+import { portalModules, moduleTitle } from "../Portal/modules";
+import PortalLoading from "../Portal/PortalLoading";
+import { schemas, initialValues, currencies } from "./fields";
+import { uid, now, loadWorkspace, saveWorkspace, contactData, money, duplicateGroups, reminders, metrics, putFile, getFile, deleteFile } from "./model";
+import "./CommercialPortal.css";
+const navigation = [["contacts", Users, "Contactos", "Contacts"], ["board", Columns3, "Oportunidades", "Opportunities"], ["operations", CalendarClock, "Operaci\xF3n", "Operations"], ["metrics", BarChart3, "M\xE9tricas", "Metrics"], ["connections", Plug, "Conexiones", "Connections"], ["methods", CreditCard, "Pagos", "Payments"]];
+const detailTabs = [["profile", "Ficha", "Profile"], ["history", "Historial", "Timeline"], ["files", "Archivos", "Files"], ["actions", "Seguimiento", "Follow-up"], ["notes", "Notas", "Notes"], ["quotes", "Cotizaciones", "Quotes"], ["contracts", "Contratos", "Contracts"], ["payments", "Pagos", "Payments"], ["projects", "Proyectos", "Projects"]];
+const statusNames = { draft: ["Borrador", "Draft"], sent: ["Enviado", "Sent"], accepted: ["Aceptada", "Accepted"], rejected: ["Rechazada", "Rejected"], signed: ["Firmado", "Signed"], pending: ["Pendiente", "Pending"], paid: ["Pagado \xB7 manual", "Paid \xB7 manual"], planned: ["Planeado", "Planned"], progress: ["En ejecuci\xF3n", "In progress"], review: ["En aprobaci\xF3n", "Awaiting approval"], approved: ["Aprobado", "Approved"] };
+function Modal({ title, onClose, children, wide = false }) {
+  const titleId = useId();
+  const ref = useRef(null);
+  useEffect(() => {
+    const d = ref.current;
+    d.showModal();
+    return () => {
+      if (d.open) d.close();
+    };
+  }, []);
+  return <dialog ref={ref} aria-labelledby={titleId} className={"crm-dialog" + (wide ? " crm-dialog-wide" : "")} onCancel={(e) => {
+    e.preventDefault();
+    onClose();
+  }} onClick={(e) => {
+    if (e.target === ref.current) {
+      const r = ref.current.getBoundingClientRect();
+      if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) onClose();
+    }
+  }}><header><h2 id={titleId}>{title}</h2><button type="button" className="crm-icon" aria-label="Close / Cerrar" onClick={onClose}><X size={18} /></button></header>{children}</dialog>;
+}
+function Rating({ stage, en }) {
+  return <span className={"crm-rating crm-stage-" + stage}><span aria-hidden="true">{[1, 2, 3, 4, 5].map((n) => <Star key={n} size={12} fill={n <= stage ? "currentColor" : "none"} />)}</span><small>{en ? "Contact" : "Contacto"} {stage}</small></span>;
+}
+function RecordForm({ kind, values, onSubmit, onClose, en, workspace, contact, externalError }) {
+  const fields = schemas[kind], t = (es, english) => en ? english : es;
+  const [draft, setDraft] = useState(() => ({ ...initialValues(fields), ...values }));
+  const [selected, setSelected] = useState(values?.modules || []);
+  const [failure, setFailure] = useState("");
+  function submit(e) {
+    e.preventDefault();
+    if (kind === "contracts" && draft.status === "signed" && !draft.signedAt) {
+      setFailure(t("Indica la fecha de firma.", "Enter the signature date."));
+      return;
+    }
+    if (kind === "methods" && draft.url && !/^https:\/\//i.test(draft.url)) {
+      setFailure(t("El enlace debe empezar por https://", "The link must start with https://"));
+      return;
+    }
+    onSubmit({ ...draft, ...kind === "conversion" ? { modules: selected } : {} });
+  }
+  return <form className="crm-form" onSubmit={submit}>{fields.map((field) => {
+    let options = field.options;
+    if (field.type === "team") options = workspace.team.map((r) => ({ value: r.id, es: r.title, en: r.title }));
+    if (field.type === "files") options = (contact.files || []).map((r) => ({ value: r.id, es: r.name, en: r.name }));
+    if (field.type === "methods") options = workspace.methods.filter((r) => !r.archived || r.id === draft.methodId).map((r) => ({ value: r.id, es: r.title, en: r.title }));
+    return <label key={field.key} className={field.type === "textarea" ? "crm-field-wide" : ""}><span>{en ? field.en : field.es}{field.required ? " *" : ""}</span>{options ? <select value={draft[field.key] ?? ""} required={field.required} onChange={(e) => setDraft({ ...draft, [field.key]: e.target.value })}><option value="">{t("Seleccionar", "Select")}</option>{options.map((o) => typeof o === "string" ? <option key={o} value={o}>{o}</option> : <option key={o.value} value={o.value}>{en ? o.en : o.es}</option>)}</select> : field.type === "textarea" ? <textarea value={draft[field.key] || ""} required={field.required} onChange={(e) => setDraft({ ...draft, [field.key]: e.target.value })} /> : <input type={field.type} value={draft[field.key] ?? ""} min={field.type === "number" ? 0 : void 0} step={field.type === "number" ? "0.01" : void 0} required={field.required} onChange={(e) => setDraft({ ...draft, [field.key]: e.target.value })} />}</label>;
+  })}{kind === "conversion" && <fieldset className="crm-field-wide"><legend>{t("M\xF3dulos solicitados", "Requested modules")}</legend>{portalModules.map((m) => <label className="crm-check" key={m.id}><input type="checkbox" checked={selected.includes(m.id)} onChange={(e) => setSelected(e.target.checked ? [...selected, m.id] : selected.filter((id) => id !== m.id))} />{moduleTitle(m, en ? "en" : "es")}</label>)}<p>{t("Se guarda una solicitud local. No crea cuentas ni concede accesos.", "Saves a local request. Does not create accounts or grant access.")}</p></fieldset>}{kind === "methods" && <p className="crm-field-wide crm-muted">{t("Solo referencias comerciales. No guardes n\xFAmeros de tarjeta, CVV, contrase\xF1as ni claves.", "Business references only. Do not store card numbers, CVV, passwords or keys.")}</p>}{(failure || externalError) && <p role="alert" className="crm-field-wide">{failure || externalError}</p>}<div className="crm-form-actions crm-field-wide"><button type="button" className="crm-secondary" onClick={onClose}>{t("Cancelar", "Cancel")}</button><button type="submit">{t("Guardar localmente", "Save locally")}</button></div></form>;
+}
+function CommercialPortal() {
+  const context = useOutletContext();
+  if (context.role !== "super_admin") return <Navigate to="/panel" replace />;
+  return <Workspace key={context.user.id} user={context.user} />;
+}
+function Workspace({ user }) {
+  const { language } = useLanguage(), en = language === "en";
+  const t = useCallback((es, english) => en ? english : es, [en]);
+  const [params, setParams] = useSearchParams();
+  const requested = params.get("view");
+  const [view, setView] = useState(navigation.some((n) => n[0] === requested) ? requested : "contacts");
+  const [workspace, setWorkspace] = useState(() => loadWorkspace(user.id)), [rows, setRows] = useState([]), [loading, setLoading] = useState(true), [error, setError] = useState(""), [message, setMessage] = useState("");
+  const [term, setTerm] = useState(""), [owner, setOwner] = useState(""), [stageFilter, setStageFilter] = useState(""), [selected, setSelected] = useState(params.get("contact") || null), [tab, setTab] = useState("profile"), [form, setForm] = useState(null), [help, setHelp] = useState(false), [notifications, setNotifications] = useState(false), [busy, setBusy] = useState(false), [category, setCategory] = useState("Contrato");
+  const [clock, setClock] = useState(() => /* @__PURE__ */ new Date());
+  useEffect(() => {
+    const timer = setInterval(() => setClock(/* @__PURE__ */ new Date()), 6e4);
+    return () => clearInterval(timer);
+  }, []);
+  const load = useCallback(async () => {
+    setLoading(true);
+    setError("");
+    try {
+      const real = await loadQualifiedContacts(supabase);
+      setRows(real.map((r) => ({ ...r, channel: getContactChannel(r) })));
+      const stageRows = [];
+      let stageError = null;
+      for (let offset = 0; ; offset += 500) {
+        const result = await supabase.from("sales_contact_stages").select("prospect_id,stage").order("prospect_id").range(offset, offset + 499);
+        if (result.error) {
+          stageError = result.error;
+          break;
+        }
+        stageRows.push(...result.data);
+        if (result.data.length < 500) break;
+      }
+      const current = loadWorkspace(user.id);
+      let changed = false;
+      if (!stageError) for (const r of stageRows) {
+        if (!current.contacts[r.prospect_id]) {
+          current.contacts[r.prospect_id] = { ...contactData(current, r.prospect_id), stage: r.stage };
+          changed = true;
+        }
+      }
+      if (Array.isArray(current.seenContacts)) {
+        const unseen = real.filter((r) => !current.seenContacts.includes(r.id));
+        if (unseen.length) {
+          current.events = [...unseen.map((r) => ({ id: "reply:" + r.id, contactId: r.id, title: t("Respuesta confirmada en CRM", "Confirmed CRM reply"), company: r.company, kind: "reply" })), ...current.events];
+          changed = true;
+        }
+      }
+      if (!current.seenContacts || real.some((r) => !current.seenContacts.includes(r.id))) {
+        current.seenContacts = [.../* @__PURE__ */ new Set([...current.seenContacts || [], ...real.map((r) => r.id)])];
+        changed = true;
+      }
+      if (changed) {
+        try {
+          saveWorkspace(user.id, current);
+          setWorkspace(current);
+        } catch {
+          setError(t("Contactos cargados, pero no se pudo guardar la referencia local.", "Contacts loaded, but the local snapshot could not be saved."));
+        }
+      }
+    } catch (e) {
+      setError(t("No se pudieron cargar los contactos: ", "Could not load contacts: ") + e.message);
+    } finally {
+      setLoading(false);
+    }
+  }, [user.id, t]);
+  useEffect(() => {
+    let active = true;
+    load();
+    function changes(e) {
+      if (e.key === `ortdesk:commercial:v1:${user.id}` && active) setWorkspace(loadWorkspace(user.id));
+    }
+    window.addEventListener("storage", changes);
+    return () => {
+      active = false;
+      window.removeEventListener("storage", changes);
+    };
+  }, [user.id, load]);
+  function commit(next) {
+    try {
+      saveWorkspace(user.id, next);
+      setWorkspace(next);
+      setError("");
+      return true;
+    } catch {
+      setError(t("No se pudo guardar en el navegador. Revisa el espacio disponible; el cambio no fue aplicado.", "Could not save in this browser. Check available space; the change was not applied."));
+      return false;
+    }
+  }
+  function updateContact(id, patch, title) {
+    const c = contactData(workspace, id);
+    return commit({ ...workspace, contacts: { ...workspace.contacts, [id]: { ...c, ...patch, history: [{ id: uid(), at: now(), title }, ...c.history] } } });
+  }
+  function openContact(id, target = "profile") {
+    setSelected(id);
+    setTab(target);
+    const next = new URLSearchParams(params);
+    next.set("contact", id);
+    setParams(next, { replace: true });
+  }
+  function closeContact() {
+    setSelected(null);
+    const next = new URLSearchParams(params);
+    next.delete("contact");
+    setParams(next, { replace: true });
+  }
+  function changeView(next) {
+    setView(next);
+    const p = new URLSearchParams(params);
+    p.set("view", next);
+    setParams(p, { replace: true });
+  }
+  function setStage(id, stage) {
+    const c = contactData(workspace, id);
+    if (c.stage !== stage) updateContact(id, { stage }, t("Etapa actualizada: Contacto ", "Stage updated: Contact ") + stage);
+  }
+  const filtered = useMemo(() => rows.filter((r) => {
+    const c = contactData(workspace, r.id), p = c.profile;
+    return [r.company, r.person, r.email, p.person, p.email, p.phone, p.service, ...c.notes.map((n) => n.title), ...c.files.map((f) => f.name), ...c.quotes.map((q) => q.title), ...c.projects.map((p2) => p2.title)].join(" ").toLowerCase().includes(term.toLowerCase()) && (!owner || p.owner === owner) && (stageFilter === "" || c.stage === Number(stageFilter));
+  }), [rows, workspace, term, owner, stageFilter]);
+  const row = rows.find((r) => r.id === selected), contact = row ? contactData(workspace, row.id) : null;
+  const alerts = useMemo(() => [...workspace.events.filter((e) => rows.some((r) => r.id === e.contactId)), ...reminders(rows, workspace, clock)], [rows, workspace, clock]);
+  const duplicate = useMemo(() => duplicateGroups(rows, workspace), [rows, workspace]);
+  const stats = useMemo(() => metrics(rows, workspace), [rows, workspace]);
+  const ownerName = (id) => workspace.team.find((m) => m.id === id)?.title || t("Sin asignar", "Unassigned");
+  const date = (value) => value ? new Date(value.length === 10 ? value + "T12:00:00" : value).toLocaleString(en ? "en-US" : "es-CO", { dateStyle: "medium", ...value.length > 10 ? { timeStyle: "short" } : {} }) : "\u2014";
+  const titleOf = (kind) => detailTabs.find((d) => d[0] === kind)?.[en ? 2 : 1] || { methods: t("M\xE9todo de pago", "Payment method"), team: t("Responsable", "Owner"), conversion: t("Preparar cliente", "Prepare client") }[kind];
+  function submitRecord(values) {
+    if (!form) return;
+    const kind = form.kind;
+    if (["methods", "team"].includes(kind)) {
+      const record2 = { ...values, id: form.record?.id || uid() };
+      const list2 = workspace[kind];
+      if (commit({ ...workspace, [kind]: form.record ? list2.map((r) => r.id === record2.id ? record2 : r) : [...list2, record2] })) setForm(null);
+      return;
+    }
+    if (!row) return;
+    if (kind === "profile") {
+      if (updateContact(row.id, { profile: values }, t("Ficha comercial actualizada", "Commercial profile updated"))) setForm(null);
+      return;
+    }
+    if (kind === "conversion") {
+      const project = { id: uid(), title: values.projectName, status: "planned", due: "", owner: contact.profile.owner || "", milestones: "" };
+      if (updateContact(row.id, { conversion: { ...values, at: now(), status: "local" }, projects: [...contact.projects, project] }, t("Solicitud de cliente preparada \xB7 pendiente de backend", "Client request prepared \xB7 backend pending"))) setForm(null);
+      return;
+    }
+    const record = { ...values, id: form.record?.id || uid(), at: form.record?.at || now() };
+    const list = contact[kind];
+    if (updateContact(row.id, { [kind]: form.record ? list.map((r) => r.id === record.id ? record : r) : [record, ...list] }, (form.record ? t("Actualizado: ", "Updated: ") : t("Agregado: ", "Added: ")) + titleOf(kind))) setForm(null);
+  }
+  async function upload(event) {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file || !row) return;
+    if (file.size > 20 * 1024 * 1024) {
+      setError(t("M\xE1ximo 20 MB por archivo.", "Maximum 20 MB per file."));
+      return;
+    }
+    setBusy(true);
+    const id = uid(), key = user.id + ":" + row.id + ":" + id;
+    try {
+      await putFile(key, file);
+      const metadata = { id, key, name: file.name, size: file.size, type: file.type, category, at: now() };
+      if (!updateContact(row.id, { files: [metadata, ...contact.files] }, t("Archivo adjunto: ", "File attached: ") + file.name)) await deleteFile(key);
+    } catch {
+      setError(t("No se pudo guardar el archivo localmente.", "Could not save the file locally."));
+    } finally {
+      setBusy(false);
+    }
+  }
+  async function download(file) {
+    try {
+      const blob = await getFile(file.key);
+      if (!blob) throw Error();
+      const url = URL.createObjectURL(blob), a = document.createElement("a");
+      a.href = url;
+      a.download = file.name;
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 1e3);
+    } catch {
+      setError(t("Este archivo no est\xE1 disponible en este navegador.", "This file is not available in this browser."));
+    }
+  }
+  async function removeFile(file) {
+    if (!window.confirm(t("\xBFEliminar este archivo local?", "Delete this local file?"))) return;
+    if (updateContact(row.id, { files: contact.files.filter((f) => f.id !== file.id) }, t("Archivo eliminado: ", "File removed: ") + file.name)) {
+      try {
+        await deleteFile(file.key);
+      } catch {
+        setError(t("Se quit\xF3 la referencia, pero no fue posible limpiar el archivo local.", "Reference removed, but the local file could not be cleaned up."));
+      }
+    }
+  }
+  function toggleAction(action) {
+    updateContact(row.id, { actions: contact.actions.map((a) => a.id === action.id ? { ...a, done: !a.done } : a) }, t("Seguimiento actualizado", "Follow-up updated"));
+  }
+  const summary = <div className="crm-summary"><span><b>{rows.length}</b>{t("Respuestas confirmadas", "Confirmed replies")}</span><span><b>{stats.quotes}</b>{t("Cotizaciones locales", "Local quotes")}</span><span><b>{stats.wins}</b>{t("Firmados / ejecuci\xF3n", "Signed / in progress")}</span><span><b>{alerts.filter((a) => a.overdue).length}</b>{t("Pendientes vencidos", "Overdue items")}</span></div>;
+  return <div className="commercial-workspace">
+<div className="crm-top"><div><span className="crm-local"><i />{t("Prototipo frontend \xB7 guardado local", "Frontend prototype \xB7 local storage")}</span><p>{t("Contactos reales de Supabase. La gesti\xF3n nueva solo se guarda en este navegador y cuenta.", "Real contacts from Supabase. New management data is saved only in this browser and account.")}</p></div><div className="crm-top-actions"><button className="crm-icon" title={t("Notificaciones", "Notifications")} aria-label={t("Notificaciones", "Notifications")} onClick={() => setNotifications(true)}><Bell size={18} /><span className="crm-counter">{alerts.filter((a) => !workspace.read.includes(a.id)).length}</span></button><button className="crm-icon" aria-label={t("Ayuda y etapas", "Help and stages")} onClick={() => setHelp(true)}><Info size={18} /></button><button className="crm-icon" disabled={loading} title={t("Actualizar contactos", "Refresh contacts")} aria-label={t("Actualizar contactos", "Refresh contacts")} onClick={load}><RefreshCw size={18} /></button></div></div>
+{error && <p className="crm-alert" role="alert">{error}</p>}{message && <p className="crm-notice" role="status">{message}<button className="crm-icon" aria-label={t("Cerrar aviso", "Dismiss notice")} onClick={() => setMessage("")}><X size={14} /></button></p>}
+{summary}<nav className="crm-tabs" aria-label={t("Gesti\xF3n comercial", "Commercial management")}>{navigation.map(([id, Icon, es, english]) => <button key={id} className={view === id ? "active" : ""} aria-current={view === id ? "page" : void 0} onClick={() => changeView(id)}>{createElement(Icon, { size: 16 })}{t(es, english)}</button>)}</nav>
+{["contacts", "board", "operations"].includes(view) && <div className="crm-tools"><label className="crm-search"><Search size={17} /><input placeholder={t("Buscar nombre, empresa, correo, tel\xE9fono, notas o archivos\u2026", "Search name, company, email, phone, notes or files\u2026")} aria-label={t("B\xFAsqueda global", "Global search")} value={term} onChange={(e) => setTerm(e.target.value)} /></label><select aria-label={t("Responsable", "Owner")} value={owner} onChange={(e) => setOwner(e.target.value)}><option value="">{t("Todos los responsables", "All owners")}</option>{workspace.team.map((m) => <option value={m.id} key={m.id}>{m.title}</option>)}</select><select aria-label={t("Etapa", "Stage")} value={stageFilter} onChange={(e) => setStageFilter(e.target.value)}><option value="">{t("Todas las etapas", "All stages")}</option>{CONTACT_STAGES.map((s, i) => <option key={i} value={i}>{i} · {s[en ? 2 : 0]}</option>)}</select><button className="crm-secondary" onClick={() => setForm({ kind: "team" })}><Plus size={15} />{t("Responsable", "Owner")}</button></div>}
+{loading ? <PortalLoading compact /> : <>
+{view === "contacts" && <><div className="crm-table-wrap"><table className="crm-table"><thead><tr>{[t("Contacto", "Contact"), t("Etapa", "Stage"), t("Responsable", "Owner"), t("Pr\xF3xima acci\xF3n", "Next action"), ""].map((x, i) => <th key={i}>{x}</th>)}</tr></thead><tbody>{filtered.map((r) => {
+    const c = contactData(workspace, r.id), next = c.actions.filter((a) => !a.done).sort((a, b) => a.due.localeCompare(b.due))[0];
+    return <tr key={r.id}><td><button className="crm-person" onClick={() => openContact(r.id)}><span className="crm-avatar">{r.company.split(/\s+/).slice(0, 2).map((s) => s[0]).join("").toUpperCase()}</span><span><strong>{r.company}</strong><small>{c.profile.email || r.email || r.person || "\u2014"}</small></span></button></td><td><Rating stage={c.stage} en={en} /></td><td>{ownerName(c.profile.owner)}</td><td>{next ? <button className="crm-text-action" onClick={() => openContact(r.id, "actions")}>{next.title}<small>{date(next.due)}</small></button> : <span className="crm-muted">—</span>}</td><td><button className="crm-icon" aria-label={t("Abrir ", "Open ") + r.company} onClick={() => openContact(r.id)}><ChevronRight size={18} /></button></td></tr>;
+  })}</tbody></table>{!filtered.length && <Empty t={t} />}</div>{duplicate.length > 0 && <section className="crm-panel"><h3><AlertCircle size={16} />{t("Posibles duplicados", "Possible duplicates")}</h3>{duplicate.map((g) => <p key={g.key}>{g.key}: {g.rows.map((r) => <button key={r.id} className="crm-text-action" onClick={() => openContact(r.id)}>{r.company}</button>)}</p>)}<small>{t("Revisi\xF3n manual; no se fusionan ni eliminan registros.", "Manual review; records are not merged or deleted.")}</small></section>}</>}
+{view === "board" && <div className="crm-board">{CONTACT_STAGES.map((s, i) => <section key={i} className={"crm-board-column crm-stage-" + i} onDragOver={(e) => e.preventDefault()} onDrop={(e) => {
+    e.preventDefault();
+    const id = e.dataTransfer.getData("text/plain");
+    if (rows.some((r) => r.id === id)) setStage(id, i);
+  }}><header><span>{i} · {s[en ? 2 : 0]}</span><b>{filtered.filter((r) => contactData(workspace, r.id).stage === i).length}</b></header>{filtered.filter((r) => contactData(workspace, r.id).stage === i).map((r) => <article key={r.id} draggable onDragStart={(e) => e.dataTransfer.setData("text/plain", r.id)}><button className="crm-text-action" onClick={() => openContact(r.id)}><strong>{r.company}</strong></button><small>{ownerName(contactData(workspace, r.id).profile.owner)}</small><select aria-label={t("Mover etapa de ", "Move stage for ") + r.company} value={i} onChange={(e) => setStage(r.id, Number(e.target.value))}>{CONTACT_STAGES.map((s2, n) => <option key={n} value={n}>{n} · {s2[en ? 2 : 0]}</option>)}</select></article>)}</section>)}</div>}
+{view === "operations" && <><section className="crm-panel"><h3>{t("Equipo comercial", "Commercial team")}</h3><div className="crm-team">{workspace.team.map((member) => <button className="crm-secondary" key={member.id} onClick={() => setForm({ kind: "team", record: member })}>{member.title}</button>)}{!workspace.team.length && <p className="crm-muted">{t("Agrega responsables desde el bot\xF3n superior.", "Add owners using the button above.")}</p>}</div></section><div className="crm-operation-grid"><section className="crm-panel"><h3>{t("Agenda y pendientes", "Schedule and follow-up")}</h3>{alerts.filter((a) => filtered.some((r) => r.id === a.contactId)).map((a) => <button className={"crm-agenda-row" + (a.overdue ? " overdue" : "")} key={a.id} onClick={() => openContact(a.contactId, a.kind === "action" ? "actions" : a.kind === "payment" ? "payments" : a.kind === "reply" ? "history" : "contracts")}><span><strong>{a.title}</strong><small>{a.company}</small></span><span>{date(a.due)}{a.overdue && <small>{t("Vencido", "Overdue")}</small>}</span></button>)}{!alerts.length && <Empty t={t} />}</section><section className="crm-panel"><h3>{t("Proyectos y entregables", "Projects and deliverables")}</h3>{filtered.flatMap((r) => contactData(workspace, r.id).projects.map((p) => <button className="crm-agenda-row" key={p.id} onClick={() => openContact(r.id, "projects")}><span><strong>{p.title}</strong><small>{r.company} · {ownerName(p.owner)}</small></span><span className="crm-pill">{statusNames[p.status]?.[en ? 1 : 0]}</span></button>))}{!filtered.some((r) => contactData(workspace, r.id).projects.length > 0) && <Empty t={t} />}</section></div></>}
+{view === "metrics" && <><p className="crm-muted">{t("M\xE9tricas del registro local, no de cobros verificados. Respuestas: contactos confirmados importados. Cierres: etapas 4\u20135.", "Metrics from local records, not verified charges. Replies: imported confirmed contacts. Closures: stages 4\u20135.")}</p><div className="crm-operation-grid"><section className="crm-panel"><h3>{t("Embudo comercial", "Sales funnel")}</h3>{CONTACT_STAGES.map((s, i) => {
+    const count = rows.filter((r) => contactData(workspace, r.id).stage === i).length;
+    return <div className="crm-chart-row" key={i}><span>{i} · {s[en ? 2 : 0]}</span><div><i style={{ width: (rows.length ? count / rows.length * 100 : 0) + "%" }} /></div><b>{count}</b></div>;
+  })}</section><section className="crm-panel"><h3>{t("Ingresos registrados", "Recorded revenue")}</h3>{Object.entries(stats.revenue).map(([currency, value]) => <p className="crm-revenue" key={currency}>{money(value, currency, en)}</p>)}{!Object.keys(stats.revenue).length && <Empty t={t} />}<small>{t("Las monedas se muestran separadas; no se convierten ni suman entre s\xED.", "Currencies are displayed separately; no currency conversion or cross-currency totals.")}</small></section></div><div className="crm-panel crm-table-wrap"><table className="crm-table"><thead><tr>{[t("Canal", "Channel"), t("Respuestas", "Replies"), t("Cotizaciones", "Quotes"), t("Cierres", "Closures")].map((x) => <th key={x}>{x}</th>)}</tr></thead><tbody>{Object.entries(stats.byChannel).map(([channel, values]) => <tr key={channel}><td>{channel}</td><td>{values.contacts}</td><td>{values.quotes}</td><td>{values.wins}</td></tr>)}</tbody></table></div></>}
+{view === "connections" && <><p className="crm-muted">{t("Estado real de la integraci\xF3n. Este prototipo no sincroniza ni env\xEDa mensajes.", "Actual integration status. This prototype does not sync or send messages.")}</p><div className="crm-connections">{["Email / Gmail", "Instagram", "WhatsApp", "Facebook", "LinkedIn", "Notion / CRM"].map((channel) => <section className="crm-panel" key={channel}><Plug size={20} /><h3>{channel}</h3><span className="crm-pill">{channel === "Notion / CRM" ? t("Lectura de registros existentes", "Existing records read") : t("Sin conexi\xF3n en este m\xF3dulo", "Not connected in this module")}</span><p>{channel === "Notion / CRM" ? t("Se consultan respuestas confirmadas ya disponibles en Supabase.", "Reads confirmed replies already available in Supabase.") : t("Pendiente de backend / n8n y autorizaci\xF3n de la cuenta.", "Backend / n8n and account authorization pending.")}</p><Link to="/panel/mensajes" className="crm-text-action">{t("Abrir comunicaciones", "Open communications")} <ArrowRight size={14} /></Link></section>)}</div></>}
+{view === "methods" && <><div className="crm-section-heading"><h3>{t("M\xE9todos de pago", "Payment methods")}</h3><button onClick={() => setForm({ kind: "methods" })}><Plus size={16} />{t("Agregar m\xE9todo", "Add method")}</button></div><p className="crm-muted">{t("Cat\xE1logo local para vincular cobros y anticipos. No procesa transacciones.", "Local catalog for payments and deposits. Does not process transactions.")}</p><div className="crm-connections">{workspace.methods.map((m) => <article className="crm-panel" key={m.id}><CreditCard size={20} /><h3>{m.title}</h3><span className="crm-pill">{m.kind} · {m.currency}{m.archived ? " \xB7 " + t("Archivado", "Archived") : ""}</span><p className="crm-prewrap">{m.instructions}</p>{m.url && /^https:\/\//i.test(m.url) && <a href={m.url} target="_blank" rel="noopener noreferrer">{t("Abrir enlace de pago", "Open payment link")}</a>}<div className="crm-inline-actions"><button className="crm-secondary" onClick={() => setForm({ kind: "methods", record: m })}>{t("Editar", "Edit")}</button><button className="crm-text-action" onClick={() => commit({ ...workspace, methods: workspace.methods.map((v) => v.id === m.id ? { ...v, archived: !v.archived } : v) })}>{m.archived ? t("Restaurar", "Restore") : t("Archivar", "Archive")}</button></div></article>)}</div>{!workspace.methods.length && <Empty t={t} />}</>}
+</>}
+{row && contact && <Modal title={row.company} onClose={closeContact} wide><div className="crm-contact-bar"><Rating stage={contact.stage} en={en} /><select aria-label={t("Etapa del contacto", "Contact stage")} value={contact.stage} onChange={(e) => setStage(row.id, Number(e.target.value))}>{CONTACT_STAGES.map((s, i) => <option key={i} value={i}>{i} · {s[en ? 2 : 0]}</option>)}</select><span className="crm-pill">{t("Gesti\xF3n local", "Local management")}</span><Link to="/panel/mensajes">{t("Comunicaciones", "Communications")}</Link></div><nav className="crm-tabs crm-detail-tabs" aria-label={t("Detalle del contacto", "Contact details")}>{detailTabs.map(([id, es, english]) => <button key={id} className={tab === id ? "active" : ""} aria-current={tab === id ? "page" : void 0} onClick={() => setTab(id)}>{t(es, english)}{Array.isArray(contact[id]) && contact[id].length > 0 && <small>{contact[id].length}</small>}</button>)}</nav><div className="crm-detail-body">{error && <p className="crm-alert" role="alert">{error}</p>}
+{tab === "profile" && <><div className="crm-section-heading"><h3>{t("Ficha comercial", "Commercial profile")}</h3><button className="crm-secondary" onClick={() => setForm({ kind: "profile", record: { person: row.person || "", email: row.email || "", channel: row.channel, ...contact.profile } })}>{t("Editar ficha", "Edit profile")}</button></div><dl className="crm-profile">{schemas.profile.map((f) => <div key={f.key}><dt>{en ? f.en : f.es}</dt><dd>{f.key === "owner" ? ownerName(contact.profile.owner) : f.key === "budget" ? contact.profile.budget !== void 0 && contact.profile.budget !== "" ? money(contact.profile.budget, contact.profile.currency || "COP", en) : "\u2014" : contact.profile[f.key] || { person: row.person, email: row.email, channel: row.channel }[f.key] || "\u2014"}</dd></div>)}</dl><div className="crm-conversion"><div><h3>{t("Preparar conversi\xF3n a cliente", "Prepare client conversion")}</h3><p>{contact.conversion ? t("Solicitud local guardada para ", "Local request saved for ") + contact.conversion.accountEmail : t("Vincula el correo, proyecto y m\xF3dulos solicitados. La activaci\xF3n real vendr\xE1 con el backend.", "Link the email, project and requested modules. Actual activation requires the backend.")}</p>{contact.conversion && <small>{t("M\xF3dulos: ", "Modules: ")}{contact.conversion.modules.map((id) => moduleTitle(portalModules.find((m) => m.id === id) || { label: { es: id, en: id } }, en ? "en" : "es")).join(", ") || "\u2014"}</small>}</div><button disabled={!!contact.conversion} onClick={() => setForm({ kind: "conversion", record: { accountEmail: contact.profile.email || row.email || "" } })}>{contact.conversion ? t("Preparado", "Prepared") : t("Preparar", "Prepare")}<ArrowRight size={15} /></button></div></>}
+{tab === "history" && <div className="crm-timeline"><article><i /><div><strong>{t("Respuesta confirmada en CRM", "Confirmed CRM reply")}</strong><p>{row.status} · {t("Registro importado; el texto original se consulta en Comunicaciones.", "Imported record; the original message is available in Communications.")}</p></div></article>{contact.history.map((h) => <article key={h.id}><i /><div><strong>{h.title}</strong><small>{date(h.at)}</small></div></article>)}{contact.history.length === 0 && <p className="crm-muted">{t("Los cambios locales aparecer\xE1n aqu\xED.", "Local changes will appear here.")}</p>}</div>}
+{tab === "files" && <><div className="crm-upload"><select aria-label={t("Categor\xEDa del archivo", "File category")} value={category} onChange={(e) => setCategory(e.target.value)}>{[["Contrato", "Contract"], ["Cotizaci\xF3n", "Quote"], ["Propuesta", "Proposal"], ["Entregable", "Deliverable"], ["Comprobante", "Receipt"], ["Otro", "Other"]].map(([es, english]) => <option key={es} value={es}>{t(es, english)}</option>)}</select><label className={"crm-upload-button" + (busy ? " busy" : "")}><Upload size={16} />{busy ? t("Guardando\u2026", "Saving\u2026") : t("Adjuntar archivo", "Attach file")}<input type="file" disabled={busy} onChange={upload} /></label></div><p className="crm-muted">{t("Hasta 20 MB. Archivos en IndexedDB de este navegador, sin nube ni enlaces p\xFAblicos. No equivale a almacenamiento privado seguro del servidor.", "Up to 20 MB. Files stay in this browser\u2019s IndexedDB, without cloud storage or public links. This is not secure private server storage.")}</p>{contact.files.map((file) => <article className="crm-file" key={file.id}><FileText size={20} /><div><strong>{file.name}</strong><small>{file.category} · {(file.size / 1024 / 1024).toFixed(2)} MB · {date(file.at)}</small></div><button className="crm-icon" title={t("Descargar", "Download")} aria-label={t("Descargar ", "Download ") + file.name} onClick={() => download(file)}><Download size={17} /></button><button className="crm-icon" disabled={busy} aria-label={t("Eliminar ", "Delete ") + file.name} onClick={() => removeFile(file)}><Trash2 size={17} /></button></article>)}{!contact.files.length && <Empty t={t} />}</>}
+{["actions", "notes", "quotes", "contracts", "payments", "projects"].includes(tab) && <><div className="crm-section-heading"><h3>{titleOf(tab)}</h3><button onClick={() => setForm({ kind: tab })}><Plus size={16} />{t("Agregar", "Add")}</button></div>{tab === "payments" && <div className="crm-balance">{currencies.map((currency) => {
+    const ps = contact.payments.filter((p) => p.currency === currency), total = ps.reduce((sum, p) => sum + Number(p.amount), 0), paid = ps.filter((p) => p.status === "paid").reduce((sum, p) => sum + Number(p.amount), 0);
+    return ps.length > 0 && <span key={currency}><b>{currency}</b>{t("Acordado: ", "Agreed: ")}{money(total, currency, en)} · {t("Registrado pagado: ", "Recorded paid: ")}{money(paid, currency, en)} · {t("Saldo: ", "Balance: ")}{money(total - paid, currency, en)}</span>;
+  })}</div>}{contact[tab].map((record) => <article className={"crm-record" + (record.done ? " complete" : "")} key={record.id}><div className="crm-record-title"><strong>{record.title}</strong><div className="crm-inline-actions">{tab === "actions" && <button className="crm-icon" title={t("Completar / reabrir", "Complete / reopen")} aria-label={t("Completar o reabrir acci\xF3n", "Complete or reopen action")} onClick={() => toggleAction(record)}><Check size={16} /></button>}<button className="crm-text-action" onClick={() => setForm({ kind: tab, record })}>{t("Editar", "Edit")}</button></div></div><div className="crm-record-meta">{record.status && <span className="crm-pill">{statusNames[record.status]?.[en ? 1 : 0] || record.status}</span>}{record.amount !== void 0 && <b>{money(record.amount, record.currency || "COP", en)}</b>}{record.version && <span>v{record.version}</span>}{record.due && <span>{date(record.due)}</span>}{record.owner && <span>{ownerName(record.owner)}</span>}{record.signedAt && <span>{t("Firma: ", "Signed: ")}{date(record.signedAt)}</span>}{record.methodId && <span>{workspace.methods.find((m) => m.id === record.methodId)?.title || "\u2014"}</span>}</div>{record.reference && <p>{record.reference}</p>}{record.milestones && <ul className="crm-milestones">{record.milestones.split("\n").filter(Boolean).map((line, i) => <li key={i}><label><input type="checkbox" checked={!!record.completedMilestones?.includes(i)} onChange={(e) => updateContact(row.id, { projects: contact.projects.map((p) => p.id === record.id ? { ...p, completedMilestones: e.target.checked ? [...p.completedMilestones || [], i] : (p.completedMilestones || []).filter((n) => n !== i) } : p) }, t("Hito actualizado", "Milestone updated"))} />{line}</label></li>)}</ul>}{record.fileId && (contact.files.some((f) => f.id === record.fileId) ? <button className="crm-text-action" onClick={() => download(contact.files.find((f) => f.id === record.fileId))}><Download size={14} />{contact.files.find((f) => f.id === record.fileId).name}</button> : <small>{t("El archivo vinculado fue eliminado.", "The linked file was removed.")}</small>)}</article>)}{!contact[tab].length && <Empty t={t} />}</>}
+</div></Modal>}
+{form && <Modal title={titleOf(form.kind)} onClose={() => setForm(null)}><RecordForm key={form.kind + ":" + (form.record?.id || "new")} kind={form.kind} values={form.record} onSubmit={submitRecord} onClose={() => setForm(null)} en={en} workspace={workspace} contact={contact || { files: [] }} externalError={error} /></Modal>}
+{help && <Modal title={t("Etapas y alcance", "Stages and scope")} onClose={() => setHelp(false)}><div className="crm-detail-body"><p>{t("Las etapas existentes se leen de Supabase al abrir el m\xF3dulo; los cambios nuevos son locales y manuales. No sobrescriben Supabase.", "Existing stages are read from Supabase when opening the module; new changes are local and manual. They do not overwrite Supabase.")}</p>{CONTACT_STAGES.map((s, i) => <div className="crm-help-stage" key={i}><Rating stage={i} en={en} /><div><strong>{s[en ? 2 : 0]}</strong><p>{s[en ? 3 : 1]}</p></div></div>)}<p className="crm-muted">{t("Sin env\xEDos autom\xE1ticos, firma electr\xF3nica, cobros, permisos ni sincronizaci\xF3n de estos cambios. Las notificaciones son recordatorios internos calculados mientras est\xE1 abierto el portal.", "No automatic sending, electronic signatures, charges, permissions or synchronization of these changes. Notifications are internal reminders calculated while the portal is open.")}</p></div></Modal>}
+{notifications && <Modal title={t("Notificaciones", "Notifications")} onClose={() => setNotifications(false)}><div className="crm-detail-body"><p className="crm-muted">{t("Pendientes derivados del registro local; no son mensajes entrantes en vivo.", "Pending items derived from local records; these are not live incoming messages.")}</p>{alerts.map((a) => <button className={"crm-agenda-row" + (workspace.read.includes(a.id) ? " read" : "")} key={a.id} onClick={() => {
+    if (commit({ ...workspace, read: [.../* @__PURE__ */ new Set([...workspace.read, a.id])] })) {
+      setNotifications(false);
+      openContact(a.contactId, a.kind === "action" ? "actions" : a.kind === "payment" ? "payments" : a.kind === "reply" ? "history" : "contracts");
+    }
+  }}><span><strong>{a.title}</strong><small>{a.company}</small></span><span>{date(a.due)}{a.overdue && <small>{t("Vencido", "Overdue")}</small>}</span></button>)}{!alerts.length && <Empty t={t} />}</div></Modal>}
+</div>;
+}
+function Empty({ t }) {
+  return <div className="crm-empty"><Users size={24} /><p>{t("Sin registros para esta vista.", "No records for this view.")}</p></div>;
+}
+export {
+  CommercialPortal as default
+};
