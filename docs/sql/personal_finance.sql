@@ -101,7 +101,7 @@ CREATE TABLE IF NOT EXISTS public.personal_finance_pila_rollovers (
 ALTER TABLE public.personal_finance_pila_rollovers ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS finance_own_pila_rollovers ON public.personal_finance_pila_rollovers;
 CREATE POLICY finance_own_pila_rollovers ON public.personal_finance_pila_rollovers
- FOR SELECT TO authenticated USING(auth.uid()=user_id);
+ FOR ALL TO authenticated USING(auth.uid()=user_id) WITH CHECK(auth.uid()=user_id);
 
 CREATE OR REPLACE FUNCTION public.rollover_my_pila()
 RETURNS numeric LANGUAGE plpgsql SECURITY INVOKER SET search_path = public AS $$
