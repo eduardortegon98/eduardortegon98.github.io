@@ -23,10 +23,6 @@ export default function FinanceDashboard(){
  const [hourlyUsd,setHourlyUsd]=useState('5.12'),[paymentFor,setPaymentFor]=useState('Banco'),[hours,setHours]=useState(''),[historyOpen,setHistoryOpen]=useState(false),[historyMonth,setHistoryMonth]=useState(currentMonth());
  const owner=user?.id;
  useEffect(()=>{if(owner)setHourlyUsd(window.localStorage.getItem('ortfinance_extra_hourly_usd_'+owner)||'5.12');},[owner]);
- const setHourlyRate=value=>{
-  setHourlyUsd(value);
-  if(owner){if(value)window.localStorage.setItem('ortfinance_extra_hourly_usd_'+owner,value);else window.localStorage.removeItem('ortfinance_extra_hourly_usd_'+owner);}
- };
  const extraEstimate=tab==='extra'&&trm&&trm.date===form.date&&Number(hours)>0&&Number(hourlyUsd)>0?Math.round(Number(hours)*Number(hourlyUsd)*trm.rate*100)/100:null;
  useEffect(()=>{
   if(!((tab==='ingreso'&&incomeCurrency==='USD')||tab==='extra')||!form.date){setTrm(null);setTrmError('');setTrmLoading(false);return;}
@@ -199,6 +195,9 @@ export default function FinanceDashboard(){
     <label>Cuándo<input type="date" required value={form.date} onChange={e=>setForm(p=>({...p,date:e.target.value}))}/></label>
     {tab!=='extra'&&<label>Cuánto ({tab==='ingreso'?incomeCurrency:'COP'})<input type="number" min={tab==='ingreso'&&incomeCurrency==='USD'?'0.01':'1'} step={tab==='ingreso'&&incomeCurrency==='USD'?'0.01':'1'} required placeholder={tab==='ingreso'&&incomeCurrency==='USD'?'Ej. 200.50':'Ej. 20000'} value={form.amount} onChange={e=>setForm(p=>({...p,amount:e.target.value}))}/></label>}
     {tab==='ingreso'?<label>De quién<select value={paymentFor} onChange={e=>setPaymentFor(e.target.value)}>{['Blu','Cliente STO','Reembolso','Otro'].map(x=><option key={x}>{x}</option>)}</select></label>:tab==='pago'?<label>A quién<select value={paymentFor} onChange={e=>setPaymentFor(e.target.value)}>{[['Banco','Banco'],['Máster','Máster'],['PILA atrasada','PILA atrasada'],['Salud y pensión','Salud y pensión'],['Casa','Doris (casa)'],['Otro','Otro']].map(([value,label])=><option key={value} value={value}>{label}</option>)}</select></label>:tab==='gasto'?<label>Tipo<select value={form.category} onChange={e=>setForm(p=>({...p,category:e.target.value}))}>{['Otro','Gasto hormiga','Alimentación','Transporte','Salud','Casa','Estudio','Ocio'].map(x=><option key={x}>{x}</option>)}</select></label>:tab==='colchon'?<label>Operación<select value={bufferDirection} onChange={e=>setBufferDirection(e.target.value)}><option value="out">Sacar del colchón</option><option value="in">Guardar en el colchón</option></select></label>:<label>Horas trabajadas<input type="number" min=".25" step=".25" required value={hours} onChange={e=>setHours(e.target.value)} placeholder="Ej. 8"/></label>}
+    {tab==='extra'&&<div className="fin-trm-quote" aria-live="polite">
+      {trmLoading?<span>Consultando TRM del {form.date}…</span>:trmError?<span className="fin-trm-error">{trmError}</span>:trm?<><strong>TRM del {form.date}: {pesos(trm.rate)} COP/USD</strong><span>Tarifa contractual: USD {hourlyUsd}/hora</span><strong>{extraEstimate===null?'Introduce las horas para calcular':pesos(extraEstimate)+' COP estimados'}</strong><small>La TRM se obtiene automáticamente; es un estimado pendiente de pago.</small></>:<span>Selecciona una fecha para consultar la TRM.</span>}
+    </div>}
     <label>Detalle (opcional)<input maxLength="180" value={form.note} onChange={e=>setForm(p=>({...p,note:e.target.value}))} placeholder={tab==='ingreso'?'Ej. quincena de Blu':tab==='pago'?'Ej. cuota de octubre':tab==='extra'?'Ej. lunes en Blu':tab==='colchon'?'Ej. ahorro o préstamo familiar':'Ej. café'}/></label>
     <button type="submit" className="fin-primary" disabled={saving||((tab==='extra'||(tab==='ingreso'&&incomeCurrency==='USD'))&&(!trm||trmLoading||trm.date!==form.date))}><Plus size={16}/> Guardar</button>
    </form>
