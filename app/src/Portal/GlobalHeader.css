@@ -85,3 +85,97 @@
 }
 @media(max-height:480px) {.global-notification-panel {top:14px;max-height:calc(100dvh - 28px);}}
 @media(prefers-reduced-motion:no-preference) {.global-notification-panel[open]{animation:global-notification-in .25s cubic-bezier(.22,1,.36,1)}@keyframes global-notification-in{from{opacity:0;translate:0 -5px}to{opacity:1;translate:0 0}}}
+
+
+/* Deep forest finish for the shared portal header. */
+.admin-shell .admin-topbar {
+  color: #fff;
+  background: radial-gradient(ellipse at 16% 0%, #ffffff0a, transparent 58%),
+    linear-gradient(115deg, #123d2b 0%, #184a34 64%, #20553d 100%);
+  border-bottom: 1px solid #b8dfc533;
+  box-shadow: inset 0 1px 0 #ffffff0b, 0 5px 20px #123d2b13;
+}
+.admin-topbar .admin-breadcrumb > span { color: #ccdfd3; }
+.admin-topbar .admin-breadcrumb > strong {
+  color: #fff;
+  font-weight: 600;
+  letter-spacing: .015em;
+}
+.admin-shell .admin-topbar .admin-role-selector {
+  color: #e0eee5;
+  border-right-color: #ffffff24;
+}
+.admin-topbar .admin-role-selector > svg { color: #e0eee5; }
+.admin-shell .admin-topbar .admin-role-selector select {
+  color-scheme: dark;
+  color: #fff;
+  background: #ffffff0d;
+  border: 1px solid #ffffff2b;
+  box-shadow: inset 0 1px 0 #ffffff08;
+  font-weight: 500;
+}
+.admin-topbar .admin-role-selector select option { background: #184a34; color: #fff; }
+.admin-shell .admin-topbar .admin-menu,
+.admin-topbar .global-notification-trigger {
+  color: #fff;
+  background: #ffffff0b;
+  border-color: #ffffff26;
+  box-shadow: inset 0 1px 0 #ffffff09;
+}
+.admin-topbar .global-notification-trigger > span {
+  background: #e5f5e9;
+  color: #123d2b;
+  border-color: #184a34;
+}
+.admin-topbar .admin-header-utilities .language-switch {
+  background: #ffffff09;
+  color: #e4efe8;
+  border-color: #ffffff26;
+  padding: 3px;
+  border-radius: 11px;
+}
+.admin-topbar .language-switch button {
+  color: #fff;
+  border-radius: 8px;
+}
+.admin-topbar .language-switch button[aria-pressed=true] {
+  color: #123d2b;
+  background: #f1f7f2;
+  box-shadow: 0 2px 7px #081d1529;
+}
+.admin-topbar .admin-header-utilities .admin-avatar {
+  color: #fff;
+  background: #ffffff12;
+  border: 1px solid #ffffff40;
+  box-shadow: inset 0 1px 0 #ffffff10;
+  font-weight: 600;
+}
+.admin-topbar .account-profile-link { border-radius: 50%; }
+.admin-shell .admin-topbar :is(button, select, a):focus-visible {
+  outline: 3px solid #b8e7c9;
+  outline-offset: 3px;
+}
+@media(hover:hover) {
+  .admin-topbar .global-notification-trigger:hover,
+  .admin-shell .admin-topbar .admin-menu:hover,
+  .admin-topbar .admin-role-selector select:hover {
+    background: #ffffff1c;
+    border-color: #ffffff4d;
+  }
+  .admin-topbar .language-switch button:not([aria-pressed=true]):hover { background: #ffffff18; }
+  .admin-topbar .account-profile-link:hover .admin-avatar { background: #ffffff25; border-color: #ffffff73; }
+}
+@media(prefers-reduced-motion:no-preference) {
+  .admin-topbar :is(.global-notification-trigger, .admin-menu),
+  .admin-topbar .admin-avatar,
+  .admin-topbar .admin-role-selector select,
+  .admin-topbar .language-switch button {
+    transition: background .25s ease, border-color .25s ease, box-shadow .25s ease;
+  }
+}
+@media(max-width:760px) {
+  .admin-shell .admin-topbar .admin-top-actions {
+    padding-top: 12px;
+    border-top: 1px solid #ffffff17;
+  }
+}
