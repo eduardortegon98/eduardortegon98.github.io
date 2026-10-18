@@ -1,5 +1,6 @@
 // Display names only. Product IDs, routes, assignments and stored data stay stable.
 export const portalBrands={
+ finance:{name:'OrtBalance',description:{es:'Finanzas personales',en:'Personal finances'}},
  analytics:{name:'OrtLens',description:{es:'Analítica',en:'Analytics'}},
  commercial:{name:'OrtFlow',description:{es:'Gestión comercial',en:'Commercial management'}},
  messages:{name:'OrtConnect',description:{es:'Mensajes',en:'Messages'}},
