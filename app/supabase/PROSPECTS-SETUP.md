@@ -51,3 +51,13 @@ La función recorre las páginas de Notion de 100 en 100 y realiza upsert por `n
 - Si aparece `forbidden`, verifica `portal_profiles.role = 'super_admin'`.
 - Si aparece `database_upsert_failed`, comprueba SQL y estructura de la tabla.
 - No guardes secrets en GitHub Actions de frontend ni en variables `VITE_...`.
+
+## 7. Canal de contacto y agrupación
+- Notion incorpora Canal de contacto (selección) y vista Por canal de contacto.
+- Ejecutar PROSPECTS-CHANNELS.sql en Supabase SQL Editor para añadir contact_channel/contact_url a una instalación existente sin alterar estados.
+- Volver a desplegar sync-prospects con el index.ts actualizado. La publicación de GitHub Pages no despliega funciones de Supabase.
+- Abrir Analítica → Prospectos → Sincronizar Notion. La columna Canal, el filtro y Agrupar por → Canal de contacto usarán ese campo.
+- Durante la actualización, si faltan las columnas, el frontend vuelve al esquema previo y detecta Instagram solo por el asunto explícito de contacto y correo solo por un enlace Gmail; no infiere correo por disponer de email.
+- La clasificación de canal no confirma entrega, respuesta ni interés. Los estados comerciales y notas se conservan.
+- Los enlaces Instagram de esta primera campaña se extraen del @usuario del asunto; canales sin enlace se muestran sin botón.
+- El estado de entrega de correo no se aplica a Instagram u otras redes. Las respuestas en redes requieren actualización por parte del administrador.

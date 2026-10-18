@@ -33,7 +33,15 @@ function toRow(page: any) {
   const inferred = knownCountries.find(c => sector.toLowerCase().includes(c.toLowerCase()));
   const date = read('Fecha de contacto');
   const notes = read('Próxima acción');
+  const knownChannels=['Correo electrónico','Instagram','WhatsApp','LinkedIn','Facebook','Teléfono','Formulario web','Otro','Por verificar'];
+  const configuredChannel=read('Canal de contacto');
+  const subject=read('Asunto'),gmail=read('Enlace Gmail');
+  const contactChannel=knownChannels.includes(configuredChannel)?configuredChannel:/^Contacto por Instagram\b/i.test(subject)?'Instagram':/^https:\/\/mail\.google\.com\//i.test(gmail)?'Correo electrónico':'Por verificar';
+  const handle=contactChannel==='Instagram'?subject.match(/@([a-zA-Z0-9._]{1,30})\b/):null;
+  const contactUrl=handle?'https://www.instagram.com/'+handle[1]+'/':contactChannel==='Correo electrónico'&&/^https:\/\/mail\.google\.com\//i.test(gmail)?gmail:null;
   return {
+    contact_channel:contactChannel,
+    contact_url:contactUrl,
     notion_page_id: page.id,
     company: read('Empresa') || 'Sin nombre',
     person: read('Persona') || null,

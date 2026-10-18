@@ -9,6 +9,8 @@ create table if not exists public.sales_prospects (
   sector text,
   status text,
   delivery_status text,
+  contact_channel text,
+  contact_url text,
   contacted_at timestamptz,
   subject text,
   gmail_url text,
@@ -24,3 +26,7 @@ create policy "sales_prospects_admin_read" on public.sales_prospects for select 
 using ((select public.portal_is_admin()));
 -- Ingest Notion rows with a server-side job using the Supabase service role;
 -- never expose a Notion token or service-role key through Vite/GitHub Pages.
+
+-- Existing installations: add channel fields too.
+alter table public.sales_prospects add column if not exists contact_channel text;
+alter table public.sales_prospects add column if not exists contact_url text;
