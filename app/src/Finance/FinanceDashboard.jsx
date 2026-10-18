@@ -83,6 +83,9 @@ export default function FinanceDashboard(){
  const totalDebt=debtNu+debtPila;
  const originalDebt=10974592.35+2643800;
  const progress=Math.max(0,Math.min(100,(1-totalDebt/originalDebt)*100));
+ const deadlineDate=settings.goal_date||'2027-10-18';
+ const deadlineDays=Math.max(0,Math.ceil((new Date(deadlineDate+'T00:00:00').getTime()-new Date(localDate()+'T00:00:00').getTime())/86400000));
+ const deadlineLabel=new Date(deadlineDate+'T12:00:00').toLocaleDateString('es-CO',{day:'numeric',month:'short',year:'numeric'}).toUpperCase();
  const light=totalDebt<=0?'green':progress>=50?'yellow':'red';
  const lightName=light==='green'?'VERDE':light==='yellow'?'AMARILLO':'ROJÍSIMO';
  const lightMessage=light==='green'?'¡Sin deuda de Nu ni PILA atrasada! Mantén el control.':light==='yellow'?'Ya pagaste al menos la mitad de la deuda inicial. Todavía falta.':'Todavía debemos más de la mitad de la deuda inicial. Prioridad: cumplir cuotas y evitar deuda nueva.';
@@ -155,6 +158,10 @@ export default function FinanceDashboard(){
   <div className="fin-head fin-head-compact"><p>Lo que debes, lo que pagas y lo que estás logrando.</p><button type="button" className="fin-refresh-button" onClick={refresh} disabled={loading} title="Actualizar datos" aria-label="Actualizar datos"><RefreshCw size={15}/> <span>Actualizar</span></button></div>
   {error&&<p className="fin-error" role="alert">{error}</p>}
   {!isReady?<p className="fin-empty">{loading?'Cargando tu libreta...':'Activa las tablas de OrtFinance en Supabase para comenzar.'}</p>:<>
+  <section className="fin-life-deadline" aria-label="Meta de libertad financiera">
+   <div className="fin-life-heading"><span>OBJETIVO DE VIDA FINANCIERA</span><strong>{deadlineLabel}</strong><small>Salir de deudas en máximo un año. ¡Idealmente antes!</small></div>
+   <div className="fin-life-stats"><div><small>Días restantes</small><strong>{totalDebt<=0?'¡Listo!':deadlineDays}</strong></div><div><small>Deuda pendiente</small><strong>{pesos(totalDebt)}</strong></div><div><small>Avance</small><strong>{progress.toFixed(1)}%</strong></div></div>
+  </section>
   <div className="fin-family-health">
     <section className={'fin-person-card fin-doris '+(dorisCovered?'fin-person-happy':'fin-person-pending')} aria-label={'Doris: '+(dorisCovered?'aporte cubierto':'aporte por confirmar')}>
       <div className="fin-person-top"><div><span className="fin-traffic-eyebrow">SALUD FINANCIERA DE DORIS</span><h3>Doris</h3></div><span className="fin-person-face" role="img" aria-label={dorisCovered?'Carita feliz':'Carita triste'}>{dorisCovered?'😊':'😟'}</span></div>
