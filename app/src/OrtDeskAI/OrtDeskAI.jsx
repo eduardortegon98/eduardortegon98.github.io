@@ -4,6 +4,7 @@ import { BrainCircuit, Upload, FileText, Image, Search, Plus, X, Check, Trash2, 
 import { useLanguage } from '../i18n/Language';
 import PortalLoading from '../Portal/PortalLoading';
 import { readSources,writeSources,removeSource } from './localKnowledge';
+import { seedSTOEcosystem } from './seedSTOEcosystem';
 import './OrtDeskAI.css';
 const MAX_FILE=10*1024*1024,MAX_TOTAL=50*1024*1024;
 const accepted=['pdf','docx','txt','md','csv','json','png','jpg','jpeg','webp'];
@@ -11,16 +12,16 @@ const categories=[{id:'business',es:'Negocio',en:'Business'},{id:'products',es:'
 const bytes=value=>value<1024*1024?Math.ceil(value/1024)+' KB':(value/(1024*1024)).toFixed(1)+' MB';
 export default function OrtDeskAI(){
  const {user,role}=useOutletContext();
- return <><div style={{margin:'16px 22px 0'}}>{role==='super_admin'&&<a href='/panel/documentacion/sto' style={{display:'inline-flex',gap:8,alignItems:'center',padding:'11px 15px',borderRadius:12,border:'1px solid #438b6d',color:'inherit',fontWeight:600,textDecoration:'none'}}>Documentación estratégica de STO →</a>}</div><KnowledgeWorkspace key={user.id} owner={user.id}/></>;
+ return <KnowledgeWorkspace key={user.id} owner={user.id} isAdmin={role==='super_admin'}/>;
 }
-function KnowledgeWorkspace({owner}){
+function KnowledgeWorkspace({owner,isAdmin}){
  const {language}=useLanguage(),en=language==='en',t=(es,english)=>en?english:es;
  const [sources,setSources]=useState([]),[loading,setLoading]=useState(true),[busy,setBusy]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState(''),[retry,setRetry]=useState(0);
  const [query,setQuery]=useState(''),[category,setCategory]=useState(''),[filter,setFilter]=useState(''),[limit,setLimit]=useState(25);
  const [mode,setMode]=useState(null),[selected,setSelected]=useState(null),[title,setTitle]=useState(''),[content,setContent]=useState(''),[origin,setOrigin]=useState('own'),[originName,setOriginName]=useState(''),[sourceCategory,setSourceCategory]=useState('business');
  const fileInput=useRef(null),dialog=useRef(null),[previewUrl,setPreviewUrl]=useState('');
  const totalBytes=sources.reduce((sum,source)=>sum+source.size,0),reviewed=sources.filter(source=>source.reviewed).length;
- useEffect(()=>{let active=true;setLoading(true);setError('');readSources(owner).then(items=>{if(active)setSources(items);}).catch(()=>{if(active)setError(t('No pudimos abrir el almacenamiento local. Reintenta o permite el almacenamiento del navegador.','Could not open local storage. Retry or allow browser storage.'));}).finally(()=>{if(active)setLoading(false);});return()=>{active=false;};},[owner,retry,language]);
+ useEffect(()=>{let active=true;setLoading(true);setError('');(isAdmin?seedSTOEcosystem(owner):readSources(owner)).then(items=>{if(active)setSources(items);}).catch(()=>{if(active)setError(t('No pudimos abrir el almacenamiento local. Reintenta o permite el almacenamiento del navegador.','Could not open local storage. Retry or allow browser storage.'));}).finally(()=>{if(active)setLoading(false);});return()=>{active=false;};},[owner,retry,language,isAdmin]);
  useEffect(()=>{const el=dialog.current;if(mode&&!el.open)el.showModal();else if(!mode&&el.open)el.close();},[mode]);
  useEffect(()=>{if(!selected?.blob){setPreviewUrl('');return;}const url=URL.createObjectURL(selected.blob);setPreviewUrl(url);return()=>URL.revokeObjectURL(url);},[selected]);
  async function persist(items,message){
