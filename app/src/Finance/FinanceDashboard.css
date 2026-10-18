@@ -181,3 +181,11 @@
 .fin-simple .fin-overview-add .fin-eye-button{width:28px;height:28px;min-width:28px;padding:0;border-radius:8px}
 .fin-simple .fin-overview-add .fin-eye-button svg{width:15px;height:15px}
 .fin-simple .fin-overview-add .fin-month{max-width:125px}
+
+/* Keep the title and eye vertically aligned with the month input, not its label. */
+.fin-simple .fin-overview-add>.fin-line{display:flex;align-items:flex-end;justify-content:space-between;gap:8px;min-height:48px}
+.fin-simple .fin-overview-add>.fin-line>h3{margin:0 0 7px;line-height:28px;align-self:flex-end;flex:1;white-space:nowrap}
+.fin-simple .fin-overview-add .fin-movement-actions{display:flex;align-items:flex-end;gap:6px}
+.fin-simple .fin-overview-add .fin-movement-actions>.fin-eye-button{width:28px;height:28px;margin-bottom:1px;align-self:flex-end}
+.fin-simple .fin-overview-add .fin-month{display:flex;flex-direction:column;gap:3px;justify-content:flex-end}
+.fin-simple .fin-overview-add .fin-month input{height:29px;box-sizing:border-box}
