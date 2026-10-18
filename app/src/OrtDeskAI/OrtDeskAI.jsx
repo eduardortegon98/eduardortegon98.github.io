@@ -100,7 +100,7 @@ function KnowledgeWorkspace({owner,isAdmin}){
  const observer=new ResizeObserver(fit);
  observer.observe(frame);
  frame._stoFitCleanup=()=>observer.disconnect();
- }}/>}{selected.content&&!selected.blob?.type?.startsWith("text/html")?<pre>{selected.content}</pre>:!selected.content?<p>{t('Archivo conservado como borrador. Aún no se ha extraído su contenido.','File saved as a draft. Its content has not been extracted yet.')}</p>}{previewUrl&&<a className="knowledge-secondary" href={previewUrl} download={selected.title}><Download size={15}/>{t('Descargar archivo','Download file')}</a>}<footer><button className="knowledge-delete" disabled={busy} onClick={deleteSelected}><Trash2 size={15}/>{t('Eliminar','Delete')}</button><button className="knowledge-primary" disabled={busy} onClick={review}><Check size={15}/>{selected.reviewed?t('Volver a borrador','Mark as draft'):t('Marcar como revisada','Mark as reviewed')}</button></footer></div>}
+ }}/>}{selected.content&&!selected.blob?.type?.startsWith("text/html")?<pre>{selected.content}</pre>:!selected.content?<p>{t('Archivo conservado como borrador. Aún no se ha extraído su contenido.','File saved as a draft. Its content has not been extracted yet.')}</p>:null}{previewUrl&&<a className="knowledge-secondary" href={previewUrl} download={selected.title}><Download size={15}/>{t('Descargar archivo','Download file')}</a>}<footer><button className="knowledge-delete" disabled={busy} onClick={deleteSelected}><Trash2 size={15}/>{t('Eliminar','Delete')}</button><button className="knowledge-primary" disabled={busy} onClick={review}><Check size={15}/>{selected.reviewed?t('Volver a borrador','Mark as draft'):t('Marcar como revisada','Mark as reviewed')}</button></footer></div>}
   </dialog>
  </div>;
 }
