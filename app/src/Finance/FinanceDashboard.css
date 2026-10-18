@@ -1,1 +1,29 @@
 .fin-page{max-width:1160px;width:100%;margin:auto;padding:clamp(16px,3vw,32px);display:grid;gap:18px;color:#172e20}.fin-head,.fin-line{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.fin-head h2{margin:3px 0 6px;font-size:clamp(25px,3vw,34px);font-weight:850}.fin-head p,.fin-section>p,.fin-muted{color:#688074}.fin-eyebrow,.fin-label{font-size:11px;letter-spacing:.12em;font-weight:800;color:#1b9954!important}.fin-section{border:1px solid #dce8de;border-radius:18px;background:var(--card-bg,#fff);padding:22px;box-shadow:0 5px 22px #10361c0a}.fin-section h3{font-size:19px;margin:0 0 13px}.fin-goal{background:linear-gradient(125deg,#f3fff6,#fff)}.fin-goal-number{font-size:clamp(27px,4vw,42px);font-weight:850;letter-spacing:-.03em;margin:10px 0;color:#147a44}.fin-goal small,.fin-simple-rows small,.fin-entry small{font-size:12px;color:#839688}.fin-track{height:9px;border-radius:10px;background:#dcece0;overflow:hidden;margin:14px 0}.fin-track>div{height:100%;background:#23a85c}.fin-simple-rows>div,.fin-entry{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 2px;border-bottom:1px solid #e7eee9}.fin-simple-rows>div:last-child,.fin-entry:last-child{border-bottom:0}.fin-simple-rows span,.fin-entry span{display:flex;flex-direction:column;gap:4px}.fin-simple-rows strong,.fin-entry strong{font-size:17px;white-space:nowrap}.fin-two{display:grid;grid-template-columns:1fr 1fr;gap:18px}.fin-tag{border-radius:30px;background:#edf5ef;color:#42644f;font-size:12px;padding:5px 10px}.fin-tabs{display:flex;gap:7px;margin:14px 0;flex-wrap:wrap}.fin-tabs button{border:1px solid #dae8df;border-radius:10px;padding:10px 14px;background:#fff;cursor:pointer;color:#335b42;font-weight:700}.fin-tabs .selected{background:#167e45;color:#fff;border-color:#167e45}.fin-simple-form,.fin-settings{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.fin-simple-form label,.fin-settings label,.fin-month{display:grid;gap:6px;font-size:12px;font-weight:700;color:#557361}.fin-simple-form input,.fin-simple-form select,.fin-settings input,.fin-month input{width:100%;min-width:0;border:1px solid #d2e0d6;border-radius:10px;background:#fff;color:#183c27;padding:11px;font:inherit}.fin-primary,.fin-secondary,.fin-link{display:inline-flex;align-items:center;justify-content:center;gap:7px;border-radius:10px;padding:11px 17px;cursor:pointer;font-weight:750;border:1px solid #1a9951}.fin-primary{background:#188c4b;color:#fff;align-self:end}.fin-secondary,.fin-link{background:#fff;color:#167947}.fin-link{border:0}.fin-action-list p{border-radius:10px;padding:11px 13px;background:#f2fbf4;color:#2a583b;margin:7px 0}.fin-error{color:#8c2929;background:#fff0f0;border:1px solid #f3c5c5;border-radius:10px;padding:12px}.fin-remove{background:none;border:0;cursor:pointer;color:#a44;padding:6px}.fin-empty{padding:22px;background:#fff;border-radius:12px}.fin-simple .fin-section p{line-height:1.5}@media(max-width:720px){.fin-two,.fin-simple-form,.fin-settings{grid-template-columns:1fr}.fin-page{padding:12px}.fin-section{padding:16px}.fin-simple-rows strong{font-size:15px}}
+/* Compact single-screen overview. */
+.fin-simple{max-width:1540px;gap:12px;padding:clamp(10px,1.4vw,20px)}
+.fin-simple .fin-head h2{font-size:25px}
+.fin-simple .fin-head p{margin:2px 0;font-size:12px}
+.fin-simple .fin-section{padding:14px 17px;box-shadow:none;border-radius:14px}
+.fin-simple .fin-section h3{font-size:16px;margin:0 0 7px}
+.fin-overview{display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr;gap:12px;align-items:stretch}
+.fin-overview .fin-section{min-width:0}
+.fin-overview .fin-goal-number{font-size:clamp(20px,2.5vw,31px);margin:8px 0}
+.fin-overview .fin-goal p,.fin-overview .fin-goal small,.fin-overview .fin-paid p{font-size:11px;line-height:1.35;margin:5px 0}
+.fin-overview .fin-simple-rows>div,.fin-overview .fin-entry{padding:8px 0}
+.fin-overview .fin-simple-rows strong,.fin-overview .fin-entry strong{font-size:14px;white-space:normal;text-align:right}
+.fin-overview .fin-simple-rows span{font-size:12px}
+.fin-paid{max-height:272px;overflow:auto}
+.fin-overview .fin-track{margin:10px 0}
+.fin-simple .fin-add .fin-simple-form{display:grid;grid-template-columns:repeat(4,minmax(0,1fr)) auto;align-items:end;gap:9px}
+.fin-simple .fin-add .fin-tabs{margin:7px 0}
+.fin-simple .fin-add .fin-simple-form label{min-width:0}
+.fin-simple .fin-add .fin-primary{margin:0;white-space:nowrap}
+.fin-month-due .fin-simple-rows{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.fin-month-due .fin-simple-rows>div{display:block;padding:7px 8px;background:#f5faf6;border:1px solid #e2ece5;border-radius:9px}
+.fin-month-due .fin-simple-rows strong{display:block;font-size:14px;margin-top:5px}
+.fin-tips .fin-action-list{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.fin-tips .fin-action-list p{margin:0;font-size:12px;padding:8px 10px}
+.fin-history{padding:12px!important}
+.fin-history .fin-line h3{margin:0}
+@media(max-width:1200px){.fin-overview{grid-template-columns:repeat(2,minmax(0,1fr))}.fin-simple .fin-add .fin-simple-form{grid-template-columns:repeat(2,minmax(0,1fr))}.fin-month-due .fin-simple-rows{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:650px){.fin-overview{grid-template-columns:1fr 1fr;gap:8px}.fin-simple .fin-section{padding:11px}.fin-overview .fin-goal-number{font-size:20px}.fin-overview .fin-simple-rows strong,.fin-overview .fin-entry strong{font-size:12px}.fin-simple .fin-add .fin-simple-form{grid-template-columns:1fr 1fr}.fin-month-due .fin-simple-rows{grid-template-columns:1fr 1fr}.fin-tips .fin-action-list{grid-template-columns:1fr}}
