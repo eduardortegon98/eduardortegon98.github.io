@@ -127,3 +127,9 @@
 .fin-history-scroll .fin-entry{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:12px}
 .fin-history-scroll .fin-entry strong{font-variant-numeric:tabular-nums}
 @media(max-width:600px){.fin-history-backdrop{padding:9px}.fin-history-modal{padding:15px;max-height:92vh}.fin-history-header h3{font-size:19px}.fin-history-scroll .fin-entry{gap:6px}.fin-history-scroll .fin-entry strong{font-size:13px}}
+
+/* Uniform overview grid cards across both desktop rows. */
+.fin-simple .fin-overview{grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-rows:minmax(350px,auto);align-items:stretch}
+.fin-simple .fin-overview>.fin-section{height:100%;min-height:0;min-width:0;overflow-wrap:anywhere}
+@media(max-width:1150px){.fin-simple .fin-overview{grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:minmax(310px,auto)}}
+@media(max-width:650px){.fin-simple .fin-overview{grid-template-columns:1fr;grid-auto-rows:auto}.fin-simple .fin-overview>.fin-section{min-height:290px}}
