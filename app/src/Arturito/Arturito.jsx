@@ -1,7 +1,6 @@
-import ModuleBrand from '../Portal/ModuleBrand';
 import { useEffect, useRef, useState } from 'react';
 import { Navigate, useOutletContext } from 'react-router-dom';
-import { PawPrint, Utensils, Droplets, Clock3, Plus, Pencil, Trash2, Check, X, CalendarDays, WifiOff, HeartPulse, CloudDrizzle, ChevronLeft, ChevronRight, Repeat2 } from 'lucide-react';
+import { Utensils, Droplets, Clock3, Plus, Pencil, Trash2, Check, X, CalendarDays, WifiOff, HeartPulse, CloudDrizzle, ChevronLeft, ChevronRight, Repeat2 } from 'lucide-react';
 import { useLanguage } from '../i18n/Language';
 import './Arturito.css';
 const dayKeys = [1,2,3,4,5,6,0];
@@ -60,7 +59,7 @@ function BetaWorkspace({user}){
     setNotice(t('Rutina guardada en este navegador. No se enviará comida: el dispositivo no está conectado.','Routine saved in this browser. No food will be dispensed: the device is not connected.'));reset();
   }
   return <div className="arturito-beta">
-    <header className="arturito-heading"><div className="arturito-project"><span className="arturito-mark"><PawPrint size={25}/></span><div><h1><ModuleBrand id="arturito"/> <span className="arturito-beta-tag">Beta</span></h1><p className="arturito-slogan">{t('Un amigo para tu mejor amigo.','A friend for your best friend.')}</p><small className="arturito-signature">by Soluciones Tecnológicas Ortegón</small></div></div><span className="arturito-connection"><WifiOff size={14}/>{t('Demo · Sin dispositivo','Demo · No device')}</span><div className="arturito-mini-stats"><div><span>{t('Rutinas activas','Active routines')}</span><strong>{active}</strong></div><div><span>{t('Programado para hoy','Scheduled today')}</span><strong>{todayGrams}<small> g</small></strong></div></div></header>
+    <header className="arturito-heading"><div className="arturito-project"><div><p className="arturito-slogan">{t('Un amigo para tu mejor amigo.','A friend for your best friend.')}</p><small className="arturito-signature">by Soluciones Tecnológicas Ortegón</small></div></div><span className="arturito-connection"><WifiOff size={14}/>{t('Demo · Sin dispositivo','Demo · No device')}</span><div className="arturito-mini-stats"><div><span>{t('Rutinas activas','Active routines')}</span><strong>{active}</strong></div><div><span>{t('Programado para hoy','Scheduled today')}</span><strong>{todayGrams}<small> g</small></strong></div></div></header>
     <section className="arturito-demo-banner"><strong>{t('Vista previa del producto','Product preview')}</strong><span>{t('Los niveles son simulados. Las rutinas se guardan localmente; no ejecutan dispensaciones.','Levels are simulated. Routines are saved locally and do not dispense food.')}</span></section>
     <div className="arturito-columns">
       <div className="arturito-overview">

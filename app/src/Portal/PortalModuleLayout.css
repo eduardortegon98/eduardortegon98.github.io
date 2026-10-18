@@ -1,0 +1,80 @@
+/* One page frame and one title location for every portal module. */
+.admin-shell .portal-module-frame {
+  --portal-page-gutter: 32px;
+  --portal-page-top: 28px;
+  width: 100%;
+  max-width: 1700px;
+  min-width: 0;
+  margin-inline: auto;
+  padding: var(--portal-page-top) var(--portal-page-gutter) 40px;
+  box-sizing: border-box;
+}
+.admin-shell .portal-page-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  min-height: 38px;
+  margin: 0 0 22px;
+}
+.admin-shell .portal-page-heading > .module-brand-heading {
+  display: inline-flex;
+  margin: 0;
+  padding: 0;
+  font-family: var(--portal-font-display,'Manrope',sans-serif);
+  font-size: 30px;
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -.055em;
+}
+.portal-page-tag {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  padding: 4px 8px;
+  border: 1px solid #e1daee;
+  border-radius: 6px;
+  background: #f0ebf8;
+  color: #7c65a0;
+  font-size: 10px;
+  line-height: 1.4;
+}
+.admin-shell .admin-content .portal-module-frame > :is(.traffic-dashboard,.commercial-workspace,.registered-messages,.arturito-beta,.ortdesk-ai,.websites-workspace,.module-assignments,.account-page,.portal-app) {
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.admin-shell .admin-content .portal-module-frame .traffic-main,
+.admin-shell .admin-content .portal-module-frame .portal-main {
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+}
+.admin-shell .admin-content .portal-module-frame > .traffic-dashboard { min-height: 0; }
+.admin-shell .portal-module-frame .arturito-project,
+.admin-shell .portal-module-frame .knowledge-brand { min-width: 0; gap: 0; }
+.admin-shell .portal-module-frame .arturito-project > div,
+.admin-shell .portal-module-frame .knowledge-brand > div { min-width: 0; }
+.admin-shell .portal-module-frame .arturito-heading,
+.admin-shell .portal-module-frame .knowledge-heading {
+  margin: 0 0 22px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.admin-shell .portal-module-frame .arturito-slogan,
+.admin-shell .portal-module-frame .knowledge-brand p { margin: 0 0 6px; }
+@media(max-width:1100px) {
+  .admin-shell .portal-module-frame { --portal-page-gutter:24px; --portal-page-top:24px; }
+}
+@media(max-width:760px) {
+  .admin-shell .portal-module-frame { --portal-page-gutter:16px; --portal-page-top:22px; padding-bottom:28px; }
+  .admin-shell .portal-page-heading { min-height:32px; margin-bottom:18px; gap:10px; }
+  .admin-shell .portal-page-heading > .module-brand-heading { font-size:25px; }
+  .admin-shell .portal-module-frame .arturito-heading,
+  .admin-shell .portal-module-frame .knowledge-heading { margin-bottom:18px; }
+}

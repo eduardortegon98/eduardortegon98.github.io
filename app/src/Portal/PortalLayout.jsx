@@ -17,6 +17,7 @@ import PortalNotifications from './Notifications/PortalNotifications';
 import NotificationCenter from './Notifications/NotificationCenter';
 import './GlobalHeader.css';
 import './PortalTypography.css';
+import './PortalModuleLayout.css';
 
 export default function PortalLayout() {
   return <Access>{state => <Workspace key={state.user.id + state.role} state={state} />}</Access>;
@@ -67,6 +68,6 @@ function Workspace({ state }) {
       </div>
     </header>
     {preview && <div className="admin-preview-banner" role="status"><div><strong>{en ? 'Client role preview' : 'Vista previa del rol cliente'}</strong><p>{en ? 'You remain signed in as administrator. This previews the interface, without accessing another person’s account.' : 'Sigues conectado como administrador. Esta vista simula la interfaz del cliente, sin acceder a la cuenta de otra persona.'}</p></div><button onClick={() => changeRole('super_admin')}>{en ? 'Return to administrator' : 'Volver a administrador'}</button></div>}
-    <div id="admin-content" className="admin-content" tabIndex={-1}><Suspense fallback={<PortalLoading compact/>}><Outlet key={actingRole} context={context}/></Suspense></div></div>
+    <div id="admin-content" className="admin-content" tabIndex={-1}><div className="portal-module-frame">{brandedSection&&<div className="portal-page-heading"><ModuleBrand id={brandedSection} as="h1" className="module-brand-heading"/>{activeModule?.tag&&<span className="portal-page-tag">{activeModule.tag}</span>}</div>}<Suspense fallback={<PortalLoading compact/>}><Outlet key={actingRole} context={context}/></Suspense></div></div></div>
   </div></PortalNotifications>;
 }
