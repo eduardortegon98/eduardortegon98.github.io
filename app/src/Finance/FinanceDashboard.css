@@ -192,3 +192,9 @@
 
 .fin-overview-add .fin-tabs{display:flex;flex-wrap:wrap;align-items:center}
 .fin-overview-add .fin-tabs button{flex:1 1 auto;min-width:0;white-space:nowrap;font-size:11px;padding:6px 5px}
+
+/* TRM quote is read-only and never counts as money until transfer is saved. */
+.fin-overview-add .fin-trm-quote{grid-column:1/-1;display:flex;flex-direction:column;gap:3px;padding:7px 9px;border:1px solid #d8eadd;border-radius:9px;background:#f3faf5;font-size:11px;line-height:1.35;color:#254333;min-width:0}
+.fin-overview-add .fin-trm-quote strong{font-size:12px}
+.fin-overview-add .fin-trm-quote a{color:#196b38;text-decoration:underline}
+.fin-overview-add .fin-trm-quote .fin-trm-error{color:#b13838}
