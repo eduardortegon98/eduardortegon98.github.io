@@ -44,8 +44,7 @@ export default function FinanceDashboard(){
   if(!owner)return;
   setLoading(true);setError('');
   try{
-   const rolled=await supabase.rpc('rollover_my_pila');
-   if(rolled.error)throw rolled.error;
+   // Refresh is intentionally read-only: never change PILA balances just by opening the dashboard.
    const queries=await Promise.all([
     supabase.from('personal_finance_settings').select('*').eq('user_id',owner).maybeSingle(),
     supabase.from('personal_finance_expenses').select('*').eq('user_id',owner).order('date',{ascending:false}).limit(1000),
