@@ -86,6 +86,11 @@ export default function FinanceDashboard(){
  const lightName=light==='green'?'VERDE':light==='yellow'?'AMARILLO':'ROJÍSIMO';
  const lightMessage=light==='green'?'¡Sin deuda de Nu ni PILA atrasada! Mantén el control.':light==='yellow'?'Ya pagaste al menos la mitad de la deuda inicial. Todavía falta.':'Todavía debemos más de la mitad de la deuda inicial. Prioridad: cumplir cuotas y evitar deuda nueva.';
  const goal=totalDebt+master; // Master's monthly payment is a separate obligation, not outstanding debt.
+ const plannedFixed=Number(settings.house)+Number(settings.study)+Number(settings.health)+Number(settings.nu_target)+Number(settings.pila_target);
+ const plannedGap=Number(settings.monthly_salary)-plannedFixed;
+ const confirmedPayments=paid.reduce((s,x)=>s+Number(x.amount),0)+(hasNuPayment?Number(settings.nu_last_payment_amount):0);
+ const registeredNet=totalReceived-spent-confirmedPayments;
+ const outBuffer=bufferMovements.filter(x=>x.date.slice(0,7)===month&&x.direction==='out').reduce((s,x)=>s+Number(x.amount),0);
  const expected=[{name:'Casa',amount:Number(settings.house)},{name:'Máster',amount:master},{name:'Banco',amount:Number(settings.nu_target)},{name:'PILA atrasada',amount:Number(settings.pila_target)},{name:'Salud y pensión',amount:Number(settings.health)}];
  const bankPaidThisMonth=month===settings.nu_paid_month||paid.some(p=>p.category==='Banco'&&Number(p.amount)>0);
  const remaining=expected.map(x=>({...x,paid:paid.filter(p=>p.category===x.name).reduce((a,p)=>a+Number(p.amount),0)})).map(x=>({...x,remaining:x.name==='Banco'&&bankPaidThisMonth?0:Math.max(0,x.amount-x.paid)}));
@@ -161,6 +166,14 @@ export default function FinanceDashboard(){
    <div className="fin-life-heading"><span>OBJETIVO DE VIDA FINANCIERA</span><strong>{deadlineLabel}</strong><small>Salir de deudas en máximo un año. ¡Idealmente antes!</small></div>
    <div className="fin-life-stats"><div><small>Días restantes</small><strong>{totalDebt<=0?'¡Listo!':deadlineDays}</strong></div><div><small>Deuda pendiente</small><strong>{pesos(totalDebt)}</strong></div><div><small>Avance</small><strong>{progress.toFixed(1)}%</strong></div></div>
   </section>
+  <section className="fin-audit-panel" aria-label="Auditoría financiera mensual"><div className="fin-audit-head"><div><span className="fin-eyebrow">CONTROL DE CAJA · {month}</span><h3>Ingresos, salidas y proyecciones</h3></div><span className="fin-audit-alert">{plannedGap<0?'Presupuesto en déficit':'Presupuesto equilibrado'}</span></div><div className="fin-audit-grid">
+   <div><small>Ingresos realmente anotados</small><strong className="fin-audit-green">{pesos(totalReceived)}</strong><span>No incluye salario si aún no está registrado como cobrado</span></div>
+   <div><small>Horas extra aún estimadas</small><strong className="fin-audit-amber">{pesos(extraEarned)}</strong><span>{hoursTotal} horas · no sumadas a caja</span></div>
+   <div><small>Pagos y gastos registrados</small><strong className="fin-audit-red">{pesos(spent+confirmedPayments)}</strong><span>Incluye cuota Nu marcada como pagada</span></div>
+   <div><small>Flujo anotado (parcial)</small><strong className={registeredNet<0?'fin-audit-red':'fin-audit-green'}>{pesos(registeredNet)}</strong><span>No equivale a saldo bancario</span></div>
+   <div><small>Balance del presupuesto mensual</small><strong className={plannedGap<0?'fin-audit-red':'fin-audit-green'}>{pesos(plannedGap)}</strong><span>Salario configurado menos obligaciones por {pesos(plannedFixed)}</span></div>
+   <div><small>Si todas las horas extra se cobran</small><strong className={plannedGap+extraEarned<0?'fin-audit-red':'fin-audit-green'}>{pesos(plannedGap+extraEarned)}</strong><span>Proyección, no efectivo recibido</span></div>
+   </div><p className="fin-audit-foot">Colchón actual: {pesos(settings.buffer)}. Retiros registrados del colchón este mes: {pesos(outBuffer)} (no se suman otra vez como gasto, porque podrían financiar movimientos ya registrados). El aporte al hogar es únicamente tu parte; no se duplica el aporte de tu mamá.</p></section>
   <div className="fin-family-health">
     <section className={'fin-person-card fin-doris '+(dorisCovered?'fin-person-happy':'fin-person-pending')} aria-label={'Doris: '+(dorisCovered?'aporte cubierto':'aporte por confirmar')}>
       <div className="fin-person-top"><div><span className="fin-traffic-eyebrow">SALUD FINANCIERA DE DORIS</span><h3>Doris</h3></div><span className="fin-person-face" role="img" aria-label={dorisCovered?'Carita feliz':'Carita triste'}>{dorisCovered?'😊':'😟'}</span></div>
