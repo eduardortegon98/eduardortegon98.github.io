@@ -154,3 +154,11 @@
 .crm-followup-footer { margin-top:auto; display:flex; justify-content:flex-end; padding-top:10px; border-top:1px solid #e8efe9; }
 @media(max-width:850px) { .crm-followup-grid { grid-template-columns:1fr; } }
 @media(max-width:480px) { .crm-followup-card { padding:16px; } .crm-followup-card-head { flex-wrap:wrap; } }
+
+/* Search and direct conversation access within each follow-up contact card. */
+.crm-followup-search{display:flex;align-items:center;gap:12px;max-width:660px;width:100%;padding:12px 15px;border:1px solid #dce8df;background:#fff;border-radius:12px;color:#438055;}
+.crm-followup-search:focus-within{border-color:#328b54;box-shadow:0 0 0 3px rgba(50,139,84,.1)}
+.crm-followup-search input{flex:1;min-width:0;border:0;background:transparent;outline:0;font:inherit;color:inherit;}
+.crm-followup-search button{border:0;background:transparent;color:inherit;cursor:pointer;padding:3px;display:flex;}
+.crm-followup-footer{flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;}
+.crm-followup-connect{display:inline-flex;align-items:center;gap:7px;text-decoration:none;}
