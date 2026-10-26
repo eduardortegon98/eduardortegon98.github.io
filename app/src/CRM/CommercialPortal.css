@@ -128,3 +128,29 @@
   .crm-record-title { flex-wrap: wrap; gap: 10px; }
   .crm-record-meta { column-gap: 12px; }
 }
+
+/* Follow-up records are grouped by their existing contact ID. */
+.crm-followup { display:flex; flex-direction:column; gap:22px; min-width:0; }
+.crm-followup-heading { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px; }
+.crm-followup-heading h3 { margin:0 0 6px; font-size:21px; }
+.crm-followup-heading p { margin:0; }
+.crm-followup-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; }
+.crm-followup-card { min-width:0; border:1px solid #dce8df; background:#fff; border-radius:16px; padding:20px; display:flex; flex-direction:column; gap:17px; box-shadow:0 3px 15px rgba(12,56,31,.035); }
+.crm-followup-card-head { display:flex; align-items:center; gap:12px; min-width:0; }
+.crm-followup-card-head > div { flex:1; min-width:0; }
+.crm-followup-card-head h4 { margin:0 0 4px; font-size:16px; overflow-wrap:anywhere; }
+.crm-followup-card-head small { display:block; color:#64766a; overflow-wrap:anywhere; }
+.crm-followup-stats { display:flex; gap:8px; flex-wrap:wrap; }
+.crm-followup-stats span { background:#f1f7f2; border-radius:7px; padding:6px 10px; font-size:12px; color:#285a39; }
+.crm-followup-section { display:flex; flex-direction:column; gap:10px; padding-top:13px; border-top:1px solid #e8efe9; }
+.crm-followup-section > strong { font-size:13px; }
+.crm-followup-item { display:flex; align-items:flex-start; gap:10px; min-width:0; }
+.crm-followup-item > div { display:flex; flex-direction:column; gap:3px; min-width:0; }
+.crm-followup-item span { font-size:13px; overflow-wrap:anywhere; }
+.crm-followup-item small { color:#6b7a70; font-size:11px; }
+.crm-followup-dot { flex-shrink:0; width:9px; height:9px; margin-top:5px; border-radius:50%; background:#dba53a; }
+.crm-followup-dot.is-done { background:#2f9b59; }
+.crm-followup-item > svg { color:#64816d; flex-shrink:0; margin-top:2px; }
+.crm-followup-footer { margin-top:auto; display:flex; justify-content:flex-end; padding-top:10px; border-top:1px solid #e8efe9; }
+@media(max-width:850px) { .crm-followup-grid { grid-template-columns:1fr; } }
+@media(max-width:480px) { .crm-followup-card { padding:16px; } .crm-followup-card-head { flex-wrap:wrap; } }
