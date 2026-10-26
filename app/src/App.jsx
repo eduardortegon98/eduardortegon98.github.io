@@ -1,5 +1,5 @@
 import { Suspense, lazy, useEffect } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { portalModules } from "./Portal/modules.jsx";
 import ModuleRoute from "./Portal/ModuleRoute.jsx";
 import PortalLoading from "./Portal/PortalLoading";
@@ -11,7 +11,6 @@ const Account = lazy(() => import("./Portal/Account.jsx"));
 const AnalyticsDashboard = lazy(() => import("./Analytics/AnalyticsDashboard.jsx"));
 const FinanceDashboard = lazy(() => import("./Finance/FinanceDashboard.jsx"));
 const CommercialPortal = lazy(() => import("./CRM/CommercialPortal.jsx"));
-const Prospecting = lazy(() => import("./Portal/Prospecting.jsx"));
 const Assignments = lazy(() => import("./Portal/Assignments.jsx"));
 const Home = lazy(() => import("./Home/Home.jsx"));
 const Login = lazy(() => import("./Login/Login.jsx"));
@@ -36,7 +35,7 @@ function App() {
           {portalModules.map(module=><Route key={module.id} path={module.path.replace('/panel/','')} element={<ModuleRoute id={module.id}/>}/>)}
           <Route path="finanzas" element={<FinanceDashboard />} />
           <Route path="comercial" element={<CommercialPortal />} />
-          <Route path="prospeccion" element={<Prospecting />} />
+          <Route path="prospeccion" element={<Navigate to="/panel/mensajes?vista=prospectos" replace />} />
           <Route path="asignaciones" element={<Assignments />} />
         </Route>
         <Route path="/login" element={<Login />} />
