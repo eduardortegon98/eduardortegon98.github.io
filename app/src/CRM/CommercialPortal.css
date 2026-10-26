@@ -183,3 +183,10 @@
 .crm-followup-checkbox[aria-checked="true"]:hover{background:#287548;}
 .crm-followup-checkbox:disabled{opacity:.55;cursor:wait;}
 .crm-followup-checkitem.is-complete>div>span{text-decoration:line-through;color:#7c8980;}
+
+/* Green round task control, white ring, aligned to the far right of each task. */
+.crm-followup-checkitem{align-items:center;}
+.crm-followup-checkitem>div{min-width:0;flex:1;}
+.crm-followup-checkitem>.crm-followup-checkbox{order:2;flex:0 0 28px;width:28px;height:28px;min-width:28px;min-height:28px;margin:0 0 0 auto;padding:0;border:2px solid #fff;border-radius:50%;background:#2e9256;color:#fff;box-shadow:0 0 0 1px #23834b,0 2px 5px rgba(24,91,51,.16);align-self:center;}
+.crm-followup-checkitem>.crm-followup-checkbox:hover,.crm-followup-checkitem>.crm-followup-checkbox:focus-visible{background:#207a44;box-shadow:0 0 0 2px #23834b,0 2px 7px rgba(24,91,51,.2);}
+.crm-followup-checkitem>.crm-followup-checkbox[aria-checked="true"]{background:#176b3a;}
