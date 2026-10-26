@@ -167,3 +167,9 @@
 .crm-followup-card-actions{display:flex;align-items:center;gap:6px;flex-shrink:0;margin-left:auto;}
 .crm-followup-card-actions .crm-icon{display:inline-flex;align-items:center;justify-content:center;min-width:34px;min-height:34px;border:1px solid #dce8df;border-radius:9px;background:#f7faf8;color:#32734b;text-decoration:none;cursor:pointer;}
 .crm-followup-card-actions .crm-icon:hover,.crm-followup-card-actions .crm-icon:focus-visible{background:#e8f5eb;border-color:#88b99a;}
+
+/* Card-local activity search and right-aligned action group. */
+.crm-followup-task-search{display:flex;align-items:center;gap:9px;padding:9px 12px;border:1px solid #e0eae3;border-radius:10px;background:#f9fcfa;color:#528262;}
+.crm-followup-task-search:focus-within{border-color:#328b54;}
+.crm-followup-task-search input{width:100%;min-width:0;border:0;outline:0;background:transparent;font:inherit;font-size:13px;color:#203f2b;}
+.crm-followup-card>.crm-followup-card-actions{align-self:flex-end;margin-top:auto;padding-top:12px;border-top:1px solid #e8efe9;width:100%;justify-content:flex-end;}
