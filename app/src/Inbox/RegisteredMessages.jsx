@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom' from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, ArrowUpRight, Clock3, Database, Instagram, RefreshCw, Search, Send, WifiOff, MessageSquare, Mail, MessagesSquare, Facebook, Linkedin } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useLanguage } from '../i18n/Language';
