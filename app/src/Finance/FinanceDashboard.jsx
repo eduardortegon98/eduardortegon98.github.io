@@ -51,13 +51,30 @@ export default function FinanceDashboard(){
   let cancelled=false;
   setTrm(null);setTrmLoading(true);setTrmError('');
   const controller=new AbortController();
-  fetch('https://api.dolarencolombia.co/v1/trm/'+form.date,{signal:controller.signal,cache:'no-store'})
-   .then(async response=>{if(!response.ok)throw new Error('HTTP '+response.status);return response.json()})
-   .then(data=>{
+  const getQuote=async()=>{
+   // Primary provider; fall back to the Superfinanciera open-data API if it fails.
+   try{
+    const response=await fetch('https://api.dolarencolombia.co/v1/trm/'+form.date,{signal:controller.signal,cache:'no-store'});
+    if(!response.ok)throw new Error('Proveedor principal HTTP '+response.status);
+    const data=await response.json();
     const rate=Number(data.valor);
-    if(!Number.isFinite(rate)||rate<=0)throw new Error('La API no devolvió una tasa válida.');
-    if(!cancelled){setTrm({rate,date:form.date,validFrom:data.fecha||form.date,source:'dolarencolombia.co / Superfinanciera',fetchedAt:new Date().toISOString()});setTrmError('');}
-   })
+    if(!Number.isFinite(rate)||rate<=0)throw new Error('El proveedor principal no devolvió una tasa válida.');
+    return {rate,date:form.date,validFrom:data.fecha||form.date,source:'dolarencolombia.co / Superfinanciera',fetchedAt:new Date().toISOString()};
+   }catch(primaryError){
+    if(controller.signal.aborted)throw primaryError;
+    const date=form.date;
+    const where="vigenciadesde <= '"+date+"T23:59:59' AND vigenciahasta >= '"+date+"T00:00:00'";
+    const url='https://www.datos.gov.co/resource/32sa-8pi3.json?'+new URLSearchParams({'$where':where,'$order':'vigenciadesde DESC','$limit':'1'});
+    const response=await fetch(url,{signal:controller.signal,cache:'no-store'});
+    if(!response.ok)throw new Error('La fuente oficial no respondió (HTTP '+response.status+').');
+    const rows=await response.json();
+    const row=Array.isArray(rows)?rows[0]:null;
+    const rate=Number(row?.valor);
+    if(!Number.isFinite(rate)||rate<=0)throw new Error('No hay una TRM oficial válida para la fecha seleccionada.');
+    return {rate,date,validFrom:row.vigenciadesde?.slice(0,10)||date,source:'Superfinanciera / datos.gov.co',fetchedAt:new Date().toISOString()};
+   }
+  };
+  getQuote().then(quote=>{if(!cancelled){setTrm(quote);setTrmError('');}})
    .catch(err=>{if(!cancelled&&err.name!=='AbortError')setTrmError('No pudimos obtener la TRM de esa fecha. '+err.message);})
    .finally(()=>{if(!cancelled)setTrmLoading(false)});
   return()=>{cancelled=true;controller.abort()};
