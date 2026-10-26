@@ -1,1 +1,19 @@
-.ortconnect-workspace{width:100%;min-width:0}.ortconnect-tabs{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 16px;padding:8px;background:#fff;border:1px solid #e0eae2;border-radius:14px}.ortconnect-tabs button{display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:11px 16px;border:1px solid transparent;border-radius:10px;background:transparent;color:#456452;font-size:13px;font-weight:700;cursor:pointer;transition:background .15s,color .15s}.ortconnect-tabs button:hover{background:#edf5ef}.ortconnect-tabs button.active{background:#176c43;color:white;box-shadow:0 3px 9px #176c4320}.ortconnect-workspace .ort-prospecting{padding:0}@media(max-width:600px){.ortconnect-tabs button{flex:1;padding:10px;font-size:12px}}
+.ortconnect-workspace{width:100%;min-width:0}
+.ortconnect-navigation{padding:16px;margin-bottom:20px;border:1px solid #d9e7dd;background:#fff;border-radius:18px;box-shadow:0 5px 18px rgba(15,76,40,.05)}
+.ortconnect-navigation-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.ortconnect-navigation-heading strong{font-size:16px;color:#163d2a}
+.ortconnect-navigation-heading p{margin:4px 0 0;color:#657b6d;font-size:12px}
+.ortconnect-navigation-current{color:#176c43;background:#eaf5ee;padding:7px 11px;border-radius:999px;font-size:11px;font-weight:700}
+.ortconnect-workspace .ortconnect-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:0;margin:0;background:transparent;border:0;border-radius:0}
+.ortconnect-workspace .ortconnect-tabs button{appearance:none;display:flex;align-items:center;justify-content:flex-start;text-align:left;gap:12px;min-width:0;padding:17px 18px;border:2px solid #dce9e0;border-radius:14px;background:#f8fbf9;color:#1d4932;cursor:pointer;box-shadow:none;transition:background .15s,border-color .15s,transform .15s}
+.ortconnect-workspace .ortconnect-tabs button:hover{background:#edf6ef;border-color:#77b58d;transform:translateY(-1px)}
+.ortconnect-workspace .ortconnect-tabs button.active,.ortconnect-workspace .ortconnect-tabs button.active:hover{background:#176c43;color:#fff;border-color:#176c43;box-shadow:0 6px 14px rgba(23,108,67,.18)}
+.ortconnect-tab-icon{display:grid;place-items:center;flex-shrink:0;width:42px;height:42px;border-radius:12px;background:#e5f2e9;color:#176c43}
+.ortconnect-tabs button.active .ortconnect-tab-icon{background:rgba(255,255,255,.18);color:#fff}
+.ortconnect-tab-copy{display:flex;flex-direction:column;align-items:flex-start;gap:5px;min-width:0}
+.ortconnect-tab-copy strong{font-size:15px;font-weight:800;line-height:1.2;color:inherit}
+.ortconnect-tab-copy small{font-size:12px;font-weight:500;line-height:1.35;color:inherit;opacity:.78}
+.ortconnect-tab-arrow{margin-left:auto;flex-shrink:0;opacity:.65}
+.ortconnect-view{min-width:0}
+.ortconnect-workspace .ort-prospecting{padding:0}
+@media(max-width:700px){.ortconnect-workspace .ortconnect-tabs{grid-template-columns:1fr}.ortconnect-navigation{padding:12px}.ortconnect-workspace .ortconnect-tabs button{padding:13px 14px}.ortconnect-navigation-current{display:none}}
