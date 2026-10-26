@@ -3,6 +3,7 @@ export const portalBrands={
  finance:{name:'OrtFinance',description:{es:'Finanzas personales',en:'Personal finances'}},
  analytics:{name:'OrtLens',description:{es:'Analítica',en:'Analytics'}},
  commercial:{name:'OrtFlow',description:{es:'Gestión comercial',en:'Commercial management'}},
+ prospecting:{name:'OrtProspect',description:{es:'Prospección',en:'Prospecting'}},
  messages:{name:'OrtConnect',description:{es:'Mensajes',en:'Messages'}},
  arturito:{name:'Arturito',description:{es:'Cuidado de mascotas',en:'Pet care'}},
  websites:{name:'OrtSites',description:{es:'Sitios web',en:'Websites'}},
