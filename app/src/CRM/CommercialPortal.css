@@ -173,3 +173,13 @@
 .crm-followup-task-search:focus-within{border-color:#328b54;}
 .crm-followup-task-search input{width:100%;min-width:0;border:0;outline:0;background:transparent;font:inherit;font-size:13px;color:#203f2b;}
 .crm-followup-card>.crm-followup-card-actions{align-self:flex-end;margin-top:auto;padding-top:12px;border-top:1px solid #e8efe9;width:100%;justify-content:flex-end;}
+
+/* Windows To Do-style task checklist; one information control per card. */
+.crm-followup-checkitem{align-items:flex-start;gap:12px;}
+.crm-followup-checkitem>div{flex:1;}
+.crm-followup-checkbox{display:inline-flex;align-items:center;justify-content:center;flex:0 0 21px;width:21px;height:21px;margin-top:1px;padding:0;border:1.5px solid #5c9872;border-radius:50%;background:#fff;color:#fff;cursor:pointer;transition:background .15s,border-color .15s;}
+.crm-followup-checkbox:hover,.crm-followup-checkbox:focus-visible{background:#e8f5ec;outline-offset:3px;}
+.crm-followup-checkbox[aria-checked="true"]{background:#318956;border-color:#318956;}
+.crm-followup-checkbox[aria-checked="true"]:hover{background:#287548;}
+.crm-followup-checkbox:disabled{opacity:.55;cursor:wait;}
+.crm-followup-checkitem.is-complete>div>span{text-decoration:line-through;color:#7c8980;}
