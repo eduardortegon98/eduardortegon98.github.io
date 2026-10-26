@@ -1,6 +1,6 @@
 import { useState, Suspense } from 'react';
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { BarChart3, Wallet, ExternalLink, LogOut, Menu, X, UserRound, UserCog, Users, Target } from 'lucide-react';
+import { BarChart3, Wallet, ExternalLink, LogOut, Menu, X, UserRound, UserCog, Users } from 'lucide-react';
 import ModuleNavigation from './ModuleNavigation';
 import ModuleBrand from './ModuleBrand';
 import { portalModules, moduleTitle } from './modules';
@@ -39,7 +39,7 @@ function Workspace({ state }) {
     setPreviewRole(role); setOpen(false); navigate('/panel');
   }
   const activeModule=portalModules.find(module=>pathname===module.path||pathname.startsWith(module.path+'/'));
-  const brandedSection = activeModule?.id || (pathname.startsWith('/panel/finanzas')?'finance':pathname.startsWith('/panel/comercial')?'commercial':pathname.startsWith('/panel/prospeccion')?'prospecting':pathname.startsWith('/panel/asignaciones')?'assignments':pathname.startsWith('/panel/analitica')||pathname==='/panel'&&admin?'analytics':null);
+  const brandedSection = activeModule?.id || (pathname.startsWith('/panel/finanzas')?'finance':pathname.startsWith('/panel/comercial')?'commercial':pathname.startsWith('/panel/prospeccion')?'messages':pathname.startsWith('/panel/asignaciones')?'assignments':pathname.startsWith('/panel/analitica')||pathname==='/panel'&&admin?'analytics':null);
   const pageTitle = brandedSection ? brandName(brandedSection) : activeModule ? moduleTitle(activeModule,language) : pathname.startsWith('/panel/cuenta') ? (en?'My account':'Mi cuenta') : (en?'My workspace':'Mi espacio');
   async function logout() {
     setPending(true); setError('');
@@ -56,7 +56,6 @@ function Workspace({ state }) {
         {admin && <NavLink to="/panel/analitica" title={en?'Analytics':'Analítica'} onClick={() => setOpen(false)}><BarChart3 size={19}/><ModuleBrand id="analytics"/></NavLink>}
         {admin && <NavLink to="/panel/finanzas" title={en?'Personal finances':'Finanzas personales'} onClick={() => setOpen(false)}><Wallet size={19}/><ModuleBrand id="finance"/></NavLink>}
         {admin && <NavLink to="/panel/comercial" title={en?'Commercial management':'Gestión comercial'} onClick={() => setOpen(false)}><Users size={19}/><ModuleBrand id="commercial"/></NavLink>}
-        {admin && <NavLink to="/panel/prospeccion" title={en?'Prospecting':'Prospección'} onClick={() => setOpen(false)}><Target size={19}/><span>Prospección</span></NavLink>}
         <ModuleNavigation role={actingRole} modules={modules} language={language} onNavigate={()=>setOpen(false)}/>
         {admin && <NavLink to="/panel/asignaciones" title={en?'Module assignments':'Asignación de módulos'} onClick={() => setOpen(false)}><UserCog size={19}/><ModuleBrand id="assignments"/></NavLink>}
       </nav>
