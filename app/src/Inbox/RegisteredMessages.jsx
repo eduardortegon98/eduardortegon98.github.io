@@ -38,7 +38,7 @@ export default function RegisteredMessages({admin=false}){
  };
  const replied=item=>['Respondió','Interesado','Reunión','Cotización','Ganado'].includes(item.status);
  return <div className="registered-messages">
-  <div className="registered-toolbar"><div><span className="registered-source"><Database size={13}/>{admin?t('Registros reales · CRM','Real records · CRM'):t('Integraciones pendientes','Integrations pending')}</span><span className="registered-offline"><WifiOff size={13}/>{t('Gmail / n8n / Meta sin conectar','Gmail / n8n / Meta not connected')}</span></div><div><button className="compact-action" aria-label={t('Actualizar registros','Refresh records')} title={t('Actualizar registros','Refresh records')} disabled={loading||syncing} onClick={()=>setRevision(value=>value+1)}><RefreshCw size={17}/></button>{admin&&<button className="registered-sync" disabled={loading||syncing} onClick={sync}><RefreshCw size={14}/>{syncing?t('Sincronizando…','Syncing…'):t('Sincronizar Notion','Sync Notion')}</button>}</div></div>
+
   <nav className="registered-channel-tabs" aria-label={t('Filtrar comunicaciones por canal','Filter communications by channel')}>{channels.map(item=><button key={item.id||'all'} aria-pressed={channel===item.id} onClick={()=>{setChannel(item.id);setMobileOpen(false);}}><item.icon size={16}/><span>{item.label}</span><small>{item.id?items.filter(row=>row.channel===item.id).length:items.length}</small></button>)}</nav>
   {error&&<p className="registered-error" role="alert">{error}</p>}{notice&&<p className="registered-notice" role="status">{notice}</p>}
   {loading?<PortalLoading compact/>:<div className={'registered-grid'+(mobileOpen?' thread-open':'')}>
