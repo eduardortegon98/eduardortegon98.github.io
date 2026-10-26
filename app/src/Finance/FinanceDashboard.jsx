@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useLanguage } from '../i18n/Language';
@@ -21,6 +21,28 @@ export default function FinanceDashboard(){
  const [bufferDirection,setBufferDirection]=useState('out'),[historyCategory,setHistoryCategory]=useState('Todas'),[historyFlow,setHistoryFlow]=useState('all');
  const [incomeCurrency,setIncomeCurrency]=useState('COP'),[trm,setTrm]=useState(null),[trmLoading,setTrmLoading]=useState(false),[trmError,setTrmError]=useState('');
  const [hourlyUsd,setHourlyUsd]=useState('5.12'),[paymentFor,setPaymentFor]=useState('Banco'),[hours,setHours]=useState(''),[historyOpen,setHistoryOpen]=useState(false),[historyMonth,setHistoryMonth]=useState(currentMonth());
+ const [trmRefreshKey,setTrmRefreshKey]=useState(0);
+ const lastTodayRef=useRef(localDate());
+ useEffect(()=>{
+  const refreshQuote=()=>{
+   const today=localDate();
+   if(today!==lastTodayRef.current){
+    const previousToday=lastTodayRef.current;
+    lastTodayRef.current=today;
+    setForm(previous=>previous.date===previousToday?{...previous,date:today}:previous);
+   }
+   setTrmRefreshKey(key=>key+1);
+  };
+  const onVisibilityChange=()=>{if(document.visibilityState==='visible')refreshQuote()};
+  window.addEventListener('focus',refreshQuote);
+  document.addEventListener('visibilitychange',onVisibilityChange);
+  const interval=window.setInterval(()=>{if(document.visibilityState==='visible')refreshQuote()},30*60*1000);
+  return()=>{
+   window.removeEventListener('focus',refreshQuote);
+   document.removeEventListener('visibilitychange',onVisibilityChange);
+   window.clearInterval(interval);
+  };
+ },[]);
  const owner=user?.id;
  useEffect(()=>{if(owner)setHourlyUsd(window.localStorage.getItem('ortfinance_extra_hourly_usd_'+owner)||'5.12');},[owner]);
  const extraEstimate=tab==='extra'&&trm&&trm.date===form.date&&Number(hours)>0&&Number(hourlyUsd)>0?Math.round(Number(hours)*Number(hourlyUsd)*trm.rate*100)/100:null;
@@ -29,17 +51,17 @@ export default function FinanceDashboard(){
   let cancelled=false;
   setTrm(null);setTrmLoading(true);setTrmError('');
   const controller=new AbortController();
-  fetch('https://api.dolarencolombia.co/v1/trm/'+form.date,{signal:controller.signal})
+  fetch('https://api.dolarencolombia.co/v1/trm/'+form.date,{signal:controller.signal,cache:'no-store'})
    .then(async response=>{if(!response.ok)throw new Error('HTTP '+response.status);return response.json()})
    .then(data=>{
     const rate=Number(data.valor);
     if(!Number.isFinite(rate)||rate<=0)throw new Error('La API no devolvió una tasa válida.');
-    if(!cancelled){setTrm({rate,date:form.date,validFrom:data.fecha||form.date,source:'dolarencolombia.co / Superfinanciera'});setTrmError('');}
+    if(!cancelled){setTrm({rate,date:form.date,validFrom:data.fecha||form.date,source:'dolarencolombia.co / Superfinanciera',fetchedAt:new Date().toISOString()});setTrmError('');}
    })
    .catch(err=>{if(!cancelled&&err.name!=='AbortError')setTrmError('No pudimos obtener la TRM de esa fecha. '+err.message);})
    .finally(()=>{if(!cancelled)setTrmLoading(false)});
   return()=>{cancelled=true;controller.abort()};
- },[tab,incomeCurrency,form.date]);
+ },[tab,incomeCurrency,form.date,trmRefreshKey]);
  const refresh=async()=>{
   if(!owner)return;
   setLoading(true);setError('');
@@ -211,7 +233,7 @@ export default function FinanceDashboard(){
     {tab!=='extra'&&<label>Cuánto ({tab==='ingreso'?incomeCurrency:'COP'})<input type="number" min={tab==='ingreso'&&incomeCurrency==='USD'?'0.01':'1'} step={tab==='ingreso'&&incomeCurrency==='USD'?'0.01':'1'} required placeholder={tab==='ingreso'&&incomeCurrency==='USD'?'Ej. 200.50':'Ej. 20000'} value={form.amount} onChange={e=>setForm(p=>({...p,amount:e.target.value}))}/></label>}
     {tab==='ingreso'?<label>De quién<select value={paymentFor} onChange={e=>setPaymentFor(e.target.value)}>{['Blu','Cliente STO','Reembolso','Otro'].map(x=><option key={x}>{x}</option>)}</select></label>:tab==='pago'?<label>A quién<select value={paymentFor} onChange={e=>setPaymentFor(e.target.value)}>{[['Banco','Banco'],['Máster','Máster'],['PILA atrasada','PILA atrasada'],['Salud y pensión','Salud y pensión'],['Casa','Doris (casa)'],['Otro','Otro']].map(([value,label])=><option key={value} value={value}>{label}</option>)}</select></label>:tab==='gasto'?<label>Tipo<select value={form.category} onChange={e=>setForm(p=>({...p,category:e.target.value}))}>{['Otro','Gasto hormiga','Alimentación','Transporte','Salud','Casa','Estudio','Ocio'].map(x=><option key={x}>{x}</option>)}</select></label>:tab==='colchon'?<label>Operación<select value={bufferDirection} onChange={e=>setBufferDirection(e.target.value)}><option value="out">Sacar del colchón</option><option value="in">Guardar en el colchón</option></select></label>:<label>Horas trabajadas<input type="number" min=".25" step=".25" required value={hours} onChange={e=>setHours(e.target.value)} placeholder="Ej. 8"/></label>}
     {tab==='extra'&&<div className="fin-trm-quote" aria-live="polite">
-      {trmLoading?<span>Consultando TRM del {form.date}…</span>:trmError?<span className="fin-trm-error">{trmError}</span>:trm?<><strong>TRM del {form.date}: {pesos(trm.rate)} COP/USD</strong><span>Tarifa contractual: USD {hourlyUsd}/hora</span><strong>{extraEstimate===null?'Introduce las horas para calcular':pesos(extraEstimate)+' COP estimados'}</strong><small>La TRM se obtiene automáticamente; es un estimado pendiente de pago.</small></>:<span>Selecciona una fecha para consultar la TRM.</span>}
+      {trmLoading?<span>Consultando TRM del {form.date}…</span>:trmError?<span className="fin-trm-error">{trmError}</span>:trm?<><strong>TRM del {form.date}: {pesos(trm.rate)} COP/USD</strong><span>Tarifa contractual: USD {hourlyUsd}/hora</span><strong>{extraEstimate===null?'Introduce las horas para calcular':pesos(extraEstimate)+' COP estimados'}</strong><small>Fuente: {trm.source}. Vigente desde: {trm.validFrom}. Consultada: {new Date(trm.fetchedAt).toLocaleString('es-CO')}. Se actualiza al volver a la app y cada 30 minutos mientras esté abierta. Estimado pendiente de pago.</small></>:<span>Selecciona una fecha para consultar la TRM.</span>}
     </div>}
     <label>Detalle (opcional)<input maxLength="180" value={form.note} onChange={e=>setForm(p=>({...p,note:e.target.value}))} placeholder={tab==='ingreso'?'Ej. quincena de Blu':tab==='pago'?'Ej. cuota de octubre':tab==='extra'?'Ej. lunes en Blu':tab==='colchon'?'Ej. ahorro o préstamo familiar':'Ej. café'}/></label>
     <button type="submit" className="fin-primary" disabled={saving||((tab==='extra'||(tab==='ingreso'&&incomeCurrency==='USD'))&&(!trm||trmLoading||trm.date!==form.date))}><Plus size={16}/> Guardar</button>
