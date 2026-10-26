@@ -24,21 +24,17 @@ export default function FinanceDashboard(){
  const [trmRefreshKey,setTrmRefreshKey]=useState(0);
  const lastTodayRef=useRef(localDate());
  useEffect(()=>{
-  const refreshQuote=()=>{
+  const updateDay=()=>{
    const today=localDate();
-   if(today!==lastTodayRef.current){
-    const previousToday=lastTodayRef.current;
-    lastTodayRef.current=today;
-    setForm(previous=>previous.date===previousToday?{...previous,date:today}:previous);
-   }
-   setTrmRefreshKey(key=>key+1);
+   if(today===lastTodayRef.current)return;
+   const previousToday=lastTodayRef.current;
+   lastTodayRef.current=today;
+   setForm(previous=>previous.date===previousToday?{...previous,date:today}:previous);
   };
-  const onVisibilityChange=()=>{if(document.visibilityState==='visible')refreshQuote()};
-  window.addEventListener('focus',refreshQuote);
+  const onVisibilityChange=()=>{if(document.visibilityState==='visible')updateDay();};
   document.addEventListener('visibilitychange',onVisibilityChange);
-  const interval=window.setInterval(()=>{if(document.visibilityState==='visible')refreshQuote()},30*60*1000);
+  const interval=window.setInterval(updateDay,30*60*1000);
   return()=>{
-   window.removeEventListener('focus',refreshQuote);
    document.removeEventListener('visibilitychange',onVisibilityChange);
    window.clearInterval(interval);
   };
