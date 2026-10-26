@@ -9,10 +9,10 @@ export default function Access({ admin = false, children }) {
   const [retry, setRetry] = useState(0);
   useEffect(() => {
     if (!supabase) { setState({ user: null }); return; }
-    let active = true, version = 0;
+    let active = true, version = 0, lastUserId = null;
     async function load() {
       const current = ++version;
-      setState({ loading: true });
+      if (!lastUserId) setState({ loading: true });
       try {
         const { data, error } = await supabase.auth.getUser();
         if (error || !data.user) { if (active && current === version) setState({ user: null }); return; }
@@ -22,11 +22,11 @@ export default function Access({ admin = false, children }) {
         try { assignments={data:await readClientModules(data.user.id)}; } catch { assignments={error:true}; }
         // Missing migration or unavailable permissions fail closed for client modules.
         const modules = assignments.error ? [] : assignments.data.map(item=>item.module);
-        if (active && current === version) setState({ user: data.user, role: profile.data.role, modules });
+        if (active && current === version) { lastUserId = data.user.id; setState({ user: data.user, role: profile.data.role, modules }); }
       } catch { if (active && current === version) setState({ error: true }); }
     }
     load();
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(() => { queueMicrotask(() => { if (active) load(); }); });
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => { if (event === 'TOKEN_REFRESHED' || event === 'INITIAL_SESSION') return; if (event === 'SIGNED_IN' && session?.user?.id === lastUserId) return; queueMicrotask(() => { if (active) load(); }); });
     return () => { active = false; version++; subscription.unsubscribe(); };
   }, [retry]);
   if (state.loading) return <PortalLoading/>;
