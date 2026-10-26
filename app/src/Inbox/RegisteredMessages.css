@@ -21,3 +21,5 @@
 .registered-email-subject strong{font-size:11px;font-weight:550;line-height:1.7;color:#65866f;overflow-wrap:anywhere}
 .registered-channel-tabs button:focus-visible{outline:3px solid #92bfa2;outline-offset:1px}
 @media(prefers-reduced-motion:no-preference){.registered-channel-tabs button{transition:background-color .32s cubic-bezier(.22,1,.36,1),color .32s cubic-bezier(.22,1,.36,1),border-color .32s cubic-bezier(.22,1,.36,1)}}
+
+.registered-crm-card{max-width:480px;margin:20px auto 0;padding:16px 18px;background:#fff;border:1px solid #dbe9df;border-radius:12px;color:#375c45}.registered-crm-card>strong{display:block;margin-bottom:12px;font-size:12px;color:#176c43}.registered-crm-card p{font-size:11px;margin:7px 0;overflow-wrap:anywhere}.registered-crm-card b{font-weight:700}
