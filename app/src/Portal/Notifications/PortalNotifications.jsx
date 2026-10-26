@@ -23,9 +23,9 @@ export default function PortalNotifications({userId,role,admin,preview,children}
         if(event.key===notificationKey(userId,role)||event.key===null)setRegistry(readRegistry(userId,role));
       }else if(event.detail?.userId===userId)setWorkspace(loadWorkspace(userId));
     }
-    const tick=setInterval(()=>setClock(new Date()),60000),poll=setInterval(refresh,300000);
+    const tick=setInterval(()=>{if(document.visibilityState==='visible')setClock(new Date());},60000);
     window.addEventListener('storage',update);window.addEventListener('ortdesk:commercial-change',update);
-    return()=>{clearInterval(tick);clearInterval(poll);window.removeEventListener('storage',update);window.removeEventListener('ortdesk:commercial-change',update);};
+    return()=>{clearInterval(tick);window.removeEventListener('storage',update);window.removeEventListener('ortdesk:commercial-change',update);};
   },[userId,role,refresh]);
   const items=useMemo(()=>preview?[]:mergeNotifications(admin?commercialNotifications(rows,workspace,clock):[],registry),[admin,preview,rows,workspace,registry,clock]);
   function persistRegistry(next){try{localStorage.setItem(notificationKey(userId,role),JSON.stringify(next));setRegistry(next);setError('');return true;}catch{setError('save_failed');return false;}}
