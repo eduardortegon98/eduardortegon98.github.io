@@ -90,6 +90,9 @@ function Workspace({ user }) {
   const [workspace, setWorkspace] = useState(() => loadWorkspace(user.id)), [rows, setRows] = useState([]), [loading, setLoading] = useState(true), [error, setError] = useState(""), [message, setMessage] = useState("");
   const [term, setTerm] = useState(""), [owner, setOwner] = useState(""), [stageFilter, setStageFilter] = useState(""), [selected, setSelected] = useState(params.get("contact") || null), [tab, setTab] = useState("hiring"), [form, setForm] = useState(null), [help, setHelp] = useState(false), [busy, setBusy] = useState(false), [category, setCategory] = useState("Contrato");
   const [clock, setClock] = useState(() => /* @__PURE__ */ new Date());
+  const [remoteTasks, setRemoteTasks] = useState([]);
+  const [prospectRows, setProspectRows] = useState([]);
+  const [taskBusy, setTaskBusy] = useState(null);
   useEffect(() => {
     const timer = setInterval(() => setClock(/* @__PURE__ */ new Date()), 6e4);
     return () => clearInterval(timer);
@@ -99,6 +102,22 @@ function Workspace({ user }) {
     setError("");
     try {
       const real = await loadQualifiedContacts(supabase);
+       const allProspects = [];
+       for (let offset=0;;offset+=500) {
+         const {data,error:prospectError}=await supabase.from("sales_prospects").select("id,company,person,email,status").order("company").range(offset,offset+499);
+         if(prospectError) throw prospectError;
+         allProspects.push(...data);
+         if(data.length<500)break;
+       }
+       setProspectRows(allProspects);
+       const allTasks=[];
+       for(let offset=0;;offset+=500){
+         const {data,error:taskError}=await supabase.from("sales_followup_tasks").select("id,prospect_id,title,details,due_at,completed_at,created_at").order("created_at",{ascending:false}).range(offset,offset+499);
+         if(taskError)throw taskError;
+         allTasks.push(...data);
+         if(data.length<500)break;
+       }
+       setRemoteTasks(allTasks);
       setRows(real.map((r) => ({ ...r, channel: getContactChannel(r) })));
       const stageRows = [];
       let stageError = null;
@@ -299,22 +318,31 @@ function Workspace({ user }) {
     const entries = rows.flatMap((r) => contactData(workspace, r.id)[kind].filter((record) => kind !== "files" || ["Contrato", "Otro"].includes(record.category)).map((record) => ({ row: r, record }))).sort((a, b) => String(b.record.at || "").localeCompare(String(a.record.at || "")));
     return <section className="crm-panel"><h3>{titleOf(kind)}</h3>{entries.map(({ row: r, record }) => <div className="crm-contact-record-link" key={r.id + record.id}><button className="crm-agenda-row" key={r.id + record.id} onClick={() => openContact(r.id, kind)}><span><strong>{record.title || record.name}</strong><small>{r.company}</small></span><span>{record.done ? <span className="crm-pill">{t("Completado", "Completed")}</span> : record.status ? <span className="crm-pill">{statusNames[record.status]?.[en ? 1 : 0] || record.status}</span> : date(record.at)}{record.amount !== void 0 && <small>{money(record.amount, record.currency || "COP", en)}</small>}</span></button><ContactStageTooltip stage={contactData(workspace,r.id).stage} en={en} compact/></div>)}{!entries.length && <Empty t={t} />}</section>;
   }
+  async function toggleRemoteTask(task) {
+    setTaskBusy(task.id);
+    const next = task.completed_at ? null : new Date().toISOString();
+    const {data,error:taskError} = await supabase.from("sales_followup_tasks").update({completed_at:next,updated_at:new Date().toISOString()}).eq("id",task.id).select("id,completed_at").single();
+    if(taskError){setError(t("No se pudo actualizar la tarea en Supabase: ","Could not update task in Supabase: ")+taskError.message);}else{setRemoteTasks(items=>items.map(item=>item.id===task.id?{...item,completed_at:data.completed_at}:item));}
+    setTaskBusy(null);
+  }
   function followupByContact() {
-    const grouped = rows.map(r => {
+    const allFollowupRows = [...prospectRows, ...rows.filter(r => !prospectRows.some(p => p.id === r.id))];
+    const grouped = allFollowupRows.map(r => {
       const data = contactData(workspace, r.id);
-      const actions = data.actions || [], notes = data.notes || [];
-      return { row: r, actions, notes, pending: actions.filter(a => !a.done).length,
+      const actions = data.actions || [], notes = data.notes || [], remote = remoteTasks.filter(task=>task.prospect_id===r.id);
+      return { row: r, actions, notes, remote, pending: actions.filter(a => !a.done).length + remote.filter(a=>!a.completed_at).length,
         lastActivity: [...actions, ...notes].reduce((last, entry) => String(entry.at || entry.due || "") > last ? String(entry.at || entry.due || "") : last, "") };
-    }).filter(group => group.actions.length || group.notes.length)
+    }).filter(group => group.actions.length || group.notes.length || group.remote.length)
       .sort((a, b) => b.pending - a.pending || b.lastActivity.localeCompare(a.lastActivity) || a.row.company.localeCompare(b.row.company));
     return <section className="crm-followup">
       <div className="crm-followup-heading"><div><h3>{t("Seguimiento por contacto", "Follow-up by contact")}</h3><p className="crm-muted">{t("Cada contacto reúne sus tareas y notas comerciales. Abre su ficha para editar o agregar registros.", "Each contact keeps its commercial tasks and notes together. Open its profile to edit or add records.")}</p></div><span className="crm-pill">{grouped.length} {t("contactos con seguimiento", "contacts with follow-up")}</span></div>
       {grouped.length ? <div className="crm-followup-grid">{grouped.map(group => <article className="crm-followup-card" key={group.row.id}>
         <header className="crm-followup-card-head"><span className="crm-avatar">{group.row.company.split(/\\s+/).slice(0,2).map(s=>s[0]).join("").toUpperCase()}</span><div><h4>{group.row.company}</h4><small>{group.row.person || group.row.email || t("Contacto comercial", "Commercial contact")}</small></div><ContactStageTooltip stage={contactData(workspace,group.row.id).stage} en={en} compact /></header>
-        <div className="crm-followup-stats"><span>{group.pending} {t("pendientes", "pending")}</span><span>{group.actions.length} {t("tareas", "tasks")}</span><span>{group.notes.length} {t("notas", "notes")}</span></div>
+        <div className="crm-followup-stats"><span>{group.pending} {t("pendientes", "pending")}</span><span>{group.actions.length+group.remote.length} {t("tareas", "tasks")}</span><span>{group.notes.length} {t("notas", "notes")}</span></div>
+        {!!group.remote.length && <div className="crm-followup-section"><strong>{t("Tareas en Supabase", "Supabase tasks")}</strong>{group.remote.map(task=><div className="crm-followup-item" key={task.id}><span className={"crm-followup-dot"+(task.completed_at?" is-done":"")}/><div><span>{task.title}</span>{task.details&&<small>{task.details}</small>}<small>{task.completed_at?t("Completada","Completed"):task.due_at?date(task.due_at):t("Pendiente · sin fecha límite","Pending · no due date")}</small></div><button className="crm-secondary" disabled={taskBusy===task.id} onClick={()=>toggleRemoteTask(task)}>{task.completed_at?t("Reabrir","Reopen"):t("Completar","Complete")}</button></div>)}</div>}
         {!!group.actions.length && <div className="crm-followup-section"><strong>{t("Tareas de seguimiento", "Follow-up tasks")}</strong>{group.actions.slice().sort((a,b)=>Number(!!a.done)-Number(!!b.done)||String(a.due||"9999").localeCompare(String(b.due||"9999"))).map(action=><div className="crm-followup-item" key={action.id}><span className={"crm-followup-dot"+(action.done?" is-done":"")} /><div><span>{action.title}</span><small>{action.done?t("Completada","Completed"):action.due?date(action.due):t("Sin fecha límite","No due date")}</small></div></div>)}</div>}
         {!!group.notes.length && <div className="crm-followup-section"><strong>{t("Notas", "Notes")}</strong>{group.notes.slice().sort((a,b)=>String(b.at||"").localeCompare(String(a.at||""))).map(note=><div className="crm-followup-item" key={note.id}><FileText size={14}/><div><span>{note.title}</span>{note.at&&<small>{date(note.at)}</small>}</div></div>)}</div>}
-        <div className="crm-followup-footer"><button className="crm-secondary" onClick={()=>openContact(group.row.id,"actions")}>{t("Abrir seguimiento", "Open follow-up")} <ArrowRight size={15}/></button></div>
+        <div className="crm-followup-footer">{rows.some(r=>r.id===group.row.id)?<button className="crm-secondary" onClick={()=>openContact(group.row.id,"actions")}>{t("Abrir seguimiento", "Open follow-up")} <ArrowRight size={15}/></button>:<span className="crm-pill">{t("Prospecto · seguimiento en Supabase", "Prospect · follow-up in Supabase")}</span>}</div>
       </article>)}</div>:<div className="crm-panel"><p className="crm-muted">{t("Todavía no hay tareas ni notas de seguimiento registradas. Puedes agregarlas desde la ficha comercial de un contacto.", "No follow-up tasks or notes yet. Add them from a contact's commercial profile.")}</p><button className="crm-secondary" onClick={()=>changeView("contacts")}>{t("Ver contactos", "View contacts")} <ArrowRight size={15}/></button></div>}
       <section className="crm-panel"><h3>{t("Conversaciones", "Conversations")}</h3><p className="crm-muted">{t("Los mensajes y canales se consultan en OrtConnect; las tareas y notas permanecen organizadas aquí por contacto.", "Messages and channels are in OrtConnect; tasks and notes stay grouped here by contact.")}</p><Link to="/panel/mensajes" className="crm-text-action">{t("Ir a OrtConnect", "Go to OrtConnect")} <ArrowRight size={14}/></Link></section>
     </section>;
