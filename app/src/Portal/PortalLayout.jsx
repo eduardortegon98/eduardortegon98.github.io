@@ -59,7 +59,18 @@ function Workspace({ state }) {
         <ModuleNavigation role={actingRole} modules={modules} language={language} onNavigate={()=>setOpen(false)}/>
         {admin && <NavLink to="/panel/asignaciones" title={en?'Module assignments':'Asignación de módulos'} onClick={() => setOpen(false)}><UserCog size={19}/><ModuleBrand id="assignments"/></NavLink>}
       </nav>
-      <div className="admin-sidebar-bottom"><Link to="/" className="admin-public-link"><ExternalLink size={17}/>{en ? 'View website' : 'Ver página web'}</Link><div className="admin-identity"><Link to="/panel/cuenta" className="account-profile-link" onClick={()=>setOpen(false)} aria-label={en?'Open my account':'Abrir mi cuenta'} title={en?'My account':'Mi cuenta'}><span className="admin-avatar">{state.user.email?.slice(0,1).toUpperCase() || 'O'}</span></Link><div><strong>{realAdmin ? (en ? 'Administrator' : 'Administrador') : (en ? 'Client' : 'Cliente')}</strong><span>{state.user.email}</span></div></div><button title={en ? 'Sign out' : 'Cerrar sesión'} aria-label={en ? 'Sign out' : 'Cerrar sesión'} className="admin-logout compact-action" onClick={logout} disabled={pending}><LogOut size={17} aria-hidden="true"/></button>{error && <p role="alert">{error}</p>}</div>
+      <div className="admin-sidebar-bottom">
+        <Link to="/" className="admin-public-link" onClick={()=>setOpen(false)}><ExternalLink size={16}/><span>{en?'View website':'Ver página web'}</span></Link>
+        <div className="admin-account-card">
+          <Link to="/panel/cuenta" className="admin-account-main" onClick={()=>setOpen(false)} title={en?'Manage my account':'Administrar mi cuenta'}>
+            <span className="admin-avatar">{state.user.email?.slice(0,1).toUpperCase() || 'O'}</span>
+            <span className="admin-account-copy"><strong>{realAdmin?(en?'Administrator':'Administrador'):(en?'Client':'Cliente')}</strong><small title={state.user.email}>{state.user.email}</small></span>
+            <UserRound size={16} className="admin-account-chevron" aria-hidden="true"/>
+          </Link>
+          <button title={en?'Sign out':'Cerrar sesión'} aria-label={en?'Sign out':'Cerrar sesión'} className="admin-account-signout" onClick={logout} disabled={pending}><LogOut size={16} aria-hidden="true"/><span>{pending?(en?'Signing out…':'Cerrando sesión…'):(en?'Sign out':'Cerrar sesión')}</span></button>
+        </div>
+        {error && <p role="alert">{error}</p>}
+      </div>
     </aside>
     <div className="admin-body"><header className="admin-topbar">
       <div className="admin-header-context"><button className="admin-menu" aria-controls="admin-navigation" aria-expanded={open} aria-label={en ? 'Toggle navigation' : 'Abrir o cerrar navegación'} onClick={() => setOpen(value => !value)}>{open ? <X size={20}/> : <Menu size={20}/>}</button><div className="admin-breadcrumb"><span className="admin-breadcrumb-eyebrow"><span className="admin-breadcrumb-dot" aria-hidden="true"/>Portal</span><h1 className="admin-current-section" title={pageTitle}>{brandedSection?<ModuleBrand id={brandedSection} dark/>:pageTitle}</h1></div></div>
