@@ -162,3 +162,8 @@
 .crm-followup-search button{border:0;background:transparent;color:inherit;cursor:pointer;padding:3px;display:flex;}
 .crm-followup-footer{flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;}
 .crm-followup-connect{display:inline-flex;align-items:center;gap:7px;text-decoration:none;}
+
+/* Follow-up card actions stay beside the contact information, without a separate action footer. */
+.crm-followup-card-actions{display:flex;align-items:center;gap:6px;flex-shrink:0;margin-left:auto;}
+.crm-followup-card-actions .crm-icon{display:inline-flex;align-items:center;justify-content:center;min-width:34px;min-height:34px;border:1px solid #dce8df;border-radius:9px;background:#f7faf8;color:#32734b;text-decoration:none;cursor:pointer;}
+.crm-followup-card-actions .crm-icon:hover,.crm-followup-card-actions .crm-icon:focus-visible{background:#e8f5eb;border-color:#88b99a;}
