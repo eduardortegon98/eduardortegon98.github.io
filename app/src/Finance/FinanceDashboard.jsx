@@ -59,7 +59,7 @@ export default function FinanceDashboard(){
    {name:'Superfinanciera / Datos Abiertos (JSON)',url:officialBase+'.json?'+new URLSearchParams({'$where':officialWhere,'$order':'vigenciadesde DESC','$limit':'1'}),parse:rows=>({rate:Number(rows?.[0]?.valor),validFrom:rows?.[0]?.vigenciadesde?.slice(0,10)||date})},
    {name:'Superfinanciera / Datos Abiertos (consulta alternativa)',url:officialBase+'.json?'+new URLSearchParams({'$where':officialWhere,'$select':'valor,vigenciadesde','$limit':'1'}),parse:rows=>({rate:Number(rows?.[0]?.valor),validFrom:rows?.[0]?.vigenciadesde?.slice(0,10)||date})},
    {name:'Superfinanciera / Datos Abiertos (CSV)',url:officialBase+'.csv?'+new URLSearchParams({'$where':officialWhere,'$select':'valor,vigenciadesde','$limit':'1'}),parse:csv=>{
-    const rows=csv.trim().split(/\\r?\\n/);
+    const rows=csv.trim().split(/\r?\n/);
     if(rows.length<2)throw new Error('CSV sin resultados');
     const cells=rows[1].match(/(?:"[^"]*"|[^,])+/g)||[];
     return {rate:Number(cells[0]?.replaceAll('"','')),validFrom:cells[1]?.replaceAll('"','').slice(0,10)||date};
