@@ -4,11 +4,11 @@ import {supabase} from '../lib/supabase';
 import {useLanguage} from '../i18n/Language';
 import './MeetingPanel.css';
 
-const states={proposed:['Propuesta','Proposed'],pending_confirmation:[t("Por confirmar","Awaiting confirmation"),'Awaiting confirmation'],confirmed:['Confirmada','Confirmed'],completed:['Realizada','Completed'],cancelled:['Cancelada','Cancelled']};
+const states={proposed:['Propuesta','Proposed'],pending_confirmation:['Por confirmar','Awaiting confirmation'],confirmed:['Confirmada','Confirmed'],completed:['Realizada','Completed'],cancelled:['Cancelada','Cancelled']};
 const localDate=d=>new Intl.DateTimeFormat('en-CA',{timeZone:'America/Bogota',year:'numeric',month:'2-digit',day:'2-digit'}).format(d);
 const dayKey=v=>v?localDate(new Date(v)):'';
-const fmt=(v,en)=>v?new Intl.DateTimeFormat(en?'en-US':(en?'en-US':'es-CO'),{timeZone:'America/Bogota',dateStyle:'medium',timeStyle:'short'}).format(new Date(v)):(en?'No date':'Sin fecha');
-const time=(v,en)=>v?new Intl.DateTimeFormat(en?'en-US':(en?'en-US':'es-CO'),{timeZone:'America/Bogota',hour:'2-digit',minute:'2-digit'}).format(new Date(v)):'—';
+const fmt=(v,en)=>v?new Intl.DateTimeFormat(en?'en-US':'es-CO',{timeZone:'America/Bogota',dateStyle:'medium',timeStyle:'short'}).format(new Date(v)):(en?'No date':'Sin fecha');
+const time=(v,en)=>v?new Intl.DateTimeFormat(en?'en-US':'es-CO',{timeZone:'America/Bogota',hour:'2-digit',minute:'2-digit'}).format(new Date(v)):'—';
 const monday=d=>{const x=new Date(d);x.setHours(12,0,0,0);x.setDate(x.getDate()-((x.getDay()+6)%7));return x;};
 const shift=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x};
 const isoLocal=v=>v?new Date(v).toISOString():null;
