@@ -31,3 +31,8 @@
 .registered-header-crm b{color:#365e47;font-weight:700}
 .registered-header-pill{display:inline-flex;align-items:center;padding:3px 9px;border-radius:999px;background:#e6f3e9;color:#176c43;font-weight:700}
 @media(max-width:650px){.registered-header-crm{padding-left:0;font-size:10px}}
+
+/* CRM suppression: visible before opening a conversation, with incident trace inside. */
+.registered-blocked-pill{display:inline-flex!important;align-items:center;justify-content:center;align-self:start;width:max-content;max-width:100%;padding:4px 9px!important;border:1px solid #fecaca!important;border-radius:999px;background:#fee2e2!important;color:#991b1b!important;font-size:10px!important;font-weight:750!important;line-height:1.35;white-space:normal;overflow-wrap:anywhere}
+.registered-blocked-alert{max-width:560px;margin:0 auto 20px;padding:14px 16px;border:1px solid #fca5a5;border-left:4px solid #dc2626;border-radius:12px;background:#fff1f2;color:#991b1b}
+.registered-blocked-alert strong{font-size:12px;font-weight:750}.registered-blocked-alert p{font-size:11px;line-height:1.65;margin:7px 0 0;white-space:pre-wrap;overflow-wrap:anywhere}
