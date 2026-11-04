@@ -286,3 +286,31 @@
 .fin-cash-available,.fin-cash-paid{color:#167b45}.fin-cash-pending,.fin-cash-debt{color:#b43e3e}
 @media(max-width:900px){.fin-cash-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:480px){.fin-cash-summary{grid-template-columns:1fr 1fr;gap:7px}.fin-cash-summary article{padding:10px}.fin-cash-summary article strong{font-size:16px}.fin-cash-summary article small{font-size:9px}}
+
+
+/* OrtFinance: compact, scannable financial overview */
+.fin-goal-card{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(220px,.8fr);align-items:center;gap:24px;padding:19px 22px;border:1px solid #cfe3d5;border-radius:16px;background:linear-gradient(110deg,#f1faf4,#fff)}
+.fin-goal-copy .fin-eyebrow{color:#16804a;font-size:10px;font-weight:800;letter-spacing:.12em}
+.fin-goal-copy h2{margin:5px 0 3px;color:#075c36;font-size:clamp(20px,2.4vw,29px);line-height:1.15}
+.fin-goal-copy p{margin:0;color:#687e70;font-size:12px}
+.fin-goal-progress{display:grid;gap:9px}
+.fin-goal-progress>div:first-child{display:flex;align-items:center;justify-content:space-between;gap:10px;color:#557363;font-size:11px}
+.fin-goal-progress strong{color:#087343;font-size:18px;font-variant-numeric:tabular-nums}
+.fin-goal-track{height:9px;overflow:hidden;border-radius:20px;background:#dfece3}
+.fin-goal-track span{display:block;height:100%;border-radius:20px;background:#159454;transition:width .25s ease}
+.fin-cash-summary{margin-top:12px}
+.fin-cash-summary article{padding:15px 17px;gap:6px}
+.fin-cash-summary article small{font-size:10px;letter-spacing:.08em}
+.fin-cash-summary article strong{font-size:clamp(21px,2.2vw,28px)}
+.fin-cash-summary article span{font-size:11px}
+.fin-month-strip{margin-top:12px;padding:14px 17px;border:1px solid #e0e9e3;border-radius:14px;background:#fff;display:grid;gap:12px}
+.fin-month-strip-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.fin-month-strip-heading .fin-eyebrow{font-size:10px;color:#16804a;font-weight:800;letter-spacing:.1em}
+.fin-month-status{font-size:10px;font-weight:700;border-radius:20px;padding:5px 9px}
+.fin-month-status.is-negative{background:#fff1e5;color:#a35b1b}
+.fin-month-status.is-positive{background:#eaf7ee;color:#187545}
+.fin-month-strip-items{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.fin-month-strip-items>div{display:grid;gap:4px;min-width:0}
+.fin-month-strip-items small{font-size:11px;color:#738579}
+.fin-month-strip-items strong{font-size:17px;color:#263e31;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+@media(max-width:700px){.fin-goal-card{grid-template-columns:1fr;gap:15px;padding:16px}.fin-month-strip-items{grid-template-columns:1fr}.fin-month-strip-items>div{display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:1px solid #edf2ee;padding-top:8px}.fin-month-strip-items strong{text-align:right}}
