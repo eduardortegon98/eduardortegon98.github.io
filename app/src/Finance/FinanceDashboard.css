@@ -275,3 +275,14 @@
 .fin-audit-grid small{font-size:11px;color:#657b6d}.fin-audit-grid strong{font-size:clamp(17px,2vw,22px);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}.fin-audit-grid span{font-size:10px;color:#73877b;line-height:1.4}
 .fin-audit-green{color:#137e46}.fin-audit-red{color:#b63e3e}.fin-audit-amber{color:#976c18}.fin-audit-foot{margin:0;font-size:11px;line-height:1.5;color:#637668}
 @media(max-width:850px){.fin-audit-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:520px){.fin-audit-grid{grid-template-columns:1fr}}
+
+
+/* Clear cash / payments / pending / debt summary. */
+.fin-cash-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.fin-cash-summary article{display:flex;flex-direction:column;gap:5px;min-width:0;padding:14px 16px;border:1px solid #dce8df;border-radius:13px;background:#fff}
+.fin-cash-summary article small{font-size:10px;font-weight:800;letter-spacing:.07em;color:#647c6d}
+.fin-cash-summary article strong{font-size:clamp(19px,2.1vw,27px);font-weight:850;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.fin-cash-summary article span{font-size:10px;line-height:1.4;color:#74877b}
+.fin-cash-available,.fin-cash-paid{color:#167b45}.fin-cash-pending,.fin-cash-debt{color:#b43e3e}
+@media(max-width:900px){.fin-cash-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:480px){.fin-cash-summary{grid-template-columns:1fr 1fr;gap:7px}.fin-cash-summary article{padding:10px}.fin-cash-summary article strong{font-size:16px}.fin-cash-summary article small{font-size:9px}}
